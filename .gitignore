@@ -1,32 +1,13 @@
-# Ignore a blackhole and the folder for development
 node_modules/
-.vs/
-.idea/
-*.iml
-
-# Yarn files
-.yarn/install-state.gz
-.yarn/build-state.yml
-
-# Environment variables
-.DS_Store
-
 dist/
-
-# Ignore the config file (contains sensitive information such as tokens)
-config.ts
-
-# Ignore heapsnapshot and log files
-*.heapsnapshot
+logs/
 *.log
+*.tsbuildinfo
+.eslintcache
+.seedcord/
+src/generated
 
-# Ignore npm lockfiles file
-package-lock.json
+.env*
+!.env.example
 
-# Environment variables
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-/src/generated/prisma
-.env
+.DS_Store

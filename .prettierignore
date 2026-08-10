@@ -1,4 +1,1 @@
-dist/
-node_modules/
-.yarn/
-examples/*/dist/
+seedcord-gen.d.ts

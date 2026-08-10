@@ -6,6 +6,9 @@ const statuses = {
 } as const
 
 export function createStatusEmbed(user: User, description: string, status: "success" | "fail") {
+    /* will port this to containers later
+    return new ContainerBuilder()
+        .setAccentColor(statuses[status])*/
     return new EmbedBuilder()
         .setAuthor({ name: user.globalName || "unknown", iconURL: user.displayAvatarURL() })
         .setColor(statuses[status])

@@ -1,0 +1,3 @@
+import { PRETTIER_CONFIG } from '@seedcord/eslint-config/prettier';
+
+export default PRETTIER_CONFIG;

@@ -1,5 +1,6 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageCreateOptions } from "discord.js"
 import { EmbedBuilder  } from "discord.js"
+import { BitrateId, InvitesId, MemberLimitId, RenameId } from "./interactionIds"
 
 interface ChannelOptions {
     closed: boolean,
@@ -9,6 +10,8 @@ interface ChannelOptions {
     ownerAvatar: string
 }
 
+/** i took the original emoji code that was here before, but ig it's better to use regular seedcord
+    emoji store, i remember such thing existed */
 const emojis = {
     edit: "1515775509563183125",
     bitrate: "1515775525879156766",
@@ -41,15 +44,15 @@ export function composeDashboard(settings: ChannelOptions): MessageCreateOptions
             iconURL: settings.ownerAvatar
         })
     const rename = new ButtonBuilder()
-        .setCustomId("rename")
+        .setCustomId(RenameId.encode({}))
         .setEmoji(emojis.edit)
         .setStyle(ButtonStyle.Secondary)
     const bitrate = new ButtonBuilder()
-        .setCustomId("bitrate")
+        .setCustomId(BitrateId.encode({}))
         .setEmoji(emojis.bitrate)
         .setStyle(ButtonStyle.Secondary)
     const memberLimit = new ButtonBuilder()
-        .setCustomId("memberLimit")
+        .setCustomId(MemberLimitId.encode({}))
         .setEmoji(emojis.voiceLimited)
         .setStyle(ButtonStyle.Secondary)
     const close = new ButtonBuilder()
@@ -57,7 +60,7 @@ export function composeDashboard(settings: ChannelOptions): MessageCreateOptions
         .setEmoji(emojis.lock)
         .setStyle(ButtonStyle.Secondary)
     const requests = new ButtonBuilder()
-        .setCustomId("manageRequests")
+        .setCustomId(InvitesId.encode({}))
         .setEmoji("📨")
         .setStyle(ButtonStyle.Secondary)
     // todo add other buttons and compose message, then send and add actions

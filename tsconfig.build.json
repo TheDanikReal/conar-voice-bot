@@ -1,11 +1,11 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
-    "extends": "@seedcord/tsconfig/node",
+    "extends": "./tsconfig.json",
     "compilerOptions": {
-        "rootDir": "./",
+        "rootDir": "./src",
         "outDir": "./dist",
-        "skipLibCheck": true
+        "noEmit": false
     },
-    "include": ["src/**/*.ts", "seedcord.config.ts"],
+    "include": ["src/**/*.ts"],
     "exclude": ["node_modules", "dist"]
 }
