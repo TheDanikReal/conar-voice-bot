@@ -13,3 +13,5 @@ export const InvitesId = new CustomId("invites")
 export const InvitesActionId = new CustomId("action")
     .snowflake("userId")
     .oneOf("choice", ["approve", "deny"])
+
+export const DeleteId = new CustomId("delete")

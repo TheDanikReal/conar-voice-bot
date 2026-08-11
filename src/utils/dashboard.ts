@@ -1,13 +1,11 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageCreateOptions } from "discord.js"
+import { ActionRowBuilder, BaseMessageOptions, ButtonBuilder, ButtonStyle, GuildMember } from "discord.js"
 import { EmbedBuilder  } from "discord.js"
-import { BitrateId, InvitesId, MemberLimitId, RenameId } from "./interactionIds"
+import { BitrateId, DeleteId, InvitesId, MemberLimitId, RenameId } from "./interactionIds"
 
 interface ChannelOptions {
-    closed: boolean,
+    members: number,
     disableRequests: boolean,
-    owner: string,
-    ownerId: string,
-    ownerAvatar: string
+    owner: GuildMember
 }
 
 /** i took the original emoji code that was here before, but ig it's better to use regular seedcord
@@ -24,24 +22,26 @@ const emojis = {
     delete: "1516040157285843077"
 } as const
 
-export function composeDashboard(settings: ChannelOptions): MessageCreateOptions {
+export function composeDashboard(settings: ChannelOptions): BaseMessageOptions {
+    const closeChannel = settings.members == 1 ? "Открыть канал" : "Закрыть канал"
     const embed = new EmbedBuilder()
         .setTitle("Приватный голосовой канал")
         .setColor(0x111984)
-        .setDescription(`Управление: ` + settings.owner + `
+        .setDescription(`Управление: ` + settings.owner.displayName + `
 
 <:edit:${emojis.edit}> - Переименовать канал.
 <:bitrate:${emojis.bitrate}>: - Установить битрейт.
 <:voiceLimited:${emojis.voiceLimited}>: - Поставить лимит по участникам.
-<:lock:${emojis.lock}>: - Закрыть канал.
+<:lock:${emojis.lock}>: - ${closeChannel}.
 📨 - Отключить запросы на вход.
 <:members:${emojis.members}>: - Управление участниками.
 <:setup:${emojis.setup}>: - Управление сохранениями настроек канала.
 <:booster:${emojis.booster}>: - Возможности бустеров.
-<:play:${emojis.play}>: - Вызвать музыкальный плеер.`)
+<:play:${emojis.play}>: - Вызвать музыкальный плеер.
+${settings.members}`)
         .setFooter({
-            text: "Владелец: " + settings.owner,
-            iconURL: settings.ownerAvatar
+            text: "Владелец: " + settings.owner.displayName,
+            iconURL: settings.owner.displayAvatarURL()
         })
     const rename = new ButtonBuilder()
         .setCustomId(RenameId.encode({}))
@@ -86,8 +86,8 @@ export function composeDashboard(settings: ChannelOptions): MessageCreateOptions
     const secondRow = new ActionRowBuilder<ButtonBuilder>()
         .addComponents(manageMembers, manageSaves, boosterOptions, musicPlayer)
     const deleteChannel = new ButtonBuilder()
-        .setCustomId("delete")
-        .setLabel("Удалить")
+        .setCustomId(DeleteId.encode({}))
+        .setLabel("Delete")
         .setEmoji(emojis.delete)
         .setStyle(ButtonStyle.Danger)
     const thirdRow = new ActionRowBuilder<ButtonBuilder>()

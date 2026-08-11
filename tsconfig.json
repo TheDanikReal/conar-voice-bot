@@ -4,7 +4,8 @@
     "compilerOptions": {
         "rootDir": "./",
         "outDir": "./dist",
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "noImplicitAny": true
     },
     "include": ["src/**/*.ts", "seedcord.config.ts"],
     "exclude": ["node_modules", "dist"]

@@ -18,9 +18,14 @@
     },
     "dependencies": {
         "@discordjs/builders": "^1.14.1",
+        "@prisma/adapter-pg": "^7.9.1",
+        "@prisma/client": "^7.9.1",
         "@seedcord/gateway": "^0.1.3",
         "discord.js": "^14.27.0",
-        "envapt": "^8.1.1"
+        "dotenv": "^17.4.2",
+        "envapt": "^8.1.1",
+        "lru-cache": "^11.5.2",
+        "prisma": "^7.9.1"
     },
     "devDependencies": {
         "@seedcord/eslint-config": "^1.5.2",

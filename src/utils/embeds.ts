@@ -1,4 +1,5 @@
-import { EmbedBuilder, User } from "discord.js";
+import { EmbedBuilder, GuildTextBasedChannel, User } from "discord.js";
+import { TempChannelCreateInput } from "../generated/prisma/models";
 
 const statuses = {
     success: 0x00ff00,
@@ -20,4 +21,8 @@ export function createGenericEmbed(user: User, description: string, color = 0xff
         .setAuthor({ name: user.globalName || "unknown", iconURL: user.displayAvatarURL() })
         .setColor(color)
         .setDescription(description)
+}
+
+export async function getMainMessage(channel: GuildTextBasedChannel, settings: Partial<TempChannelCreateInput> | null) {
+    return await channel?.messages.fetch(settings?.messageId!)
 }
