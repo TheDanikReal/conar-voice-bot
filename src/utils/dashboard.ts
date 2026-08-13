@@ -1,4 +1,5 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder } from '@discordjs/builders';
+import { ButtonStyle } from 'discord.js';
 
 import { BitrateId, CloseId, DeleteId, InvitesId, MemberLimitId, RenameId } from './interactionIds';
 

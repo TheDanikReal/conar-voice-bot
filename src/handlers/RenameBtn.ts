@@ -1,10 +1,9 @@
 import { ModalBuilder, LabelBuilder } from '@discordjs/builders';
-import { ButtonHandler, ButtonRoute, ModalHandler, ModalRoute } from '@seedcord/gateway';
+import { ButtonHandler, ButtonRoute, ModalHandler, ModalRoute, Gated } from '@seedcord/gateway';
 import { ChannelType, TextInputStyle } from 'discord.js';
 
 import { createStatusEmbed } from '../utils/embeds';
 import { RenameId, RenameModalId } from '../utils/interactionIds';
-import { Gated } from '@seedcord/gateway';
 import { CheckRights } from '../utils/preconditions';
 
 @Gated(CheckRights())
@@ -31,7 +30,7 @@ export class RenameButton extends ButtonHandler<[typeof RenameId]> {
 @ModalRoute(RenameModalId)
 export class RenameModal extends ModalHandler<[typeof RenameModalId]> {
     public async execute(): Promise<void> {
-        this.defer()
+        await this.defer();
         const name = this.event.fields.getTextInputValue('name');
         await this.event.channel?.setName(name);
         await this.event.reply({

@@ -1,7 +1,9 @@
-import { Gate, GateContextBase, Notice, RenderContext, ReplyResponse, defineGate } from '@seedcord/gateway';
-import { database } from './base';
-import { ContainerBuilder } from "@discordjs/builders"
+import { ContainerBuilder } from '@discordjs/builders';
+import { Notice, defineGate } from '@seedcord/gateway';
 
+import { database } from './base';
+
+import type { Gate, GateContextBase, RenderContext, ReplyResponse } from '@seedcord/gateway';
 import type { ButtonInteraction, CommandInteraction } from 'discord.js';
 
 export async function checkChannelRights(interaction: ButtonInteraction | CommandInteraction) {
@@ -15,9 +17,9 @@ export async function checkChannelRights(interaction: ButtonInteraction | Comman
 
 export function CheckRights(): Gate<GateContextBase, 'CheckRights'> {
     return defineGate('CheckRights', async (ctx) => {
-        const userId = ctx.userId
-        const channel = await database.findChannel(ctx.channelId!)
-        if (channel?.ownerId != userId) throw new NoRights()
+        const userId = ctx.userId;
+        const channel = await database.findChannel(ctx.channelId!);
+        if (channel?.ownerId != userId) throw new NoRights();
     });
 }
 
@@ -27,11 +29,14 @@ export class NoRights extends Notice {
     }
 
     render(_ctx: RenderContext): ReplyResponse {
-        return { components: [new ContainerBuilder()
-            .setAccentColor(0xFF0000)
-            .addTextDisplayComponents((builder) => builder
-                .setContent(":warning: You don't have permissions to do that.")
-            )
-        ]};
+        return {
+            components: [
+                new ContainerBuilder()
+                    .setAccentColor(0xff_00_00)
+                    .addTextDisplayComponents((builder) =>
+                        builder.setContent(":warning: You don't have permissions to do that.")
+                    )
+            ]
+        };
     }
 }

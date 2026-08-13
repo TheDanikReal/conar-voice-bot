@@ -1,5 +1,6 @@
+import { ActionRowBuilder, ButtonBuilder } from '@discordjs/builders';
 import { ButtonHandler, ButtonRoute } from '@seedcord/gateway';
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType } from 'discord.js';
+import { ButtonStyle, ChannelType } from 'discord.js';
 
 import { database } from '../utils/base';
 import { createGenericEmbed } from '../utils/embeds';
@@ -14,7 +15,7 @@ export class InvitesButton extends ButtonHandler<[typeof InvitesId]> {
         const channelId = this.event.channel.id;
         if (isOwner) {
             const result = await database.toggleInvites(channelId);
-            this.event.reply(result ? 'enabled' : 'disabled');
+            await this.event.reply(result ? 'enabled' : 'disabled');
             return;
         }
         if (await database.areInvitesEnabled(channelId)) {

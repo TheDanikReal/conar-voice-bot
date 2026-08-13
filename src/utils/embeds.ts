@@ -27,7 +27,7 @@ export function createGenericEmbed(user: User, description: string, color = 0xff
 
 export async function getMainMessage(channel: GuildTextBasedChannel, settings: Partial<TempChannelCreateInput> | null) {
     if (!settings?.messageId) {
-        throw new Error("missing main message id");
+        throw new Error('missing main message id');
     }
     const message = await channel.messages.fetch(settings.messageId);
     if (!message) throw new Error("can't find main message");

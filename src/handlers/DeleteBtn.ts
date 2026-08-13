@@ -1,8 +1,7 @@
-import { ButtonHandler, ButtonRoute } from '@seedcord/gateway';
+import { ButtonHandler, ButtonRoute, Gated } from '@seedcord/gateway';
 
 import { database } from '../utils/base';
 import { DeleteId } from '../utils/interactionIds';
-import { Gated } from '@seedcord/gateway';
 import { CheckRights } from '../utils/preconditions';
 
 @Gated(CheckRights())

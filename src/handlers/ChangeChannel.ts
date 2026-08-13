@@ -1,8 +1,8 @@
 import { TextDisplayBuilder } from '@discordjs/builders';
 import { Gated, RequirePermissions, SlashHandler, SlashRoute } from '@seedcord/gateway';
+import { PermissionFlagsBits } from 'discord.js';
 
 import { database } from '../utils/base';
-import { PermissionFlagsBits } from 'discord.js';
 
 const notAvailableDisplay = new TextDisplayBuilder({
     content: 'not available in dms'

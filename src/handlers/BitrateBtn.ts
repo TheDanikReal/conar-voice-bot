@@ -31,11 +31,11 @@ export class BitrateModal extends ModalHandler<[typeof BitrateModalId]> {
         if (this.event.channel?.type !== ChannelType.GuildVoice) return;
         await this.defer();
         const bitrate = parseInt(this.event.fields.getTextInputValue('bitrate').trim(), 10);
-        const maxBitrate = getMaxBitrate(this.event.guild.premiumTier);
         if (Number.isNaN(bitrate)) {
             await this.reply(`:warning: Entered bitrate is incorrect`);
             return;
         }
+        const maxBitrate = getMaxBitrate(this.event.guild.premiumTier);
         if (bitrate < 8 || bitrate > maxBitrate) {
             await this.reply(`:warning: Selected bitrate exceeds limits! ${bitrate}`);
             return;
