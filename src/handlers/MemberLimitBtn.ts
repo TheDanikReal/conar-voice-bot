@@ -3,7 +3,7 @@ import { ButtonHandler, ButtonRoute, Gated, ModalHandler, ModalRoute } from "@se
 import { ChannelType, TextInputStyle } from "discord.js"
 
 import { MemberLimitId, MemberLimitModalId } from "../utils/interactionIds"
-import { CheckRights } from "../utils/preconditions"
+import { CheckRights, RaceConditionDetected } from "../utils/preconditions"
 import { rerenderDashboard } from "../utils/misc"
 import { database } from "../utils/base"
 
@@ -41,7 +41,10 @@ export class MemberLimitModal extends ModalHandler<[typeof MemberLimitModalId]> 
         }
         await channel.setUserLimit(limit)
         await database.changeMaxMembers(channel.id, limit)
+        if ((await database.findChannel(channel.id))?.closed) {
+            throw new RaceConditionDetected()
+        }
+        await rerenderDashboard(channel, this.event.guild)
         await this.reply(`Set limit ${limit} members. ✅`)
-        rerenderDashboard(channel, this.event.guild)
     }
 }

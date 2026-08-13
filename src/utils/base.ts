@@ -139,7 +139,7 @@ class PrismaDatabase {
                 requests: !requestsEnabled
             }
         })
-        this.cacheChannels.set(channelId, { ...data, requests: !requestsEnabled })
+        this.patchCachedChannel(channelId, { requests: !requestsEnabled })
         return !requestsEnabled
     }
     async areInvitesEnabled(channelId: string) {
@@ -165,15 +165,10 @@ class PrismaDatabase {
                 closed: !isClosed
             }
         })
-        this.cacheChannels.set(channelId, { ...data, closed: !isClosed })
+        this.patchCachedChannel(channelId, { closed: !isClosed })
         return !isClosed
     }
     async changeMaxMembers(channelId: string, maxMembers: number) {
-        const data = await this.prisma.tempChannel.findUnique({
-            where: {
-                id: channelId
-            }
-        })
         await this.prisma.tempChannel.update({
             where: {
                 id: channelId
@@ -182,8 +177,17 @@ class PrismaDatabase {
                 maxMembers
             }
         })
-        this.cacheChannels.set(channelId, { ...data, maxMembers })
+        this.patchCachedChannel(channelId, { maxMembers })
         return
+    }
+    private patchCachedChannel(channelId: string, patch: Partial<Prisma.TempChannelCreateInput>) {
+        const cachedChannel = this.cacheChannels.get(channelId)
+        if (cachedChannel) {
+            this.cacheChannels.set(channelId, {
+                ...cachedChannel,
+                ...patch
+            })
+        }
     }
     /*async findUser(userId: string) {
         const cachedUser = this.cacheUsers.get(userId)

@@ -40,3 +40,23 @@ export class NoRights extends Notice {
         }
     }
 }
+
+export class RaceConditionDetected extends Notice {
+    constructor() {
+        super(`race condition`)
+    }
+
+    render(_ctx: RenderContext): ReplyResponse {
+        return {
+            components: [
+                new ContainerBuilder()
+                    .setAccentColor(0xff_00_00)
+                    .addTextDisplayComponents((builder) =>
+                        builder.setContent(
+                            ":warning: It seems that there's a race condition here. Ignore if you did that on purpose"
+                        )
+                    )
+            ]
+        }
+    }
+}
