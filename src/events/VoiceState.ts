@@ -25,16 +25,16 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
             //todo make this spaghetti code better, probably nove settings to database, make a store for saving and loading save slots so that users wont have to redo ig every time            })
             const message = await channel.send(
                 composeDashboard({
-                    members: 99,
                     disableRequests: false,
-                    owner: member
+                    owner: member,
+                    closed: false
                 })
             )
-            await member.voice.setChannel(channel, "Conor voice channels")
             await database.addChannel(channel.id, {
                 messageId: message.id,
                 ownerId: member.id
             })
+            await member.voice.setChannel(channel, "Conor voice channels")
         }
         const oldId = oldState.channelId
         if (oldId && (await database.findChannel(oldId))?.id) {
