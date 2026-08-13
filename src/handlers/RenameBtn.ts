@@ -4,7 +4,10 @@ import { ChannelType, TextInputStyle } from 'discord.js';
 
 import { createStatusEmbed } from '../utils/embeds';
 import { RenameId, RenameModalId } from '../utils/interactionIds';
+import { Gated } from '@seedcord/gateway';
+import { CheckRights } from '../utils/preconditions';
 
+@Gated(CheckRights())
 @ButtonRoute(RenameId)
 export class RenameButton extends ButtonHandler<[typeof RenameId]> {
     public async execute(): Promise<void> {
@@ -28,10 +31,11 @@ export class RenameButton extends ButtonHandler<[typeof RenameId]> {
 @ModalRoute(RenameModalId)
 export class RenameModal extends ModalHandler<[typeof RenameModalId]> {
     public async execute(): Promise<void> {
+        this.defer()
         const name = this.event.fields.getTextInputValue('name');
+        await this.event.channel?.setName(name);
         await this.event.reply({
             embeds: [createStatusEmbed(this.event.user, 'Changed channel name', 'success')]
         });
-        await this.event.channel?.setName(name);
     }
 }

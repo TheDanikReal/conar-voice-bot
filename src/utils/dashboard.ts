@@ -28,7 +28,9 @@ const emojis = {
 export function composeDashboard(settings: ChannelOptions): BaseMessageOptions {
     const isClosed = settings.members === 1;
     // these closeChannel stuff look just bad
-    const closeChannelMessage = isClosed ? 'Открыть канал' : 'Закрыть канал';
+    // todo: make so that isClosed variable was depended on close button instead of
+    // max members, but that will require implementing close button first
+    const closeChannelMessage = isClosed ? 'Open channel' : 'Close channel';
     const closeChannelId = isClosed ? emojis.unlock : emojis.lock;
     const closeChannelEmoji = isClosed ? `<:unlock:${emojis.unlock}>` : `<:lock:${emojis.lock}>`;
     const embed = new EmbedBuilder()

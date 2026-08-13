@@ -4,13 +4,13 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType } from 'disco
 import { database } from '../utils/base';
 import { createGenericEmbed } from '../utils/embeds';
 import { InvitesActionId, InvitesId } from '../utils/interactionIds';
-import { checkChannelOwner } from '../utils/preconditions';
+import { checkChannelRights } from '../utils/preconditions';
 
 @ButtonRoute(InvitesId)
 export class InvitesButton extends ButtonHandler<[typeof InvitesId]> {
     public async execute(): Promise<void> {
         if (this.event.channel?.type != ChannelType.GuildVoice) return;
-        const isOwner = await checkChannelOwner(this.event);
+        const isOwner = await checkChannelRights(this.event);
         const channelId = this.event.channel.id;
         if (isOwner) {
             const result = await database.toggleInvites(channelId);
@@ -48,10 +48,10 @@ export class InvitesAction extends ButtonHandler<[typeof InvitesActionId]> {
         const { userId, choice } = this.params;
         const settings = await database.findChannel(this.event.channelId);
         if (!settings) return;
-        if (userId == settings.id) {
-            this.event.reply('you are the owner!');
-        } else {
-            this.event.reply(`${userId} and ${choice}`);
+        if (this.event.user.id !== settings.ownerId) {
+            await this.event.reply('Only the channel owner can handle this request.');
+            return;
         }
+        await this.event.reply(`${userId} and ${choice}`);
     }
 }

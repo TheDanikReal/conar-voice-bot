@@ -1,10 +1,12 @@
 import { LabelBuilder, ModalBuilder } from '@discordjs/builders';
-import { ButtonHandler, ButtonRoute, ModalHandler, ModalRoute } from '@seedcord/gateway';
+import { ButtonHandler, ButtonRoute, Gated, ModalHandler, ModalRoute } from '@seedcord/gateway';
 import { ChannelType, TextInputStyle } from 'discord.js';
 
 import { BitrateId, BitrateModalId } from '../utils/interactionIds';
 import { getMaxBitrate } from '../utils/misc';
+import { CheckRights } from '../utils/preconditions';
 
+@Gated(CheckRights())
 @ButtonRoute(BitrateId)
 export class BitrateButton extends ButtonHandler<[typeof BitrateId]> {
     public async execute(): Promise<void> {
@@ -27,13 +29,18 @@ export class BitrateButton extends ButtonHandler<[typeof BitrateId]> {
 export class BitrateModal extends ModalHandler<[typeof BitrateModalId]> {
     public async execute(): Promise<void> {
         if (this.event.channel?.type !== ChannelType.GuildVoice) return;
+        await this.defer();
         const bitrate = parseInt(this.event.fields.getTextInputValue('bitrate').trim(), 10);
         const maxBitrate = getMaxBitrate(this.event.guild.premiumTier);
-        if (bitrate < 8 || bitrate > maxBitrate) {
-            await this.reply(`:warning: Введённый битрейт выходит за допустимые рамки! ${bitrate}`);
+        if (Number.isNaN(bitrate)) {
+            await this.reply(`:warning: Entered bitrate is incorrect`);
             return;
         }
-        await this.reply(`Successfully set ${bitrate} kbps bitrate. ✅`);
+        if (bitrate < 8 || bitrate > maxBitrate) {
+            await this.reply(`:warning: Selected bitrate exceeds limits! ${bitrate}`);
+            return;
+        }
         await this.event.channel.setBitrate(bitrate * 1000);
+        await this.reply(`Successfully set ${bitrate} kbps bitrate. ✅`);
     }
 }

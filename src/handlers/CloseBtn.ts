@@ -1,14 +1,12 @@
-import { ButtonHandler, ButtonRoute } from '@seedcord/gateway';
+import { ButtonHandler, ButtonRoute, Gated } from '@seedcord/gateway';
 
-import { database } from '../utils/base';
 import { CloseId } from '../utils/interactionIds';
+import { CheckRights } from '../utils/preconditions';
 
+@Gated(CheckRights())
 @ButtonRoute(CloseId)
 export class CloseButton extends ButtonHandler<[typeof CloseId]> {
     public async execute(): Promise<void> {
-        const channel = this.event.channel;
-        if (!channel) return;
-        const settings = await database.findChannel(channel?.id);
-        settings;
+        await this.reply(`Not implemented yet`);
     }
 }

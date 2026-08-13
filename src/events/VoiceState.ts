@@ -40,12 +40,12 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
         if (oldId && (await database.findChannel(oldId))?.id) {
             const channel = oldState.channel;
             if (!channel || channel.members.size > 0) return;
+            await channel.delete('nobody is in channel');
             try {
                 await database.deleteChannel(oldId);
             } catch {
                 console.log('channel doesnt exist');
             }
-            await channel.delete('nobody is in channel');
         }
     }
 }
