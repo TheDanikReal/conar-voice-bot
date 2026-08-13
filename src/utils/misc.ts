@@ -1,4 +1,4 @@
-import type { GuildPremiumTier } from 'discord.js';
+import type { GuildPremiumTier } from "discord.js"
 
 export function getMaxBitrate(premiumTier: GuildPremiumTier) {
     const bitrate = {
@@ -6,6 +6,6 @@ export function getMaxBitrate(premiumTier: GuildPremiumTier) {
         1: 128,
         2: 256,
         3: 384
-    } as const;
-    return bitrate[premiumTier];
+    } as const
+    return bitrate[premiumTier]
 }

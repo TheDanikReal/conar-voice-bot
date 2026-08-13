@@ -1,10 +1,10 @@
-import { resolve } from 'node:path';
+import { resolve } from "node:path"
 
-import { Seedcord } from '@seedcord/gateway';
-import { GatewayIntentBits } from 'discord.js';
-import { Envapter } from 'envapt';
+import { Seedcord } from "@seedcord/gateway"
+import { GatewayIntentBits } from "discord.js"
+import { Envapter } from "envapt"
 
-Envapter.baseDir = resolve(import.meta.dirname, '..');
+Envapter.baseDir = resolve(import.meta.dirname, "..")
 
 export const seedcord = new Seedcord({
     bot: {
@@ -12,22 +12,22 @@ export const seedcord = new Seedcord({
             intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates]
         },
         interactions: {
-            path: resolve(import.meta.dirname, './handlers')
+            path: resolve(import.meta.dirname, "./handlers")
         },
         commands: {
-            path: resolve(import.meta.dirname, './commands')
+            path: resolve(import.meta.dirname, "./commands")
         },
         events: {
-            path: resolve(import.meta.dirname, './events')
+            path: resolve(import.meta.dirname, "./events")
         }
     },
     subscribers: {
         path: null
     },
-    botColor: 'Blurple',
+    botColor: "Blurple",
     notifications: {
-        developerUsername: 'TheDanikReal'
+        developerUsername: "TheDanikReal"
     }
-});
+})
 
-export default seedcord;
+export default seedcord

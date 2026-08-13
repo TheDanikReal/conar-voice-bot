@@ -1,57 +1,57 @@
-import { PrismaPg } from '@prisma/adapter-pg';
-import { LRUCache } from 'lru-cache';
+import { PrismaPg } from "@prisma/adapter-pg"
+import { LRUCache } from "lru-cache"
 
-import { PrismaClient } from '../generated/prisma/client.js';
+import { PrismaClient } from "../generated/prisma/client.js"
 
-import type { Prisma } from '../generated/prisma/client.js';
-import 'dotenv/config';
+import type { Prisma } from "../generated/prisma/client.js"
+import "dotenv/config"
 
 class PrismaDatabase {
-    prisma: PrismaClient;
-    cacheServers: LRUCache<string, Partial<Prisma.ServerSettingsCreateInput>>;
-    cacheChannels: LRUCache<string, Partial<Prisma.TempChannelCreateInput>>;
+    prisma: PrismaClient
+    cacheServers: LRUCache<string, Partial<Prisma.ServerSettingsCreateInput>>
+    cacheChannels: LRUCache<string, Partial<Prisma.TempChannelCreateInput>>
     constructor() {
         this.cacheServers = new LRUCache<string, Partial<Prisma.ServerSettingsCreateInput>>({
             ttl: 1000 * 60 * 30,
             max: 100
-        });
+        })
         this.cacheChannels = new LRUCache<string, Partial<Prisma.TempChannelCreateInput>>({
             ttl: 1000 * 60 * 30,
             max: 100
-        });
-        const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
-        this.prisma = new PrismaClient({ adapter });
+        })
+        const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL })
+        this.prisma = new PrismaClient({ adapter })
     }
     async connect() {
-        await this.prisma.$connect();
+        await this.prisma.$connect()
     }
     async disconnect() {
-        await this.prisma.$disconnect();
+        await this.prisma.$disconnect()
     }
     /*async users() {
         return await this.prisma.user.findMany()
     }*/
     async findServer(serverId: string) {
-        const cachedServer = this.cacheServers.get(serverId);
+        const cachedServer = this.cacheServers.get(serverId)
         if (cachedServer) {
-            return cachedServer;
+            return cachedServer
         }
         const server = await this.prisma.serverSettings.findFirst({
             where: {
                 id: serverId
             }
-        });
-        this.cacheServers.set(serverId, { ...server });
-        return server;
+        })
+        this.cacheServers.set(serverId, { ...server })
+        return server
     }
     async addServer(data: Prisma.ServerSettingsCreateInput) {
-        this.cacheServers.set(data.id, data);
+        this.cacheServers.set(data.id, data)
         return await this.prisma.serverSettings.create({
             data
-        });
+        })
     }
     async editServerIfExists(data: Prisma.ServerSettingsCreateInput) {
-        this.cacheServers.set(data.id, data);
+        this.cacheServers.set(data.id, data)
         if (
             await this.prisma.serverSettings.findFirst({
                 where: {
@@ -64,36 +64,36 @@ class PrismaDatabase {
                     id: data.id
                 },
                 data
-            });
+            })
         }
         return await this.prisma.serverSettings.create({
             data
-        });
+        })
     }
     async findChannel(channelId: string) {
-        const cachedChannel = this.cacheChannels.get(channelId);
+        const cachedChannel = this.cacheChannels.get(channelId)
         if (cachedChannel) {
-            return cachedChannel;
+            return cachedChannel
         }
         const channel = await this.prisma.tempChannel.findFirst({
             where: {
                 id: channelId
             }
-        });
-        this.cacheChannels.set(channelId, { ...channel });
-        return channel;
+        })
+        this.cacheChannels.set(channelId, { ...channel })
+        return channel
     }
-    async addChannel(channelId: string, details: Omit<Prisma.TempChannelCreateInput, 'id'>) {
-        this.cacheChannels.set(channelId, { id: channelId, ...details });
+    async addChannel(channelId: string, details: Omit<Prisma.TempChannelCreateInput, "id">) {
+        this.cacheChannels.set(channelId, { id: channelId, ...details })
         return await this.prisma.tempChannel.create({
             data: {
                 id: channelId,
                 ...details
             }
-        });
+        })
     }
-    async editChannelIfExists(channelId: string, details: Omit<Prisma.TempChannelCreateInput, 'id'>) {
-        this.cacheChannels.set(channelId, { id: channelId, ...details });
+    async editChannelIfExists(channelId: string, details: Omit<Prisma.TempChannelCreateInput, "id">) {
+        this.cacheChannels.set(channelId, { id: channelId, ...details })
         if (
             await this.prisma.tempChannel.findFirst({
                 where: {
@@ -108,29 +108,29 @@ class PrismaDatabase {
                 data: {
                     ...details
                 }
-            });
+            })
         }
         return await this.prisma.tempChannel.create({
             data: {
                 id: channelId,
                 ...details
             }
-        });
+        })
     }
     async deleteChannel(channelId: string) {
         return await this.prisma.tempChannel.delete({
             where: {
                 id: channelId
             }
-        });
+        })
     }
     async toggleInvites(channelId: string) {
         const data = await this.prisma.tempChannel.findFirst({
             where: {
                 id: channelId
             }
-        });
-        const requestsEnabled = data?.requests;
+        })
+        const requestsEnabled = data?.requests
         await this.prisma.tempChannel.update({
             where: {
                 id: channelId
@@ -138,25 +138,25 @@ class PrismaDatabase {
             data: {
                 requests: !requestsEnabled
             }
-        });
-        this.cacheChannels.set(channelId, { ...data, requests: !requestsEnabled });
-        return !requestsEnabled;
+        })
+        this.cacheChannels.set(channelId, { ...data, requests: !requestsEnabled })
+        return !requestsEnabled
     }
     async areInvitesEnabled(channelId: string) {
         const data = await this.prisma.tempChannel.findFirst({
             where: {
                 id: channelId
             }
-        });
-        return data?.requests;
+        })
+        return data?.requests
     }
     async toggleClosed(channelId: string) {
         const data = await this.prisma.tempChannel.findUnique({
             where: {
                 id: channelId
             }
-        });
-        const isClosed = data?.closed ?? false;
+        })
+        const isClosed = data?.closed ?? false
         await this.prisma.tempChannel.update({
             where: {
                 id: channelId
@@ -164,9 +164,9 @@ class PrismaDatabase {
             data: {
                 closed: !isClosed
             }
-        });
-        this.cacheChannels.set(channelId, { ...data, closed: !isClosed });
-        return !isClosed;
+        })
+        this.cacheChannels.set(channelId, { ...data, closed: !isClosed })
+        return !isClosed
     }
     /*async findUser(userId: string) {
         const cachedUser = this.cacheUsers.get(userId)
@@ -231,7 +231,7 @@ class PrismaDatabase {
     }*/
 }
 
-export const database = new PrismaDatabase();
+export const database = new PrismaDatabase()
 
 // const users = await database.users()
 // await database.connect()

@@ -1,3 +1,3 @@
-import seedcord from './bot';
+import seedcord from "./bot"
 
-await seedcord.start();
+await seedcord.start()

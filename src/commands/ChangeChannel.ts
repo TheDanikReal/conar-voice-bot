@@ -1,28 +1,28 @@
-import { RegisterCommand, BuilderComponent } from '@seedcord/gateway';
-import { ChannelType, PermissionFlagsBits } from 'discord.js';
+import { RegisterCommand, BuilderComponent } from "@seedcord/gateway"
+import { ChannelType, PermissionFlagsBits } from "discord.js"
 
-@RegisterCommand('global')
-export class SetChannelCommand extends BuilderComponent<'command'> {
+@RegisterCommand("global")
+export class SetChannelCommand extends BuilderComponent<"command"> {
     constructor() {
-        super('command');
+        super("command")
 
         this.instance
-            .setName('setchannel')
-            .setDescription('set channel for voice creating')
+            .setName("setchannel")
+            .setDescription("set channel for voice creating")
             .addChannelOption((builder) =>
                 builder
-                    .setName('channel')
-                    .setDescription('voice channel to use')
+                    .setName("channel")
+                    .setDescription("voice channel to use")
                     .addChannelTypes(ChannelType.GuildVoice)
                     .setRequired(true)
             )
             .addChannelOption((builder) =>
                 builder
-                    .setName('category')
-                    .setDescription('category for temp channels')
+                    .setName("category")
+                    .setDescription("category for temp channels")
                     .addChannelTypes(ChannelType.GuildCategory)
                     .setRequired(true)
             )
-            .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild);
+            .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     }
 }
