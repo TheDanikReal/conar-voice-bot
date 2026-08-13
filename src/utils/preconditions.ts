@@ -68,7 +68,7 @@ export class RaceConditionDetected extends Notice {
                     .setAccentColor(red)
                     .addTextDisplayComponents((builder) =>
                         builder.setContent(
-                            ":warning: It seems that there's a race condition here. Ignore if you did that on purpose"
+                            ":warning: The channel changed while you were updating the limit. Check the current limit before retrying."
                         )
                     )
             ]
