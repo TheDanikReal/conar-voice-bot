@@ -5,9 +5,9 @@ import { BitrateId, CloseId, DeleteId, InvitesId, MemberLimitId, RenameId } from
 import type { BaseMessageOptions, GuildMember } from "discord.js"
 
 interface ChannelOptions {
-    members: number
     disableRequests: boolean
     owner: GuildMember
+    closed: boolean
 }
 
 /** i took the original emoji code that was here before, but ig it's better to use regular seedcord
@@ -26,7 +26,7 @@ const emojis = {
 }
 
 export function composeDashboard(settings: ChannelOptions): BaseMessageOptions {
-    const isClosed = settings.members === 1
+    const isClosed = settings.closed
     // these closeChannel stuff look just bad
     // todo: make so that isClosed variable was depended on close button instead of
     // max members, but that will require implementing close button first

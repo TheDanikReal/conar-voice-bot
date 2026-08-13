@@ -2,11 +2,10 @@ import { LabelBuilder, ModalBuilder } from "@discordjs/builders"
 import { ButtonHandler, ButtonRoute, Gated, ModalHandler, ModalRoute } from "@seedcord/gateway"
 import { ChannelType, TextInputStyle } from "discord.js"
 
-import { database } from "../utils/base"
-import { composeDashboard } from "../utils/dashboard"
-import { getMainMessage } from "../utils/embeds"
 import { MemberLimitId, MemberLimitModalId } from "../utils/interactionIds"
 import { CheckRights } from "../utils/preconditions"
+import { rerenderDashboard } from "../utils/misc"
+import { database } from "../utils/base"
 
 @Gated(CheckRights())
 @ButtonRoute(MemberLimitId)
@@ -41,15 +40,8 @@ export class MemberLimitModal extends ModalHandler<[typeof MemberLimitModalId]> 
             return
         }
         await channel.setUserLimit(limit)
+        await database.changeMaxMembers(channel.id, limit)
         await this.reply(`Set limit ${limit} members. ✅`)
-        const settings = await database.findChannel(channel.id)
-        const mainMessage = await getMainMessage(channel, settings)
-        await mainMessage.edit(
-            composeDashboard({
-                disableRequests: !settings?.requests,
-                members: channel.members.size,
-                owner: await this.event.guild.members.fetch(settings?.ownerId!)
-            })
-        )
+        rerenderDashboard(channel, this.event.guild)
     }
 }

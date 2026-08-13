@@ -168,6 +168,23 @@ class PrismaDatabase {
         this.cacheChannels.set(channelId, { ...data, closed: !isClosed })
         return !isClosed
     }
+    async changeMaxMembers(channelId: string, maxMembers: number) {
+        const data = await this.prisma.tempChannel.findUnique({
+            where: {
+                id: channelId
+            }
+        })
+        await this.prisma.tempChannel.update({
+            where: {
+                id: channelId
+            },
+            data: {
+                maxMembers
+            }
+        })
+        this.cacheChannels.set(channelId, { ...data, maxMembers })
+        return
+    }
     /*async findUser(userId: string) {
         const cachedUser = this.cacheUsers.get(userId)
         if (cachedUser) {
