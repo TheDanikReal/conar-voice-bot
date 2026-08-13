@@ -6,6 +6,7 @@ logs/
 .eslintcache
 .seedcord/
 src/generated
+seedcord_src/
 
 .env*
 !.env.example

@@ -1,40 +1,46 @@
-import { ButtonHandler, ButtonRoute, ModalHandler, ModalRoute } from "@seedcord/gateway";
-import { ChannelType, LabelBuilder, ModalBuilder, TextInputStyle } from "discord.js";
-import { BitrateId, BitrateModalId } from "../utils/interactionIds";
+import { LabelBuilder, ModalBuilder } from '@discordjs/builders';
+import { ButtonHandler, ButtonRoute, Gated, ModalHandler, ModalRoute } from '@seedcord/gateway';
+import { ChannelType, TextInputStyle } from 'discord.js';
 
+import { BitrateId, BitrateModalId } from '../utils/interactionIds';
+import { getMaxBitrate } from '../utils/misc';
+import { CheckRights } from '../utils/preconditions';
+
+@Gated(CheckRights())
 @ButtonRoute(BitrateId)
 export class BitrateButton extends ButtonHandler<[typeof BitrateId]> {
     public async execute(): Promise<void> {
-        if (this.event.channel?.type !== ChannelType.GuildVoice) return
-        const modal = new ModalBuilder()
-            .setCustomId(BitrateModalId.encode({}))
-            .setTitle("Установить битрейт")
-        const label = new LabelBuilder()
-            .setLabel("Введите число:")
-            .setTextInputComponent((builder) => {
-                return builder
-                    .setCustomId("bitrate")
-                    .setStyle(TextInputStyle.Short)
-                    .setMaxLength(3)
-                    .setRequired(true)
-                    .setPlaceholder("8 - 384")
-            })
-        modal.addLabelComponents(label)
-        await this.showModal(modal)
+        const premiumTier = this.event.guild.premiumTier;
+        const modal = new ModalBuilder().setCustomId(BitrateModalId.encode({})).setTitle('Set bitrate');
+        const label = new LabelBuilder().setLabel('Input number (kbps):').setTextInputComponent((builder) =>
+            builder
+                .setCustomId('bitrate')
+                .setStyle(TextInputStyle.Short)
+                .setMaxLength(3)
+                .setRequired(true)
+                .setPlaceholder(`8 - ${getMaxBitrate(premiumTier)}`)
+        );
+        modal.addLabelComponents(label);
+        await this.showModal(modal);
     }
 }
 
 @ModalRoute(BitrateModalId)
 export class BitrateModal extends ModalHandler<[typeof BitrateModalId]> {
     public async execute(): Promise<void> {
-        const bitrate = parseInt(this.event.fields.getTextInputValue("bitrate").trim(), 10) * 1000
-        if (bitrate < 8 || bitrate > 384) {
-            await this.reply(":warning: Введённый битрейт выходит за допустимые рамки!")
-            return
+        if (this.event.channel?.type !== ChannelType.GuildVoice) return;
+        await this.defer();
+        const bitrate = parseInt(this.event.fields.getTextInputValue('bitrate').trim(), 10);
+        if (Number.isNaN(bitrate)) {
+            await this.reply(`:warning: Entered bitrate is incorrect`);
+            return;
         }
-        await this.reply(`Установлен битрейт ${bitrate} kbps. ✅`)
-        if (this.event.channel && this.event.channel.type === ChannelType.GuildVoice) {
-            await this.event.channel.setBitrate(bitrate)
+        const maxBitrate = getMaxBitrate(this.event.guild.premiumTier);
+        if (bitrate < 8 || bitrate > maxBitrate) {
+            await this.reply(`:warning: Selected bitrate exceeds limits! ${bitrate}`);
+            return;
         }
+        await this.event.channel.setBitrate(bitrate * 1000);
+        await this.reply(`Successfully set ${bitrate} kbps bitrate. ✅`);
     }
 }

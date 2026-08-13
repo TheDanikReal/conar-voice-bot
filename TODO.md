@@ -1,0 +1,2 @@
+[ ] use seedcord gates to handle preconditions and prevent unauthorized people from running actions
+[ ] use closed option of channel as a sign of is channel closed or not, instead of relying on max member count

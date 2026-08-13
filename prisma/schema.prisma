@@ -24,6 +24,8 @@ model TempChannel {
   ownerId   String
   managers  String[] @default([])
   requests  Boolean  @default(true)
+  closed    Boolean @default(false)
+  maxMembers Int @default(0)
 }
 
 model UserSettings {
