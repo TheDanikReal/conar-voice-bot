@@ -1,4 +1,5 @@
-import { ButtonStyle, ButtonBuilder } from "discord.js"
+import { ButtonStyle } from "discord.js"
+import { ButtonBuilder } from "discord.js"
 import { EmbedBuilder, ActionRowBuilder } from "@discordjs/builders"
 import { Emojis } from "@seedcord/gateway"
 
@@ -13,23 +14,6 @@ interface ChannelOptions {
     closed: boolean
 }
 
-/** i took the original emoji code that was here before, but ig it's better to use regular seedcord
-    emoji store, i remember such thing existed */
-export const emojis = {
-    edit: "1515775509563183125",
-    bitrate: "1515775525879156766",
-    voiceLimited: "1515775542820081834",
-    lock: "1515775559584714944",
-    unlock: "1537119175359860866",
-    members: "1515775576256942170",
-    setup: "1515775592937558088",
-    booster: "1515775609668636832",
-    play: "1515775626609688716",
-    delete: "1516040157285843077",
-    kick: "1537759545684791346",
-    mod: "1537759562294104074"
-}
-
 export function composeDashboard(settings: ChannelOptions): BaseMessageOptions {
     const isClosed = settings.closed
     // these closeChannel stuff look just bad
@@ -41,7 +25,7 @@ export function composeDashboard(settings: ChannelOptions): BaseMessageOptions {
         .setTitle("Voice channel")
         .setColor(basicColor)
         .setDescription(
-            `${settings.owner.displayName} is controling!
+            `${settings.owner.displayName} is controlling!
 
 ${Emojis.edit} - Rename channel.
 ${Emojis.bitrate} - Set bitrate.

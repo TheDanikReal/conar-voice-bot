@@ -18,5 +18,6 @@ export const CloseId = new CustomId("close")
 
 export const ManageMembersId = new CustomId("manage")
 export const KickMemberId = new CustomId("kick")
+export const KickMemberModalId = new CustomId("kickmodal")
 export const BlacklistId = new CustomId("blacklist")
 export const ManagersId = new CustomId("managers")

@@ -60,3 +60,21 @@ export class RaceConditionDetected extends Notice {
         }
     }
 }
+
+export class UserNotFound extends Notice {
+    constructor() {
+        super(`user not found`)
+    }
+
+    render(_ctx: RenderContext): ReplyResponse {
+        return {
+            components: [
+                new ContainerBuilder()
+                    .setAccentColor(0xff_00_00)
+                    .addTextDisplayComponents((builder) =>
+                        builder.setContent(":warning: It seems that user can't be found")
+                    )
+            ]
+        }
+    }
+}
