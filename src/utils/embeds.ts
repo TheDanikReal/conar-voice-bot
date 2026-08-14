@@ -2,6 +2,7 @@ import { EmbedBuilder } from "@discordjs/builders"
 
 import type { TempChannelCreateInput } from "../generated/prisma/models"
 import type { GuildTextBasedChannel, User } from "discord.js"
+import { basicColor } from "./consts"
 
 const statuses = {
     success: 0x00_ff_00,
@@ -18,7 +19,7 @@ export function createStatusEmbed(user: User, description: string, status: "succ
         .setDescription(description)
 }
 
-export function createGenericEmbed(user: User, description: string, color = 0xff_ff_ff) {
+export function createGenericEmbed(user: User, description: string, color = basicColor) {
     return new EmbedBuilder()
         .setAuthor({ name: user.globalName || "unknown", iconURL: user.displayAvatarURL() })
         .setColor(color)

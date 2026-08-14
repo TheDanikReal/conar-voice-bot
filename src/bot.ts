@@ -19,6 +19,20 @@ export const seedcord = new Seedcord({
         },
         events: {
             path: resolve(import.meta.dirname, "./events")
+        },
+        emojis: {
+            edit: ["edit", "964544146444546088"],
+            bitrate: ["bitrate", "964544146444546088"],
+            voiceLimited: ["voiceLimited", "964544146444546088"],
+            lock: ["lock", "964544146444546088"],
+            unlock: ["unlock", "964544146444546088"],
+            members: ["members", "964544146444546088"],
+            setup: ["setup", "964544146444546088"],
+            booster: ["booster", "964544146444546088"],
+            play: ["play", "964544146444546088"],
+            delete: ["delete", "964544146444546088"],
+            kick: ["kick", "964544146444546088"],
+            mod: ["mod", "964544146444546088"]
         }
     },
     subscribers: {
