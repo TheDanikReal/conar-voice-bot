@@ -45,9 +45,7 @@ export function composeDashboard(settings: ChannelOptions): BaseMessageOptions {
 ${closeChannelEmoji} - ${closeChannelMessage}.
 📨 - Disable join requests.
 <:members:${emojis.members}>: - Manage members.
-<:setup:${emojis.setup}>: - Manage channel setting saves.
-<:booster:${emojis.booster}>: - Premium options (just joking, these are just WIP).
-<:play:${emojis.play}>: - Send music player menu.`
+<:setup:${emojis.setup}>: - Manage channel setting saves.`
         )
         .setFooter({
             text: `Owner: ${settings.owner.displayName}`,
@@ -84,20 +82,9 @@ ${closeChannelEmoji} - ${closeChannelMessage}.
         .setCustomId("manageSaves")
         .setEmoji(emojis.setup)
         .setStyle(ButtonStyle.Primary)
-    const boosterOptions = new ButtonBuilder()
-        .setCustomId("boosterOptions")
-        .setEmoji(emojis.booster)
-        .setStyle(ButtonStyle.Primary)
-    const musicPlayer = new ButtonBuilder()
-        .setCustomId("music")
-        .setEmoji(emojis.play)
-        .setStyle(ButtonStyle.Primary)
-        .setDisabled(true)
     const secondRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
         manageMembers,
-        manageSaves,
-        boosterOptions,
-        musicPlayer
+        manageSaves
     )
     const deleteChannel = new ButtonBuilder()
         .setCustomId(DeleteId.encode({}))
