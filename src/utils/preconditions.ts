@@ -23,7 +23,7 @@ export function CheckRights(): Gate<GateContextBase, "CheckRights"> {
         if (!userId) throw new NoRights("manager")
         const channel = await database.findChannel(ctx.channelId!)
         const isManager = Array.isArray(channel?.managers) && channel.managers.includes(userId)
-        if (channel?.ownerId != userId && !isManager) throw new NoRights("manager")
+        if (channel?.ownerId !== userId && !isManager) throw new NoRights("manager")
     })
 }
 
@@ -32,7 +32,7 @@ export function CheckOwnerRights(): Gate<GateContextBase, "CheckOwnerRights"> {
         const userId = ctx.userId
         if (!userId) throw new NoRights("owner")
         const channel = await database.findChannel(ctx.channelId!)
-        if (channel?.ownerId != userId) throw new NoRights("owner")
+        if (channel?.ownerId !== userId) throw new NoRights("owner")
     })
 }
 

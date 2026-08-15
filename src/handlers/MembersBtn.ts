@@ -121,11 +121,14 @@ export class BlacklistModal extends ModalHandler<[typeof BlacklistModalId]> {
     public async execute(): Promise<void> {
         await this.defer()
         const users = this.event.fields.getSelectedUsers("id", false)
-        const userArray = users?.map((user) => user.id) ?? []
+        const currentUsers = users?.map((user) => user.id) ?? []
         const channel = this.event.channel
         if (!(channel && channel.type === ChannelType.GuildVoice && channel.isVoiceBased())) return
-        await blacklistUsers(channel, userArray)
-        await database.changeBlacklist(channel.id, userArray)
+        const settings = await database.findChannel(channel.id)
+        if (!settings) return
+        const previousUsers = Array.isArray(settings.blacklist) ? settings.blacklist : []
+        await blacklistUsers(channel, previousUsers, currentUsers)
+        await database.changeBlacklist(channel.id, currentUsers)
         await this.edit("success")
     }
 }

@@ -1,7 +1,7 @@
 -- AlterTable
-ALTER TABLE "TempChannel" ADD COLUMN     "blacklist" TEXT[] DEFAULT ARRAY[]::TEXT[],
+ALTER TABLE "TempChannel" ADD COLUMN     "blacklist" TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[],
 ADD COLUMN     "closed" BOOLEAN NOT NULL DEFAULT false,
-ADD COLUMN     "managers" TEXT[] DEFAULT ARRAY[]::TEXT[],
+ADD COLUMN     "managers" TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[],
 ADD COLUMN     "maxMembers" INTEGER NOT NULL DEFAULT 0,
 ADD COLUMN     "requests" BOOLEAN NOT NULL DEFAULT true;
 
