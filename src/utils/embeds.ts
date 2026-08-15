@@ -15,14 +15,14 @@ export function createStatusEmbed(user: User, description: string, status: "succ
     return new ContainerBuilder()
         .setAccentColor(statuses[status])*/
     return new EmbedBuilder()
-        .setAuthor({ name: user.globalName || "unknown", iconURL: user.displayAvatarURL() })
+        .setAuthor({ name: user.globalName ?? "unknown", iconURL: user.displayAvatarURL() })
         .setColor(statuses[status])
         .setDescription(description)
 }
 
 export function createGenericEmbed(user: User, description: string, color = basicColor) {
     return new EmbedBuilder()
-        .setAuthor({ name: user.globalName || "unknown", iconURL: user.displayAvatarURL() })
+        .setAuthor({ name: user.globalName ?? "unknown", iconURL: user.displayAvatarURL() })
         .setColor(color)
         .setDescription(description)
 }

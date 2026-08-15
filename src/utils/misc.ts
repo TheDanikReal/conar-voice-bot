@@ -1,4 +1,4 @@
-import { type Guild, type GuildPremiumTier, type VoiceChannel } from "discord.js"
+import type { Guild, GuildPremiumTier, VoiceChannel } from "discord.js"
 
 import { database } from "./base"
 import { composeDashboard } from "./dashboard"
