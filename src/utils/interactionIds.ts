@@ -15,3 +15,11 @@ export const InvitesActionId = new CustomId("action").snowflake("userId").oneOf(
 export const DeleteId = new CustomId("delete")
 
 export const CloseId = new CustomId("close")
+
+export const ManageMembersId = new CustomId("manage")
+export const KickMemberId = new CustomId("kick")
+export const KickMemberModalId = new CustomId("kickmodal")
+export const BlacklistId = new CustomId("blacklist")
+export const BlacklistModalId = new CustomId("blacklistmodal")
+export const ManagersId = new CustomId("managers")
+export const ManagersModalId = new CustomId("managersmodal")

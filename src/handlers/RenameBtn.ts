@@ -10,7 +10,7 @@ import { CheckRights } from "../utils/preconditions"
 @ButtonRoute(RenameId)
 export class RenameButton extends ButtonHandler<[typeof RenameId]> {
     public async execute(): Promise<void> {
-        if (this.event.channel?.type != ChannelType.GuildVoice) return
+        if (this.event.channel?.type !== ChannelType.GuildVoice) return
         const modal = new ModalBuilder().setCustomId(RenameModalId.encode({})).setTitle("Rename channel")
         const label = new LabelBuilder()
             .setLabel("Name:")

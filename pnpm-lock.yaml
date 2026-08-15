@@ -18,8 +18,8 @@ importers:
         specifier: ^7.9.1
         version: 7.9.1(prisma@7.9.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(typescript@6.0.3))(typescript@6.0.3)
       '@seedcord/gateway':
-        specifier: ^0.1.3
-        version: 0.1.3(discord.js@14.27.0)(typescript@6.0.3)
+        specifier: ^0.1.4
+        version: 0.1.4(discord.js@14.27.0)(envapt@8.1.1)(typescript@6.0.3)
       discord.js:
         specifier: ^14.27.0
         version: 14.27.0
@@ -37,8 +37,8 @@ importers:
         version: 7.9.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(typescript@6.0.3)
     devDependencies:
       '@seedcord/eslint-config':
-        specifier: ^1.5.2
-        version: 1.5.2(@types/eslint@9.6.1)(@typescript-eslint/utils@8.66.0(eslint@10.8.1(jiti@2.7.0))(typescript@6.0.3))(eslint@10.8.1(jiti@2.7.0))(tailwindcss@4.3.3)(typescript@6.0.3)
+        specifier: ^1.5.3
+        version: 1.5.3(@types/eslint@9.6.1)(@typescript-eslint/utils@8.66.0(eslint@10.8.1(jiti@2.7.0))(typescript@6.0.3))(eslint-plugin-better-tailwindcss@4.7.0(eslint@10.8.1(jiti@2.7.0))(tailwindcss@4.3.3)(typescript@6.0.3))(eslint-plugin-mdx@3.8.1(eslint@10.8.1(jiti@2.7.0)))(eslint-plugin-tailwind-canonical-classes@1.4.1(eslint@10.8.1(jiti@2.7.0)))(eslint@10.8.1(jiti@2.7.0))(tailwindcss@4.3.3)(typescript@6.0.3)
       '@seedcord/tsconfig':
         specifier: ^2.0.2
         version: 2.0.2
@@ -49,8 +49,8 @@ importers:
         specifier: ^3.9.6
         version: 3.9.6
       seedcord:
-        specifier: ^0.17.3
-        version: 0.17.3(@types/node@26.2.0)(@types/react@19.2.18)(esbuild@0.28.1)(typescript@6.0.3)(yaml@2.9.0)
+        specifier: ^0.17.4
+        version: 0.17.4(@types/node@26.2.0)(@types/react@19.2.18)(envapt@8.1.1)(esbuild@0.28.1)(typescript@6.0.3)(yaml@2.9.0)
       typescript:
         specifier: ~6.0.3
         version: 6.0.3
@@ -660,27 +660,37 @@ packages:
     resolution: {integrity: sha512-xzvBr1Q1c4lCe7i6sRnrofxeO1QTP/LKQ6A6qy0iB4x5yfiSfARMEQEghojzTNALDTcv8En04qYNIco9/K9eZQ==}
     engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
 
-  '@seedcord/core@0.1.3':
-    resolution: {integrity: sha512-de5WZ5L/mYMG0of5PZydwR+xz24qC8lD8cIXBM3U0R+bLw4MdSBOFnJHVT8ldlP+JCBc9tWI2YSFG9EnYPBzHg==}
+  '@seedcord/core@0.1.4':
+    resolution: {integrity: sha512-rE5Gb0qVf03COIftlstTnRXMt0efIzpfnfo7rWeSVRIYJExr0Q7UTSz1fOYX4DtmL5GLTwb/KYz8VUykNzZN+g==}
+    engines: {node: '>=24.11'}
+    peerDependencies:
+      envapt: ^8.1.1
+      typescript: ^6.0.3
+
+  '@seedcord/errors@0.3.4':
+    resolution: {integrity: sha512-Soee7PIJMnx2hUn9UfB7jTJHRbJ1vI0vPYwUSIM+i6j4M+44n1qXBU5pHLljqlACWfSbzfOp0CmBDC5T9wk8RA==}
     engines: {node: '>=24.11'}
     peerDependencies:
       typescript: ^6.0.3
 
-  '@seedcord/errors@0.3.3':
-    resolution: {integrity: sha512-vpHZhLYkmxB4ecC/hzw2Q9qFegwFy3yj5CBtaDWXThmWL+hQnx2Mib6MgaEzpcku55YDvF5+gGYf759fMlX+3g==}
-    engines: {node: '>=24.11'}
-    peerDependencies:
-      typescript: ^6.0.3
-
-  '@seedcord/eslint-config@1.5.2':
-    resolution: {integrity: sha512-J/6OUFkNQlSxomNWH1S+anr2RL0i6OZmjzijU9d9RcUKZIEOuSDXcr2+qMYiPeIf0si4OBYbUxIqvqSgiSfBlQ==}
+  '@seedcord/eslint-config@1.5.3':
+    resolution: {integrity: sha512-moCEfw7NG0wzlFcB5CRgsgBuG/qQwlfE8JVjKSMKb7F7KhzT+mD97ZhWQXsPd9eEYML1e6OZ5XmJH0zqpebXMw==}
     engines: {node: '>=24.11'}
     peerDependencies:
       eslint: ^9.22.0 || ^10.4.0
+      eslint-plugin-better-tailwindcss: ^4.7.0
+      eslint-plugin-mdx: ^3.8.1
+      eslint-plugin-tailwind-canonical-classes: ^1.4.1
       prettier-plugin-tailwindcss: ^0.8.1
       tailwindcss: ^4.3.3
       typescript: ^6.0.3
     peerDependenciesMeta:
+      eslint-plugin-better-tailwindcss:
+        optional: true
+      eslint-plugin-mdx:
+        optional: true
+      eslint-plugin-tailwind-canonical-classes:
+        optional: true
       prettier-plugin-tailwindcss:
         optional: true
       tailwindcss:
@@ -699,17 +709,19 @@ packages:
     peerDependencies:
       typescript: ^6.0.3
 
-  '@seedcord/gateway@0.1.3':
-    resolution: {integrity: sha512-AMeGx4anghQ4WczMquud+yjwu4JHVKu9aoOOs73Ez8E25XxBotgZwnVZ+xp6uR5djlt9vPkV631wvruI3TXg9Q==}
+  '@seedcord/gateway@0.1.4':
+    resolution: {integrity: sha512-+ObbZ3XEVJS3Hdw9ZXmQfZ0AN599ZZSmwmG6PRylQ+4ErrIdbcLOpcZqDT7+9mcXVroWYJU5KvvdViDQX4PAeA==}
     engines: {node: '>=24.11'}
     peerDependencies:
       discord.js: ^14.27.0
+      envapt: ^8.1.1
       typescript: ^6.0.3
 
-  '@seedcord/logger@0.1.3':
-    resolution: {integrity: sha512-FOQIXCqgQSwipqkyJlhghL1xWU84xqpx8I0VQ6VLWmr2e2kLrRsN2zGve90ZChr5PU2Eu3cDLXISx51HcluxdA==}
+  '@seedcord/logger@0.1.4':
+    resolution: {integrity: sha512-lAoPzq/INP/cTLk9UNbDCSMhGSMRwiLD+FVCq3H/mDrNSkFJtwQ2wa10Rvhv57hl9Ronf1qlB8YsdOQYhHY+GQ==}
     engines: {node: '>=24.11'}
     peerDependencies:
+      envapt: ^8.1.1
       typescript: ^6.0.3
 
   '@seedcord/rate-limiter@0.1.2':
@@ -728,8 +740,8 @@ packages:
     peerDependencies:
       typescript: ^6.0.3
 
-  '@seedcord/utils@0.8.3':
-    resolution: {integrity: sha512-XgFWypZV7rEtJmQNc4YdJ2Bmr0zLKpeaB2u1EOxuKNR/QQ0UWtGW4jqOmzNGNtqA52/qBPM5KjhBbaUS9Bnskg==}
+  '@seedcord/utils@0.8.4':
+    resolution: {integrity: sha512-4RszWRWJIK/SXa6agoqpu2MRbq56BNOvrxJ368IEe///qqH315F1kQS3itpjs/vsRaWS4fg8kMVLKoa+QZCQ9w==}
     engines: {node: '>=24.11'}
     peerDependencies:
       typescript: ^6.0.3
@@ -2694,11 +2706,12 @@ packages:
   scheduler@0.27.0:
     resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
 
-  seedcord@0.17.3:
-    resolution: {integrity: sha512-UDRwHoQ9fUy7k+s3IyCTT0C6BguNuozMhSRZY0m1JuX25MBSc9XKtGJd54HC0RtV1mnk6EFwFmQCBlC6KxLs/A==}
+  seedcord@0.17.4:
+    resolution: {integrity: sha512-GR2oVMmhYlFaqrNXvP862FqNXrJHHfUuyABtFMAgA2tvxuCR9qxGDj7DEbrMH+9UIUhWmOvkquvA8qY0iogR0w==}
     engines: {node: '>=24.11'}
     hasBin: true
     peerDependencies:
+      envapt: ^8.1.1
       typescript: ^6.0.3
 
   semver@7.8.5:
@@ -3137,8 +3150,10 @@ snapshots:
       '@babel/helper-validator-identifier': 7.29.7
       js-tokens: 4.0.0
       picocolors: 1.1.1
+    optional: true
 
-  '@babel/helper-validator-identifier@7.29.7': {}
+  '@babel/helper-validator-identifier@7.29.7':
+    optional: true
 
   '@clack/core@1.4.3':
     dependencies:
@@ -3376,25 +3391,31 @@ snapshots:
       strip-ansi-cjs: strip-ansi@6.0.1
       wrap-ansi: 8.1.0
       wrap-ansi-cjs: wrap-ansi@7.0.0
+    optional: true
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
       '@jridgewell/trace-mapping': 0.3.31
+    optional: true
 
   '@jridgewell/remapping@2.3.5':
     dependencies:
       '@jridgewell/gen-mapping': 0.3.13
       '@jridgewell/trace-mapping': 0.3.31
+    optional: true
 
-  '@jridgewell/resolve-uri@3.1.2': {}
+  '@jridgewell/resolve-uri@3.1.2':
+    optional: true
 
-  '@jridgewell/sourcemap-codec@1.5.5': {}
+  '@jridgewell/sourcemap-codec@1.5.5':
+    optional: true
 
   '@jridgewell/trace-mapping@0.3.31':
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
+    optional: true
 
   '@microsoft/tsdoc-config@0.18.1':
     dependencies:
@@ -3424,6 +3445,7 @@ snapshots:
       walk-up-path: 3.0.1
     transitivePeerDependencies:
       - bluebird
+    optional: true
 
   '@npmcli/git@5.0.8':
     dependencies:
@@ -3438,6 +3460,7 @@ snapshots:
       which: 4.0.0
     transitivePeerDependencies:
       - bluebird
+    optional: true
 
   '@npmcli/map-workspaces@3.0.6':
     dependencies:
@@ -3445,8 +3468,10 @@ snapshots:
       glob: 10.5.0
       minimatch: 9.0.9
       read-package-json-fast: 3.0.2
+    optional: true
 
-  '@npmcli/name-from-folder@2.0.0': {}
+  '@npmcli/name-from-folder@2.0.0':
+    optional: true
 
   '@npmcli/package-json@5.2.1':
     dependencies:
@@ -3459,10 +3484,12 @@ snapshots:
       semver: 7.8.5
     transitivePeerDependencies:
       - bluebird
+    optional: true
 
   '@npmcli/promise-spawn@7.0.2':
     dependencies:
       which: 4.0.0
+    optional: true
 
   '@oxc-project/types@0.143.0': {}
 
@@ -3684,27 +3711,27 @@ snapshots:
 
   '@sapphire/snowflake@3.5.5': {}
 
-  '@seedcord/core@0.1.3(typescript@6.0.3)':
+  '@seedcord/core@0.1.4(envapt@8.1.1)(typescript@6.0.3)':
     dependencies:
       '@discordjs/builders': 1.14.1
       '@discordjs/rest': 2.6.3
-      '@seedcord/errors': 0.3.3(typescript@6.0.3)
+      '@seedcord/errors': 0.3.4(typescript@6.0.3)
       '@seedcord/event-emitter': 0.1.2(typescript@6.0.3)
-      '@seedcord/logger': 0.1.3(typescript@6.0.3)
+      '@seedcord/logger': 0.1.4(envapt@8.1.1)(typescript@6.0.3)
       '@seedcord/types': 0.8.2(typescript@6.0.3)
-      '@seedcord/utils': 0.8.3(typescript@6.0.3)
+      '@seedcord/utils': 0.8.4(typescript@6.0.3)
       chalk: 6.0.0
       discord-api-types: 0.38.53
       envapt: 8.1.1
       reflect-metadata: 0.2.2
       typescript: 6.0.3
 
-  '@seedcord/errors@0.3.3(typescript@6.0.3)':
+  '@seedcord/errors@0.3.4(typescript@6.0.3)':
     dependencies:
       chalk: 6.0.0
       typescript: 6.0.3
 
-  '@seedcord/eslint-config@1.5.2(@types/eslint@9.6.1)(@typescript-eslint/utils@8.66.0(eslint@10.8.1(jiti@2.7.0))(typescript@6.0.3))(eslint@10.8.1(jiti@2.7.0))(tailwindcss@4.3.3)(typescript@6.0.3)':
+  '@seedcord/eslint-config@1.5.3(@types/eslint@9.6.1)(@typescript-eslint/utils@8.66.0(eslint@10.8.1(jiti@2.7.0))(typescript@6.0.3))(eslint-plugin-better-tailwindcss@4.7.0(eslint@10.8.1(jiti@2.7.0))(tailwindcss@4.3.3)(typescript@6.0.3))(eslint-plugin-mdx@3.8.1(eslint@10.8.1(jiti@2.7.0)))(eslint-plugin-tailwind-canonical-classes@1.4.1(eslint@10.8.1(jiti@2.7.0)))(eslint@10.8.1(jiti@2.7.0))(tailwindcss@4.3.3)(typescript@6.0.3)':
     dependencies:
       '@seedcord/eslint-plugin': 0.1.2(eslint@10.8.1(jiti@2.7.0))(typescript@6.0.3)
       '@types/eslint-plugin-security': 3.0.1
@@ -3712,13 +3739,10 @@ snapshots:
       eslint: 10.8.1(jiti@2.7.0)
       eslint-config-prettier: 10.1.8(eslint@10.8.1(jiti@2.7.0))
       eslint-import-resolver-typescript: 4.4.5(eslint-plugin-import-x@4.17.1(@typescript-eslint/utils@8.66.0(eslint@10.8.1(jiti@2.7.0))(typescript@6.0.3))(eslint@10.8.1(jiti@2.7.0)))(eslint@10.8.1(jiti@2.7.0))
-      eslint-plugin-better-tailwindcss: 4.7.0(eslint@10.8.1(jiti@2.7.0))(tailwindcss@4.3.3)(typescript@6.0.3)
       eslint-plugin-discordjs: 0.1.2(eslint@10.8.1(jiti@2.7.0))(typescript@6.0.3)
       eslint-plugin-import-x: 4.17.1(@typescript-eslint/utils@8.66.0(eslint@10.8.1(jiti@2.7.0))(typescript@6.0.3))(eslint@10.8.1(jiti@2.7.0))
-      eslint-plugin-mdx: 3.8.1(eslint@10.8.1(jiti@2.7.0))
       eslint-plugin-prettier: 5.5.6(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8(eslint@10.8.1(jiti@2.7.0)))(eslint@10.8.1(jiti@2.7.0))(prettier@3.9.6)
       eslint-plugin-security: 4.0.1
-      eslint-plugin-tailwind-canonical-classes: 1.4.1(eslint@10.8.1(jiti@2.7.0))
       eslint-plugin-tsdoc: 0.5.2(eslint@10.8.1(jiti@2.7.0))(typescript@6.0.3)
       eslint-plugin-unicorn: 72.0.0(eslint@10.8.1(jiti@2.7.0))
       lodash.merge: 4.6.2
@@ -3726,19 +3750,16 @@ snapshots:
       typescript: 6.0.3
       typescript-eslint: 8.66.0(eslint@10.8.1(jiti@2.7.0))(typescript@6.0.3)
     optionalDependencies:
+      eslint-plugin-better-tailwindcss: 4.7.0(eslint@10.8.1(jiti@2.7.0))(tailwindcss@4.3.3)(typescript@6.0.3)
+      eslint-plugin-mdx: 3.8.1(eslint@10.8.1(jiti@2.7.0))
+      eslint-plugin-tailwind-canonical-classes: 1.4.1(eslint@10.8.1(jiti@2.7.0))
       tailwindcss: 4.3.3
     transitivePeerDependencies:
-      - '@eslint/css'
       - '@types/eslint'
       - '@typescript-eslint/utils'
-      - bluebird
       - eslint-import-resolver-node
       - eslint-plugin-import
-      - oxlint
-      - remark-lint-file-extension
       - supports-color
-      - svelte-eslint-parser
-      - vue-eslint-parser
 
   '@seedcord/eslint-plugin@0.1.2(eslint@10.8.1(jiti@2.7.0))(typescript@6.0.3)':
     dependencies:
@@ -3753,28 +3774,28 @@ snapshots:
     dependencies:
       typescript: 6.0.3
 
-  '@seedcord/gateway@0.1.3(discord.js@14.27.0)(typescript@6.0.3)':
+  '@seedcord/gateway@0.1.4(discord.js@14.27.0)(envapt@8.1.1)(typescript@6.0.3)':
     dependencies:
       '@discordjs/builders': 1.14.1
       '@discordjs/rest': 2.6.3
-      '@seedcord/core': 0.1.3(typescript@6.0.3)
-      '@seedcord/errors': 0.3.3(typescript@6.0.3)
+      '@seedcord/core': 0.1.4(envapt@8.1.1)(typescript@6.0.3)
+      '@seedcord/errors': 0.3.4(typescript@6.0.3)
       '@seedcord/event-emitter': 0.1.2(typescript@6.0.3)
-      '@seedcord/logger': 0.1.3(typescript@6.0.3)
+      '@seedcord/logger': 0.1.4(envapt@8.1.1)(typescript@6.0.3)
       '@seedcord/rate-limiter': 0.1.2(typescript@6.0.3)
       '@seedcord/types': 0.8.2(typescript@6.0.3)
-      '@seedcord/utils': 0.8.3(typescript@6.0.3)
+      '@seedcord/utils': 0.8.4(typescript@6.0.3)
       chalk: 6.0.0
       discord.js: 14.27.0
       envapt: 8.1.1
       reflect-metadata: 0.2.2
       typescript: 6.0.3
 
-  '@seedcord/logger@0.1.3(typescript@6.0.3)':
+  '@seedcord/logger@0.1.4(envapt@8.1.1)(typescript@6.0.3)':
     dependencies:
-      '@seedcord/errors': 0.3.3(typescript@6.0.3)
+      '@seedcord/errors': 0.3.4(typescript@6.0.3)
       '@seedcord/types': 0.8.2(typescript@6.0.3)
-      '@seedcord/utils': 0.8.3(typescript@6.0.3)
+      '@seedcord/utils': 0.8.4(typescript@6.0.3)
       chalk: 6.0.0
       envapt: 8.1.1
       typescript: 6.0.3
@@ -3792,9 +3813,9 @@ snapshots:
       discord-api-types: 0.38.53
       typescript: 6.0.3
 
-  '@seedcord/utils@0.8.3(typescript@6.0.3)':
+  '@seedcord/utils@0.8.4(typescript@6.0.3)':
     dependencies:
-      '@seedcord/errors': 0.3.3(typescript@6.0.3)
+      '@seedcord/errors': 0.3.4(typescript@6.0.3)
       '@seedcord/types': 0.8.2(typescript@6.0.3)
       discord-api-types: 0.38.53
       strip-ansi: 7.2.0
@@ -3816,6 +3837,7 @@ snapshots:
       magic-string: 0.30.21
       source-map-js: 1.2.1
       tailwindcss: 4.3.3
+    optional: true
 
   '@tybys/wasm-util@0.10.3':
     dependencies:
@@ -3825,6 +3847,7 @@ snapshots:
   '@types/concat-stream@2.0.3':
     dependencies:
       '@types/node': 26.2.0
+    optional: true
 
   '@types/d3-array@3.0.3': {}
 
@@ -3859,6 +3882,7 @@ snapshots:
   '@types/debug@4.1.13':
     dependencies:
       '@types/ms': 2.1.0
+    optional: true
 
   '@types/eslint-plugin-security@3.0.1':
     dependencies:
@@ -3874,6 +3898,7 @@ snapshots:
   '@types/estree-jsx@1.0.5':
     dependencies:
       '@types/estree': 1.0.9
+    optional: true
 
   '@types/estree@1.0.9': {}
 
@@ -3882,8 +3907,10 @@ snapshots:
   '@types/hast@3.0.5':
     dependencies:
       '@types/unist': 3.0.3
+    optional: true
 
-  '@types/is-empty@1.2.3': {}
+  '@types/is-empty@1.2.3':
+    optional: true
 
   '@types/json-schema@7.0.15': {}
 
@@ -3892,12 +3919,15 @@ snapshots:
   '@types/mdast@4.0.4':
     dependencies:
       '@types/unist': 3.0.3
+    optional: true
 
-  '@types/ms@2.1.0': {}
+  '@types/ms@2.1.0':
+    optional: true
 
   '@types/node@22.20.1':
     dependencies:
       undici-types: 6.21.0
+    optional: true
 
   '@types/node@26.2.0':
     dependencies:
@@ -3913,13 +3943,16 @@ snapshots:
     dependencies:
       csstype: 3.2.3
 
-  '@types/supports-color@8.1.3': {}
+  '@types/supports-color@8.1.3':
+    optional: true
 
   '@types/triple-beam@1.3.5': {}
 
-  '@types/unist@2.0.11': {}
+  '@types/unist@2.0.11':
+    optional: true
 
-  '@types/unist@3.0.3': {}
+  '@types/unist@3.0.3':
+    optional: true
 
   '@types/ws@8.18.1':
     dependencies:
@@ -3955,8 +3988,8 @@ snapshots:
 
   '@typescript-eslint/project-service@8.56.1(typescript@6.0.3)':
     dependencies:
-      '@typescript-eslint/tsconfig-utils': 8.56.1(typescript@6.0.3)
-      '@typescript-eslint/types': 8.56.1
+      '@typescript-eslint/tsconfig-utils': 8.66.0(typescript@6.0.3)
+      '@typescript-eslint/types': 8.66.0
       debug: 4.4.3
       typescript: 6.0.3
     transitivePeerDependencies:
@@ -4140,6 +4173,7 @@ snapshots:
   '@valibot/to-json-schema@1.7.1(valibot@1.4.2(typescript@6.0.3))':
     dependencies:
       valibot: 1.4.2(typescript@6.0.3)
+    optional: true
 
   '@visx/curve@4.0.1-alpha.0':
     dependencies:
@@ -4220,7 +4254,8 @@ snapshots:
 
   '@vladfrangu/async_event_emitter@2.4.7': {}
 
-  abbrev@2.0.0: {}
+  abbrev@2.0.0:
+    optional: true
 
   acorn-jsx@5.3.2(acorn@8.18.0):
     dependencies:
@@ -4246,13 +4281,15 @@ snapshots:
     dependencies:
       environment: 1.1.0
 
-  ansi-regex@5.0.1: {}
+  ansi-regex@5.0.1:
+    optional: true
 
   ansi-regex@6.2.2: {}
 
   ansi-styles@4.3.0:
     dependencies:
       color-convert: 2.0.1
+    optional: true
 
   ansi-styles@6.2.3: {}
 
@@ -4262,9 +4299,11 @@ snapshots:
 
   aws-ssl-profiles@1.1.2: {}
 
-  bail@2.0.2: {}
+  bail@2.0.2:
+    optional: true
 
-  balanced-match@1.0.2: {}
+  balanced-match@1.0.2:
+    optional: true
 
   balanced-match@4.0.4: {}
 
@@ -4275,6 +4314,7 @@ snapshots:
   brace-expansion@2.1.4:
     dependencies:
       balanced-match: 1.0.2
+    optional: true
 
   brace-expansion@5.0.9:
     dependencies:
@@ -4288,7 +4328,8 @@ snapshots:
       node-releases: 2.0.53
       update-browserslist-db: 1.3.0(browserslist@4.28.8)
 
-  buffer-from@1.1.2: {}
+  buffer-from@1.1.2:
+    optional: true
 
   builtin-modules@5.3.0: {}
 
@@ -4309,12 +4350,14 @@ snapshots:
 
   caniuse-lite@1.0.30001809: {}
 
-  ccount@2.0.1: {}
+  ccount@2.0.1:
+    optional: true
 
   chalk@4.1.2:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
+    optional: true
 
   chalk@5.6.2: {}
 
@@ -4322,13 +4365,17 @@ snapshots:
 
   change-case@5.4.4: {}
 
-  character-entities-html4@2.1.0: {}
+  character-entities-html4@2.1.0:
+    optional: true
 
-  character-entities-legacy@3.0.0: {}
+  character-entities-legacy@3.0.0:
+    optional: true
 
-  character-entities@2.0.2: {}
+  character-entities@2.0.2:
+    optional: true
 
-  character-reference-invalid@2.0.1: {}
+  character-reference-invalid@2.0.1:
+    optional: true
 
   chokidar@5.0.0:
     dependencies:
@@ -4358,12 +4405,14 @@ snapshots:
   color-convert@2.0.1:
     dependencies:
       color-name: 1.1.4
+    optional: true
 
   color-convert@3.1.3:
     dependencies:
       color-name: 2.1.1
 
-  color-name@1.1.4: {}
+  color-name@1.1.4:
+    optional: true
 
   color-name@2.1.1: {}
 
@@ -4386,6 +4435,7 @@ snapshots:
       inherits: 2.0.4
       readable-stream: 3.6.2
       typedarray: 0.0.6
+    optional: true
 
   confbox@0.2.4: {}
 
@@ -4458,6 +4508,7 @@ snapshots:
   decode-named-character-reference@1.3.0:
     dependencies:
       character-entities: 2.0.2
+    optional: true
 
   deep-is@0.1.4: {}
 
@@ -4471,7 +4522,8 @@ snapshots:
 
   denque@2.1.0: {}
 
-  dequal@2.0.3: {}
+  dequal@2.0.3:
+    optional: true
 
   destr@2.0.5: {}
 
@@ -4482,6 +4534,7 @@ snapshots:
   devlop@1.1.0:
     dependencies:
       dequal: 2.0.3
+    optional: true
 
   discord-api-types@0.38.53: {}
 
@@ -4506,7 +4559,8 @@ snapshots:
 
   dotenv@17.4.2: {}
 
-  eastasianwidth@0.2.0: {}
+  eastasianwidth@0.2.0:
+    optional: true
 
   effect@3.20.0:
     dependencies:
@@ -4517,11 +4571,14 @@ snapshots:
 
   elkjs@0.11.1: {}
 
-  emoji-regex@10.6.0: {}
+  emoji-regex@10.6.0:
+    optional: true
 
-  emoji-regex@8.0.0: {}
+  emoji-regex@8.0.0:
+    optional: true
 
-  emoji-regex@9.2.2: {}
+  emoji-regex@9.2.2:
+    optional: true
 
   empathic@2.0.0: {}
 
@@ -4531,6 +4588,7 @@ snapshots:
     dependencies:
       graceful-fs: 4.2.11
       tapable: 2.3.3
+    optional: true
 
   entities@4.5.0: {}
 
@@ -4540,11 +4598,13 @@ snapshots:
 
   environment@1.1.0: {}
 
-  err-code@2.0.3: {}
+  err-code@2.0.3:
+    optional: true
 
   error-ex@1.3.4:
     dependencies:
       is-arrayish: 0.2.1
+    optional: true
 
   es-errors@1.3.0: {}
 
@@ -4629,6 +4689,7 @@ snapshots:
     transitivePeerDependencies:
       - bluebird
       - supports-color
+    optional: true
 
   eslint-plugin-better-tailwindcss@4.7.0(eslint@10.8.1(jiti@2.7.0))(tailwindcss@4.3.3)(typescript@6.0.3):
     dependencies:
@@ -4646,6 +4707,7 @@ snapshots:
     transitivePeerDependencies:
       - '@eslint/css'
       - typescript
+    optional: true
 
   eslint-plugin-discordjs@0.1.2(eslint@10.8.1(jiti@2.7.0))(typescript@6.0.3):
     dependencies:
@@ -4689,6 +4751,7 @@ snapshots:
       - bluebird
       - remark-lint-file-extension
       - supports-color
+    optional: true
 
   eslint-plugin-prettier@5.5.6(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8(eslint@10.8.1(jiti@2.7.0)))(eslint@10.8.1(jiti@2.7.0))(prettier@3.9.6):
     dependencies:
@@ -4709,6 +4772,7 @@ snapshots:
       '@tailwindcss/node': 4.3.3
       eslint: 10.8.1(jiti@2.7.0)
       synckit: 0.11.13
+    optional: true
 
   eslint-plugin-tsdoc@0.5.2(eslint@10.8.1(jiti@2.7.0))(typescript@6.0.3):
     dependencies:
@@ -4808,18 +4872,21 @@ snapshots:
 
   estraverse@5.3.0: {}
 
-  estree-util-is-identifier-name@3.0.0: {}
+  estree-util-is-identifier-name@3.0.0:
+    optional: true
 
   estree-util-visit@2.0.0:
     dependencies:
       '@types/estree-jsx': 1.0.5
       '@types/unist': 3.0.3
+    optional: true
 
   esutils@2.0.3: {}
 
   exsolve@1.1.1: {}
 
-  extend@3.0.2: {}
+  extend@3.0.2:
+    optional: true
 
   fast-check@3.23.2:
     dependencies:
@@ -4927,6 +4994,7 @@ snapshots:
       minipass: 7.1.3
       package-json-from-dist: 1.0.1
       path-scurry: 1.11.1
+    optional: true
 
   globals@17.9.0: {}
 
@@ -4936,7 +5004,8 @@ snapshots:
 
   graphmatch@1.1.1: {}
 
-  has-flag@4.0.0: {}
+  has-flag@4.0.0:
+    optional: true
 
   hasown@2.0.4:
     dependencies:
@@ -4945,6 +5014,7 @@ snapshots:
   hosted-git-info@7.0.2:
     dependencies:
       lru-cache: 10.4.3
+    optional: true
 
   iconv-lite@0.7.3:
     dependencies:
@@ -4956,11 +5026,13 @@ snapshots:
 
   ignore@5.3.2: {}
 
-  ignore@6.0.2: {}
+  ignore@6.0.2:
+    optional: true
 
   ignore@7.0.6: {}
 
-  import-meta-resolve@4.2.0: {}
+  import-meta-resolve@4.2.0:
+    optional: true
 
   imurmurhash@0.1.4: {}
 
@@ -4968,7 +5040,8 @@ snapshots:
 
   inherits@2.0.4: {}
 
-  ini@4.1.3: {}
+  ini@4.1.3:
+    optional: true
 
   ink-spinner@5.0.0(ink@7.1.1(@types/react@19.2.18)(react@19.2.8))(react@19.2.8):
     dependencies:
@@ -5012,14 +5085,17 @@ snapshots:
 
   internmap@2.0.3: {}
 
-  is-alphabetical@2.0.1: {}
+  is-alphabetical@2.0.1:
+    optional: true
 
   is-alphanumerical@2.0.1:
     dependencies:
       is-alphabetical: 2.0.1
       is-decimal: 2.0.1
+    optional: true
 
-  is-arrayish@0.2.1: {}
+  is-arrayish@0.2.1:
+    optional: true
 
   is-builtin-module@5.0.0:
     dependencies:
@@ -5033,13 +5109,16 @@ snapshots:
     dependencies:
       hasown: 2.0.4
 
-  is-decimal@2.0.1: {}
+  is-decimal@2.0.1:
+    optional: true
 
-  is-empty@1.2.0: {}
+  is-empty@1.2.0:
+    optional: true
 
   is-extglob@2.1.1: {}
 
-  is-fullwidth-code-point@3.0.0: {}
+  is-fullwidth-code-point@3.0.0:
+    optional: true
 
   is-fullwidth-code-point@5.1.0:
     dependencies:
@@ -5049,7 +5128,8 @@ snapshots:
     dependencies:
       is-extglob: 2.1.1
 
-  is-hexadecimal@2.0.1: {}
+  is-hexadecimal@2.0.1:
+    optional: true
 
   is-identifier@1.1.0:
     dependencies:
@@ -5058,7 +5138,8 @@ snapshots:
 
   is-in-ci@2.0.0: {}
 
-  is-plain-obj@4.1.0: {}
+  is-plain-obj@4.1.0:
+    optional: true
 
   is-property@1.0.2: {}
 
@@ -5066,25 +5147,29 @@ snapshots:
 
   isexe@2.0.0: {}
 
-  isexe@3.1.5: {}
+  isexe@3.1.5:
+    optional: true
 
   jackspeak@3.4.3:
     dependencies:
       '@isaacs/cliui': 8.0.2
     optionalDependencies:
       '@pkgjs/parseargs': 0.11.0
+    optional: true
 
   jiti@2.7.0: {}
 
   jju@1.4.0: {}
 
-  js-tokens@4.0.0: {}
+  js-tokens@4.0.0:
+    optional: true
 
   jsesc@3.1.0: {}
 
   json-buffer@3.0.1: {}
 
-  json-parse-even-better-errors@3.0.2: {}
+  json-parse-even-better-errors@3.0.2:
+    optional: true
 
   json-schema-traverse@0.4.1: {}
 
@@ -5092,7 +5177,8 @@ snapshots:
 
   json-stable-stringify-without-jsonify@1.0.1: {}
 
-  json5@2.2.3: {}
+  json5@2.2.3:
+    optional: true
 
   keyv@4.5.4:
     dependencies:
@@ -5186,6 +5272,7 @@ snapshots:
       lightningcss-linux-x64-musl: 1.32.0
       lightningcss-win32-arm64-msvc: 1.32.0
       lightningcss-win32-x64-msvc: 1.32.0
+    optional: true
 
   lightningcss@1.33.0:
     dependencies:
@@ -5203,7 +5290,8 @@ snapshots:
       lightningcss-win32-arm64-msvc: 1.33.0
       lightningcss-win32-x64-msvc: 1.33.0
 
-  lines-and-columns@2.0.4: {}
+  lines-and-columns@2.0.4:
+    optional: true
 
   load-plugin@6.0.3:
     dependencies:
@@ -5211,6 +5299,7 @@ snapshots:
       import-meta-resolve: 4.2.0
     transitivePeerDependencies:
       - bluebird
+    optional: true
 
   locate-path@6.0.0:
     dependencies:
@@ -5233,9 +5322,11 @@ snapshots:
 
   long@5.3.2: {}
 
-  longest-streak@3.1.0: {}
+  longest-streak@3.1.0:
+    optional: true
 
-  lru-cache@10.4.3: {}
+  lru-cache@10.4.3:
+    optional: true
 
   lru-cache@11.5.2: {}
 
@@ -5246,6 +5337,7 @@ snapshots:
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
+    optional: true
 
   make-asynchronous@1.1.0:
     dependencies:
@@ -5269,6 +5361,7 @@ snapshots:
       unist-util-stringify-position: 4.0.0
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   mdast-util-mdx-expression@2.0.1:
     dependencies:
@@ -5280,6 +5373,7 @@ snapshots:
       mdast-util-to-markdown: 2.1.2
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   mdast-util-mdx-jsx@3.2.0:
     dependencies:
@@ -5297,6 +5391,7 @@ snapshots:
       vfile-message: 4.0.3
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   mdast-util-mdx@3.0.0:
     dependencies:
@@ -5307,6 +5402,7 @@ snapshots:
       mdast-util-to-markdown: 2.1.2
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   mdast-util-mdxjs-esm@2.0.1:
     dependencies:
@@ -5318,11 +5414,13 @@ snapshots:
       mdast-util-to-markdown: 2.1.2
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   mdast-util-phrasing@4.1.0:
     dependencies:
       '@types/mdast': 4.0.4
       unist-util-is: 6.0.1
+    optional: true
 
   mdast-util-to-markdown@2.1.2:
     dependencies:
@@ -5335,10 +5433,12 @@ snapshots:
       micromark-util-decode-string: 2.0.1
       unist-util-visit: 5.1.0
       zwitch: 2.0.4
+    optional: true
 
   mdast-util-to-string@4.0.0:
     dependencies:
       '@types/mdast': 4.0.4
+    optional: true
 
   mdn-data@2.29.0: {}
 
@@ -5360,6 +5460,7 @@ snapshots:
       micromark-util-subtokenize: 2.1.0
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-extension-mdx-expression@3.0.1:
     dependencies:
@@ -5371,6 +5472,7 @@ snapshots:
       micromark-util-events-to-acorn: 2.0.3
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-extension-mdx-jsx@3.0.2:
     dependencies:
@@ -5384,10 +5486,12 @@ snapshots:
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
       vfile-message: 4.0.3
+    optional: true
 
   micromark-extension-mdx-md@2.0.0:
     dependencies:
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-extension-mdxjs-esm@3.0.0:
     dependencies:
@@ -5400,6 +5504,7 @@ snapshots:
       micromark-util-types: 2.0.2
       unist-util-position-from-estree: 2.0.0
       vfile-message: 4.0.3
+    optional: true
 
   micromark-extension-mdxjs@3.0.0:
     dependencies:
@@ -5411,12 +5516,14 @@ snapshots:
       micromark-extension-mdxjs-esm: 3.0.0
       micromark-util-combine-extensions: 2.0.1
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-factory-destination@2.0.1:
     dependencies:
       micromark-util-character: 2.1.1
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-factory-label@2.0.1:
     dependencies:
@@ -5424,6 +5531,7 @@ snapshots:
       micromark-util-character: 2.1.1
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-factory-mdx-expression@2.0.3:
     dependencies:
@@ -5436,11 +5544,13 @@ snapshots:
       micromark-util-types: 2.0.2
       unist-util-position-from-estree: 2.0.0
       vfile-message: 4.0.3
+    optional: true
 
   micromark-factory-space@2.0.1:
     dependencies:
       micromark-util-character: 2.1.1
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-factory-title@2.0.1:
     dependencies:
@@ -5448,6 +5558,7 @@ snapshots:
       micromark-util-character: 2.1.1
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-factory-whitespace@2.0.1:
     dependencies:
@@ -5455,30 +5566,36 @@ snapshots:
       micromark-util-character: 2.1.1
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-util-character@2.1.1:
     dependencies:
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-util-chunked@2.0.1:
     dependencies:
       micromark-util-symbol: 2.0.1
+    optional: true
 
   micromark-util-classify-character@2.0.1:
     dependencies:
       micromark-util-character: 2.1.1
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-util-combine-extensions@2.0.1:
     dependencies:
       micromark-util-chunked: 2.0.1
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-util-decode-numeric-character-reference@2.0.2:
     dependencies:
       micromark-util-symbol: 2.0.1
+    optional: true
 
   micromark-util-decode-string@2.0.1:
     dependencies:
@@ -5486,8 +5603,10 @@ snapshots:
       micromark-util-character: 2.1.1
       micromark-util-decode-numeric-character-reference: 2.0.2
       micromark-util-symbol: 2.0.1
+    optional: true
 
-  micromark-util-encode@2.0.1: {}
+  micromark-util-encode@2.0.1:
+    optional: true
 
   micromark-util-events-to-acorn@2.0.3:
     dependencies:
@@ -5498,22 +5617,27 @@ snapshots:
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
       vfile-message: 4.0.3
+    optional: true
 
-  micromark-util-html-tag-name@2.0.1: {}
+  micromark-util-html-tag-name@2.0.1:
+    optional: true
 
   micromark-util-normalize-identifier@2.0.1:
     dependencies:
       micromark-util-symbol: 2.0.1
+    optional: true
 
   micromark-util-resolve-all@2.0.1:
     dependencies:
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-util-sanitize-uri@2.0.1:
     dependencies:
       micromark-util-character: 2.1.1
       micromark-util-encode: 2.0.1
       micromark-util-symbol: 2.0.1
+    optional: true
 
   micromark-util-subtokenize@2.1.0:
     dependencies:
@@ -5521,10 +5645,13 @@ snapshots:
       micromark-util-chunked: 2.0.1
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
+    optional: true
 
-  micromark-util-symbol@2.0.1: {}
+  micromark-util-symbol@2.0.1:
+    optional: true
 
-  micromark-util-types@2.0.2: {}
+  micromark-util-types@2.0.2:
+    optional: true
 
   micromark@4.0.2:
     dependencies:
@@ -5547,6 +5674,7 @@ snapshots:
       micromark-util-types: 2.0.2
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   mimic-fn@2.1.0: {}
 
@@ -5557,10 +5685,13 @@ snapshots:
   minimatch@9.0.9:
     dependencies:
       brace-expansion: 2.1.4
+    optional: true
 
-  minimist@1.2.8: {}
+  minimist@1.2.8:
+    optional: true
 
-  minipass@7.1.3: {}
+  minipass@7.1.3:
+    optional: true
 
   ms@2.1.3: {}
 
@@ -5591,18 +5722,22 @@ snapshots:
   nopt@7.2.1:
     dependencies:
       abbrev: 2.0.0
+    optional: true
 
   normalize-package-data@6.0.2:
     dependencies:
       hosted-git-info: 7.0.2
       semver: 7.8.5
       validate-npm-package-license: 3.0.4
+    optional: true
 
   npm-install-checks@6.3.0:
     dependencies:
       semver: 7.8.5
+    optional: true
 
-  npm-normalize-package-bin@3.0.1: {}
+  npm-normalize-package-bin@3.0.1:
+    optional: true
 
   npm-package-arg@11.0.3:
     dependencies:
@@ -5610,6 +5745,7 @@ snapshots:
       proc-log: 4.2.0
       semver: 7.8.5
       validate-npm-package-name: 5.0.1
+    optional: true
 
   npm-pick-manifest@9.1.0:
     dependencies:
@@ -5617,6 +5753,7 @@ snapshots:
       npm-normalize-package-bin: 3.0.1
       npm-package-arg: 11.0.3
       semver: 7.8.5
+    optional: true
 
   ohash@2.0.11: {}
 
@@ -5651,7 +5788,8 @@ snapshots:
 
   p-timeout@6.1.4: {}
 
-  package-json-from-dist@1.0.1: {}
+  package-json-from-dist@1.0.1:
+    optional: true
 
   parse-entities@4.0.2:
     dependencies:
@@ -5662,6 +5800,7 @@ snapshots:
       is-alphanumerical: 2.0.1
       is-decimal: 2.0.1
       is-hexadecimal: 2.0.1
+    optional: true
 
   parse-json@7.1.1:
     dependencies:
@@ -5670,6 +5809,7 @@ snapshots:
       json-parse-even-better-errors: 3.0.2
       lines-and-columns: 2.0.4
       type-fest: 3.13.1
+    optional: true
 
   patch-console@2.0.0: {}
 
@@ -5683,6 +5823,7 @@ snapshots:
     dependencies:
       lru-cache: 10.4.3
       minipass: 7.1.3
+    optional: true
 
   pathe@2.0.3: {}
 
@@ -5780,14 +5921,17 @@ snapshots:
       - react
       - react-dom
 
-  proc-log@4.2.0: {}
+  proc-log@4.2.0:
+    optional: true
 
-  promise-inflight@1.0.1: {}
+  promise-inflight@1.0.1:
+    optional: true
 
   promise-retry@2.0.1:
     dependencies:
       err-code: 2.0.3
       retry: 0.12.0
+    optional: true
 
   proper-lockfile@4.1.2:
     dependencies:
@@ -5822,6 +5966,7 @@ snapshots:
     dependencies:
       json-parse-even-better-errors: 3.0.2
       npm-normalize-package-bin: 3.0.1
+    optional: true
 
   readable-stream@3.6.2:
     dependencies:
@@ -5845,6 +5990,7 @@ snapshots:
       micromark-extension-mdxjs: 3.0.0
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   remark-parse@11.0.0:
     dependencies:
@@ -5854,12 +6000,14 @@ snapshots:
       unified: 11.0.5
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   remark-stringify@11.0.0:
     dependencies:
       '@types/mdast': 4.0.4
       mdast-util-to-markdown: 2.1.2
       unified: 11.0.5
+    optional: true
 
   remeda@2.33.4: {}
 
@@ -5923,17 +6071,17 @@ snapshots:
 
   scheduler@0.27.0: {}
 
-  seedcord@0.17.3(@types/node@26.2.0)(@types/react@19.2.18)(esbuild@0.28.1)(typescript@6.0.3)(yaml@2.9.0):
+  seedcord@0.17.4(@types/node@26.2.0)(@types/react@19.2.18)(envapt@8.1.1)(esbuild@0.28.1)(typescript@6.0.3)(yaml@2.9.0):
     dependencies:
       '@clack/prompts': 1.7.0
       '@commander-js/extra-typings': 15.0.0(commander@15.0.0)
       '@discordjs/rest': 2.6.3
-      '@seedcord/core': 0.1.3(typescript@6.0.3)
-      '@seedcord/errors': 0.3.3(typescript@6.0.3)
+      '@seedcord/core': 0.1.4(envapt@8.1.1)(typescript@6.0.3)
+      '@seedcord/errors': 0.3.4(typescript@6.0.3)
       '@seedcord/event-emitter': 0.1.2(typescript@6.0.3)
-      '@seedcord/logger': 0.1.3(typescript@6.0.3)
+      '@seedcord/logger': 0.1.4(envapt@8.1.1)(typescript@6.0.3)
       '@seedcord/types': 0.8.2(typescript@6.0.3)
-      '@seedcord/utils': 0.8.3(typescript@6.0.3)
+      '@seedcord/utils': 0.8.4(typescript@6.0.3)
       chalk: 6.0.0
       commander: 15.0.0
       discord-api-types: 0.38.53
@@ -5992,15 +6140,19 @@ snapshots:
     dependencies:
       spdx-expression-parse: 3.0.1
       spdx-license-ids: 3.0.23
+    optional: true
 
-  spdx-exceptions@2.5.0: {}
+  spdx-exceptions@2.5.0:
+    optional: true
 
   spdx-expression-parse@3.0.1:
     dependencies:
       spdx-exceptions: 2.5.0
       spdx-license-ids: 3.0.23
+    optional: true
 
-  spdx-license-ids@3.0.23: {}
+  spdx-license-ids@3.0.23:
+    optional: true
 
   split2@4.2.0: {}
 
@@ -6021,18 +6173,21 @@ snapshots:
       emoji-regex: 8.0.0
       is-fullwidth-code-point: 3.0.0
       strip-ansi: 6.0.1
+    optional: true
 
   string-width@5.1.2:
     dependencies:
       eastasianwidth: 0.2.0
       emoji-regex: 9.2.2
       strip-ansi: 7.2.0
+    optional: true
 
   string-width@6.1.0:
     dependencies:
       eastasianwidth: 0.2.0
       emoji-regex: 10.6.0
       strip-ansi: 7.2.0
+    optional: true
 
   string-width@8.2.2:
     dependencies:
@@ -6047,16 +6202,19 @@ snapshots:
     dependencies:
       character-entities-html4: 2.1.0
       character-entities-legacy: 3.0.0
+    optional: true
 
   strip-ansi@6.0.1:
     dependencies:
       ansi-regex: 5.0.1
+    optional: true
 
   strip-ansi@7.2.0:
     dependencies:
       ansi-regex: 6.2.2
 
-  strip-bom@3.0.0: {}
+  strip-bom@3.0.0:
+    optional: true
 
   strip-indent@4.1.1: {}
 
@@ -6069,8 +6227,10 @@ snapshots:
   supports-color@7.2.0:
     dependencies:
       has-flag: 4.0.0
+    optional: true
 
-  supports-color@9.4.0: {}
+  supports-color@9.4.0:
+    optional: true
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
@@ -6080,11 +6240,14 @@ snapshots:
 
   tagged-tag@1.0.0: {}
 
-  tailwind-csstree@0.3.3: {}
+  tailwind-csstree@0.3.3:
+    optional: true
 
-  tailwindcss@4.3.3: {}
+  tailwindcss@4.3.3:
+    optional: true
 
-  tapable@2.3.3: {}
+  tapable@2.3.3:
+    optional: true
 
   terminal-size@4.0.1: {}
 
@@ -6101,7 +6264,8 @@ snapshots:
 
   triple-beam@1.4.1: {}
 
-  trough@2.2.0: {}
+  trough@2.2.0:
+    optional: true
 
   ts-api-utils@2.5.0(typescript@6.0.3):
     dependencies:
@@ -6115,12 +6279,14 @@ snapshots:
       enhanced-resolve: 5.24.5
       tapable: 2.3.3
       tsconfig-paths: 4.2.0
+    optional: true
 
   tsconfig-paths@4.2.0:
     dependencies:
       json5: 2.2.3
       minimist: 1.2.8
       strip-bom: 3.0.0
+    optional: true
 
   tslib@2.8.1: {}
 
@@ -6134,7 +6300,8 @@ snapshots:
     dependencies:
       prelude-ls: 1.2.1
 
-  type-fest@3.13.1: {}
+  type-fest@3.13.1:
+    optional: true
 
   type-fest@4.41.0: {}
 
@@ -6142,7 +6309,8 @@ snapshots:
     dependencies:
       tagged-tag: 1.0.0
 
-  typedarray@0.0.6: {}
+  typedarray@0.0.6:
+    optional: true
 
   typescript-eslint@8.66.0(eslint@10.8.1(jiti@2.7.0))(typescript@6.0.3):
     dependencies:
@@ -6157,7 +6325,8 @@ snapshots:
 
   typescript@6.0.3: {}
 
-  undici-types@6.21.0: {}
+  undici-types@6.21.0:
+    optional: true
 
   undici-types@8.3.0: {}
 
@@ -6189,6 +6358,7 @@ snapshots:
     transitivePeerDependencies:
       - bluebird
       - supports-color
+    optional: true
 
   unified@11.0.5:
     dependencies:
@@ -6199,33 +6369,40 @@ snapshots:
       is-plain-obj: 4.1.0
       trough: 2.2.0
       vfile: 6.0.3
+    optional: true
 
   unist-util-inspect@8.1.0:
     dependencies:
       '@types/unist': 3.0.3
+    optional: true
 
   unist-util-is@6.0.1:
     dependencies:
       '@types/unist': 3.0.3
+    optional: true
 
   unist-util-position-from-estree@2.0.0:
     dependencies:
       '@types/unist': 3.0.3
+    optional: true
 
   unist-util-stringify-position@4.0.0:
     dependencies:
       '@types/unist': 3.0.3
+    optional: true
 
   unist-util-visit-parents@6.0.2:
     dependencies:
       '@types/unist': 3.0.3
       unist-util-is: 6.0.1
+    optional: true
 
   unist-util-visit@5.1.0:
     dependencies:
       '@types/unist': 3.0.3
       unist-util-is: 6.0.1
       unist-util-visit-parents: 6.0.2
+    optional: true
 
   unrs-resolver@1.12.2:
     dependencies:
@@ -6274,13 +6451,16 @@ snapshots:
     dependencies:
       spdx-correct: 3.2.0
       spdx-expression-parse: 3.0.1
+    optional: true
 
-  validate-npm-package-name@5.0.1: {}
+  validate-npm-package-name@5.0.1:
+    optional: true
 
   vfile-message@4.0.3:
     dependencies:
       '@types/unist': 3.0.3
       unist-util-stringify-position: 4.0.0
+    optional: true
 
   vfile-reporter@8.1.1:
     dependencies:
@@ -6292,21 +6472,25 @@ snapshots:
       vfile-message: 4.0.3
       vfile-sort: 4.0.0
       vfile-statistics: 3.0.0
+    optional: true
 
   vfile-sort@4.0.0:
     dependencies:
       vfile: 6.0.3
       vfile-message: 4.0.3
+    optional: true
 
   vfile-statistics@3.0.0:
     dependencies:
       vfile: 6.0.3
       vfile-message: 4.0.3
+    optional: true
 
   vfile@6.0.3:
     dependencies:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
+    optional: true
 
   vite@8.2.1(@types/node@26.2.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.11)(yaml@2.9.0):
     dependencies:
@@ -6323,7 +6507,8 @@ snapshots:
       tsx: 4.23.11
       yaml: 2.9.0
 
-  walk-up-path@3.0.1: {}
+  walk-up-path@3.0.1:
+    optional: true
 
   web-worker@1.5.0: {}
 
@@ -6334,6 +6519,7 @@ snapshots:
   which@4.0.0:
     dependencies:
       isexe: 3.1.5
+    optional: true
 
   widest-line@6.0.0:
     dependencies:
@@ -6372,12 +6558,14 @@ snapshots:
       ansi-styles: 4.3.0
       string-width: 4.2.3
       strip-ansi: 6.0.1
+    optional: true
 
   wrap-ansi@8.1.0:
     dependencies:
       ansi-styles: 6.2.3
       string-width: 5.1.2
       strip-ansi: 7.2.0
+    optional: true
 
   ws@8.21.3: {}
 
@@ -6394,4 +6582,5 @@ snapshots:
       grammex: 3.1.13
       graphmatch: 1.1.1
 
-  zwitch@2.0.4: {}
+  zwitch@2.0.4:
+    optional: true

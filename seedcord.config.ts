@@ -6,5 +6,9 @@ export default defineConfig({
     entry: "./index.ts",
     build: {
         tsconfig: "./tsconfig.build.json"
+    },
+    idleAnimation: false,
+    hmr: {
+        typecheck: false
     }
 })
