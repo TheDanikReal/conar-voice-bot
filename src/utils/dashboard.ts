@@ -3,7 +3,7 @@ import { Emojis } from "@seedcord/gateway"
 import { ButtonStyle, ButtonBuilder } from "discord.js"
 
 import { basicColor } from "./consts"
-import { BitrateId, CloseId, DeleteId, InvitesId, ManageMembersId, MemberLimitId, RenameId } from "./interactionIds"
+import { BitrateId, CloseId, DeleteId, InvitesId, ManageMembersId, MemberLimitId, RenameId, StatesId } from "./interactionIds"
 
 import type { BaseMessageOptions, GuildMember } from "discord.js"
 
@@ -66,7 +66,7 @@ ${Emojis.setup} - Manage channel setting saves.`
         .setEmoji(Emojis.members.id)
         .setStyle(ButtonStyle.Primary)
     const manageSaves = new ButtonBuilder()
-        .setCustomId("manageSaves")
+        .setCustomId(StatesId.encode({}))
         .setEmoji(Emojis.setup.id)
         .setStyle(ButtonStyle.Primary)
     const secondRow = new ActionRowBuilder<ButtonBuilder>().addComponents(manageMembers, manageSaves)

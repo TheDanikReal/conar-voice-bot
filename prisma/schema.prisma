@@ -35,12 +35,15 @@ model UserSettings {
 }
 
 model Save {
-  id              String  @id @default(cuid())
+  id              String   @id @default(cuid())
   userId          String
   name            String
   bitrate         Int
   memberLimit     Int
   requestsEnabled Boolean
+  closed          Boolean
+  managers        String[] @default([])
+  blacklist       String[] @default([])
 
   user UserSettings @relation(fields: [userId], references: [userId], onDelete: Cascade)
 

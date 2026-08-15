@@ -38,7 +38,7 @@ export class ManageMembersBtn extends ButtonHandler<[typeof ManageMembersId]> {
             blacklistButton,
             managersButton
         )
-        await this.reply({
+        await this.edit({
             components: [
                 new ContainerBuilder().setAccentColor(basicColor).addTextDisplayComponents((builder) =>
                     builder.setContent(`## Managing members

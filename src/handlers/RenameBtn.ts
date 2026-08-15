@@ -33,7 +33,8 @@ export class RenameModal extends ModalHandler<[typeof RenameModalId]> {
         await this.defer()
         const name = this.event.fields.getTextInputValue("name")
         await this.event.channel?.setName(name)
-        await this.event.reply({
+        this.logger.info("set")
+        await this.event.editReply({
             embeds: [createStatusEmbed(this.event.user, "Changed channel name", "success")]
         })
     }
