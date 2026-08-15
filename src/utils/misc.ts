@@ -1,7 +1,14 @@
-import type { Guild, GuildPremiumTier, VoiceChannel } from "discord.js"
-import { getMainMessage } from "./embeds"
-import { composeDashboard } from "./dashboard"
+import {
+    PermissionFlagsBits,
+    type Guild,
+    type GuildPremiumTier,
+    type OverwriteResolvable,
+    type VoiceChannel
+} from "discord.js"
+
 import { database } from "./base"
+import { composeDashboard } from "./dashboard"
+import { getMainMessage } from "./embeds"
 
 export function getMaxBitrate(premiumTier: GuildPremiumTier) {
     const bitrate = {
@@ -11,6 +18,17 @@ export function getMaxBitrate(premiumTier: GuildPremiumTier) {
         3: 384
     } as const
     return bitrate[premiumTier]
+}
+
+export async function blacklistUsers(channel: VoiceChannel, users: string[]) {
+    const overwrites: OverwriteResolvable[] = []
+    for (const user of users) {
+        overwrites.push({
+            id: user,
+            deny: [PermissionFlagsBits.Connect, PermissionFlagsBits.Speak]
+        })
+    }
+    await channel.permissionOverwrites.set(overwrites)
 }
 
 export async function rerenderDashboard(channel: VoiceChannel, guild: Guild): Promise<void> {

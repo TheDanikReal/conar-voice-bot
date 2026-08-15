@@ -6,6 +6,8 @@ import { database } from "./base"
 import type { Gate, GateContextBase, RenderContext, ReplyResponse } from "@seedcord/gateway"
 import type { ButtonInteraction, CommandInteraction } from "discord.js"
 
+const red = 0xff_00_00
+
 export async function checkChannelRights(interaction: ButtonInteraction | CommandInteraction) {
     const userId = interaction.user.id
     if (!interaction.channel) return false
@@ -18,23 +20,36 @@ export async function checkChannelRights(interaction: ButtonInteraction | Comman
 export function CheckRights(): Gate<GateContextBase, "CheckRights"> {
     return defineGate("CheckRights", async (ctx) => {
         const userId = ctx.userId
+        if (!userId) throw new NoRights("manager")
         const channel = await database.findChannel(ctx.channelId!)
-        if (channel?.ownerId != userId) throw new NoRights()
+        const isManager = Array.isArray(channel?.managers) && channel.managers.includes(userId)
+        if (channel?.ownerId != userId && !isManager) throw new NoRights("manager")
+    })
+}
+
+export function CheckOwnerRights(): Gate<GateContextBase, "CheckOwnerRights"> {
+    return defineGate("CheckOwnerRights", async (ctx) => {
+        const userId = ctx.userId
+        if (!userId) throw new NoRights("owner")
+        const channel = await database.findChannel(ctx.channelId!)
+        if (channel?.ownerId != userId) throw new NoRights("owner")
     })
 }
 
 export class NoRights extends Notice {
-    constructor() {
+    level: "manager" | "owner"
+    constructor(level: "manager" | "owner") {
         super(`user doesn't have enough rights to do action`)
+        this.level = level
     }
 
     render(_ctx: RenderContext): ReplyResponse {
         return {
             components: [
                 new ContainerBuilder()
-                    .setAccentColor(0xff_00_00)
+                    .setAccentColor(red)
                     .addTextDisplayComponents((builder) =>
-                        builder.setContent(":warning: You don't have permissions to do that.")
+                        builder.setContent(`:warning: You don't have ${this.level} permissions to do that.`)
                     )
             ]
         }
@@ -50,7 +65,7 @@ export class RaceConditionDetected extends Notice {
         return {
             components: [
                 new ContainerBuilder()
-                    .setAccentColor(0xff_00_00)
+                    .setAccentColor(red)
                     .addTextDisplayComponents((builder) =>
                         builder.setContent(
                             ":warning: It seems that there's a race condition here. Ignore if you did that on purpose"
@@ -70,7 +85,7 @@ export class UserNotFound extends Notice {
         return {
             components: [
                 new ContainerBuilder()
-                    .setAccentColor(0xff_00_00)
+                    .setAccentColor(red)
                     .addTextDisplayComponents((builder) =>
                         builder.setContent(":warning: It seems that user can't be found")
                     )

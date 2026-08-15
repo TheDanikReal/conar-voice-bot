@@ -2,10 +2,10 @@ import { LabelBuilder, ModalBuilder } from "@discordjs/builders"
 import { ButtonHandler, ButtonRoute, Gated, ModalHandler, ModalRoute } from "@seedcord/gateway"
 import { ChannelType, TextInputStyle } from "discord.js"
 
-import { MemberLimitId, MemberLimitModalId } from "../utils/interactionIds"
-import { CheckRights, RaceConditionDetected } from "../utils/preconditions"
-import { rerenderDashboard } from "../utils/misc"
 import { database } from "../utils/base"
+import { MemberLimitId, MemberLimitModalId } from "../utils/interactionIds"
+import { rerenderDashboard } from "../utils/misc"
+import { CheckRights, RaceConditionDetected } from "../utils/preconditions"
 
 @Gated(CheckRights())
 @ButtonRoute(MemberLimitId)

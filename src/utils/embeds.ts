@@ -1,8 +1,9 @@
 import { EmbedBuilder } from "@discordjs/builders"
 
+import { basicColor } from "./consts"
+
 import type { TempChannelCreateInput } from "../generated/prisma/models"
 import type { GuildTextBasedChannel, User } from "discord.js"
-import { basicColor } from "./consts"
 
 const statuses = {
     success: 0x00_ff_00,

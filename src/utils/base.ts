@@ -178,7 +178,28 @@ class PrismaDatabase {
             }
         })
         this.patchCachedChannel(channelId, { maxMembers })
-        return
+    }
+    async changeManagers(channelId: string, managers: string[]) {
+        await this.prisma.tempChannel.update({
+            where: {
+                id: channelId
+            },
+            data: {
+                managers
+            }
+        })
+        this.patchCachedChannel(channelId, { managers })
+    }
+    async changeBlacklist(channelId: string, blacklist: string[]) {
+        await this.prisma.tempChannel.update({
+            where: {
+                id: channelId
+            },
+            data: {
+                blacklist
+            }
+        })
+        this.patchCachedChannel(channelId, { blacklist })
     }
     private patchCachedChannel(channelId: string, patch: Partial<Prisma.TempChannelCreateInput>) {
         const cachedChannel = this.cacheChannels.get(channelId)
