@@ -93,3 +93,23 @@ export class UserNotFound extends Notice {
         }
     }
 }
+
+export class RaceConditionDetected extends Notice {
+    constructor() {
+        super(`race condition`)
+    }
+
+    render(_ctx: RenderContext): ReplyResponse {
+        return {
+            components: [
+                new ContainerBuilder()
+                    .setAccentColor(0xff_00_00)
+                    .addTextDisplayComponents((builder) =>
+                        builder.setContent(
+                            ":warning: The channel changed while you were updating the limit. Check the current limit before retrying."
+                        )
+                    )
+            ]
+        }
+    }
+}

@@ -5,6 +5,9 @@ import { database } from "../utils/base"
 import { CloseId } from "../utils/interactionIds"
 import { rerenderDashboard } from "../utils/misc"
 import { CheckRights } from "../utils/preconditions"
+import { database } from "../utils/base"
+import { rerenderDashboard } from "../utils/misc"
+import { ChannelType } from "discord.js"
 
 @Gated(CheckRights())
 @ButtonRoute(CloseId)
