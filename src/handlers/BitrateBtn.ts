@@ -41,6 +41,6 @@ export class BitrateModal extends ModalHandler<[typeof BitrateModalId]> {
             return
         }
         await this.event.channel.setBitrate(bitrate * 1000)
-        await this.reply(`Successfully set ${bitrate} kbps bitrate. ✅`)
+        await this.edit(`Successfully set ${bitrate} kbps bitrate. ✅`)
     }
 }

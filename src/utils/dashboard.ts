@@ -3,7 +3,16 @@ import { Emojis } from "@seedcord/gateway"
 import { ButtonStyle, ButtonBuilder } from "discord.js"
 
 import { basicColor } from "./consts"
-import { BitrateId, CloseId, DeleteId, InvitesId, ManageMembersId, MemberLimitId, RenameId, StatesId } from "./interactionIds"
+import {
+    BitrateId,
+    CloseId,
+    DeleteId,
+    InvitesId,
+    ManageMembersId,
+    MemberLimitId,
+    RenameId,
+    StatesId
+} from "./interactionIds"
 
 import type { BaseMessageOptions, GuildMember } from "discord.js"
 

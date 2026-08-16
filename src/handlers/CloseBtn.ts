@@ -1,10 +1,11 @@
 import { ButtonHandler, ButtonRoute, Gated } from "@seedcord/gateway"
-
-import { CloseId } from "../utils/interactionIds"
-import { CheckRights } from "../utils/preconditions"
-import { database } from "../utils/base"
-import { rerenderDashboard } from "../utils/misc"
 import { ChannelType } from "discord.js"
+
+import { database } from "../utils/base"
+import { CloseId } from "../utils/interactionIds"
+import { rerenderDashboard } from "../utils/misc"
+import { CheckRights } from "../utils/preconditions"
+
 
 @Gated(CheckRights())
 @ButtonRoute(CloseId)

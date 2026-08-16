@@ -50,8 +50,6 @@ ${Emojis.mod} - Manage channel's managers
                 buttonRow
             ]
         })
-        // todo: add buttons to actually do these actions
-        // i think users to kick should be chosen by a select menu btw
     }
 }
 
@@ -102,8 +100,7 @@ export class BlacklistBtn extends ButtonHandler<[typeof BlacklistId]> {
         const channel = this.event.channel
         if (!channel) return
         const settings = await database.findChannel(channel.id)
-        if (!settings?.blacklist) return
-        const managers = Array.isArray(settings.blacklist) ? settings.blacklist : []
+        const managers = Array.isArray(settings?.blacklist) ? settings.blacklist : []
         const modal = new ModalBuilder().setCustomId(BlacklistModalId.encode({})).setTitle("Manage blacklist")
         const label = new LabelBuilder()
             .setLabel("Select users")
@@ -140,8 +137,7 @@ export class ManageManagersBtn extends ButtonHandler<[typeof ManagersId]> {
         const channel = this.event.channel
         if (!channel) return
         const settings = await database.findChannel(channel.id)
-        if (!settings?.managers) return
-        const managers = Array.isArray(settings.managers) ? settings.managers : []
+        const managers = Array.isArray(settings?.managers) ? settings.managers : []
         const modal = new ModalBuilder().setCustomId(ManagersModalId.encode({})).setTitle("Manage managers")
         const label = new LabelBuilder()
             .setLabel("Select users")

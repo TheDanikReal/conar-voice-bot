@@ -26,6 +26,6 @@ export const ManagersModalId = new CustomId("managersmodal")
 
 export const StatesId = new CustomId("states")
 export const SaveState = new CustomId("savestate")
-    .int("id")
+    .int("slot")
 export const LoadState = new CustomId("loadstate")
-    .int("id")
+    .int("slot")
