@@ -56,26 +56,6 @@ export class NoRights extends Notice {
     }
 }
 
-export class RaceConditionDetected extends Notice {
-    constructor() {
-        super(`race condition`)
-    }
-
-    render(_ctx: RenderContext): ReplyResponse {
-        return {
-            components: [
-                new ContainerBuilder()
-                    .setAccentColor(red)
-                    .addTextDisplayComponents((builder) =>
-                        builder.setContent(
-                            ":warning: The channel changed while you were updating the limit. Check the current limit before retrying."
-                        )
-                    )
-            ]
-        }
-    }
-}
-
 export class UserNotFound extends Notice {
     constructor() {
         super(`user not found`)
