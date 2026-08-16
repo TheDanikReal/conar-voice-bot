@@ -98,7 +98,7 @@ class PrismaDatabase {
         })
     }
     async editChannel(channelId: string, details: Partial<Omit<Prisma.TempChannelCreateInput, "id">>) {
-        return await this.prisma.tempChannel.update({
+        const updated = await this.prisma.tempChannel.update({
             where: {
                 id: channelId
             },
@@ -106,6 +106,8 @@ class PrismaDatabase {
                 ...details
             }
         })
+        this.patchCachedChannel(channelId, details)
+        return updated
     }
     async editChannelIfExists(channelId: string, details: Omit<Prisma.TempChannelCreateInput, "id">) {
         this.cacheChannels.set(channelId, { id: channelId, ...details })

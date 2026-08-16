@@ -6,7 +6,6 @@ import { CloseId } from "../utils/interactionIds"
 import { rerenderDashboard } from "../utils/misc"
 import { CheckRights } from "../utils/preconditions"
 
-
 @Gated(CheckRights())
 @ButtonRoute(CloseId)
 export class CloseButton extends ButtonHandler<[typeof CloseId]> {

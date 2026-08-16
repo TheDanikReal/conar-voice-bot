@@ -1,13 +1,12 @@
-import { ActionRowBuilder, ContainerBuilder, ButtonBuilder, } from "@discordjs/builders"
+import { ActionRowBuilder, ContainerBuilder, ButtonBuilder } from "@discordjs/builders"
 import { ButtonHandler, ButtonRoute, Gated } from "@seedcord/gateway"
-import {  ButtonStyle, ChannelType } from "discord.js"
+import { ButtonStyle, ChannelType } from "discord.js"
 
 import { database } from "../utils/base"
 import { basicColor } from "../utils/consts"
 import { LoadState, SaveState, StatesId } from "../utils/interactionIds"
 import { CheckRights } from "../utils/preconditions"
 import { blacklistUsers, rerenderDashboard } from "../utils/misc"
-
 
 @Gated(CheckRights())
 @ButtonRoute(StatesId)
@@ -19,7 +18,7 @@ export class ManageStatesBtn extends ButtonHandler<[typeof StatesId]> {
                 new ButtonBuilder()
                     .setCustomId(SaveState.encode({ slot: i }))
                     .setStyle(ButtonStyle.Primary)
-                    .setLabel(`Slot ${  i + 1}`)
+                    .setLabel(`Slot ${i + 1}`)
             )
         }
         const loadButtons: ButtonBuilder[] = []
@@ -52,10 +51,7 @@ export class SaveStateBtn extends ButtonHandler<[typeof SaveState]> {
         const channel = this.event.channel
         if (!channel?.isVoiceBased()) return
         const settings = await database.findChannel(channel.id)
-        if (!settings ||
-            settings.closed == null ||
-            settings.maxMembers == null ||
-            settings.requests == null) return
+        if (!settings) return
         const userId = this.event.user.id
         let userSettings = await database.findUser(userId)
         if (!userSettings) {
@@ -66,10 +62,10 @@ export class SaveStateBtn extends ButtonHandler<[typeof SaveState]> {
         const managers = Array.isArray(settings.managers) ? settings.managers : []
         await database.updateSave(userId, {
             bitrate: channel.bitrate,
-            closed: settings.closed,
-            memberLimit: settings.maxMembers,
+            closed: settings.closed ?? false,
+            memberLimit: settings.maxMembers ?? 0,
             name: channel.name,
-            requestsEnabled: settings.requests,
+            requestsEnabled: settings.requests ?? true,
             slotNum: this.params.slot,
             blacklist,
             managers: managers,
@@ -89,11 +85,20 @@ export class LoadStateBtn extends ButtonHandler<[typeof LoadState]> {
         const channel = this.event.channel
         if (!channel?.isVoiceBased() || !(channel.type === ChannelType.GuildVoice)) return
         await this.defer()
+        const currentSettings = await database.findChannel(channel.id)
+        if (!currentSettings) return
+        const oldBlacklist = Array.isArray(currentSettings.blacklist) ? currentSettings.blacklist : []
         const slotSettings = await database.findSave(this.event.user.id, this.params.slot)
         if (!slotSettings) {
             await this.edit("unable to find slot settings")
             return
         }
+        await channel.edit({
+            bitrate: slotSettings.bitrate,
+            userLimit: slotSettings.closed ? 1 : slotSettings.memberLimit,
+            name: slotSettings.name
+        })
+        await blacklistUsers(channel, oldBlacklist, slotSettings.blacklist)
         await database.editChannel(channel.id, {
             blacklist: slotSettings.blacklist,
             closed: slotSettings.closed,
@@ -101,12 +106,6 @@ export class LoadStateBtn extends ButtonHandler<[typeof LoadState]> {
             maxMembers: slotSettings.memberLimit,
             requests: slotSettings.requestsEnabled
         })
-        await channel.edit({
-            bitrate: slotSettings.bitrate,
-            userLimit: slotSettings.closed ? 1 : slotSettings.memberLimit,
-            name: slotSettings.name
-        })
-        await blacklistUsers(channel, [], slotSettings.blacklist)
         await rerenderDashboard(channel, this.event.guild)
         await this.edit(`success`)
     }
