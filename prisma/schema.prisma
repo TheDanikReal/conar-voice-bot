@@ -35,17 +35,20 @@ model UserSettings {
 }
 
 model Save {
-  id              String   @id @default(cuid())
-  userId          String
+  id      String @id @default(cuid())
+  userId  String
+  slotNum Int
+
   name            String
   bitrate         Int
-  memberLimit     Int
-  requestsEnabled Boolean
-  closed          Boolean
+  memberLimit     Int      @default(0)
+  requestsEnabled Boolean  @default(true)
+  closed          Boolean  @default(false)
   managers        String[] @default([])
   blacklist       String[] @default([])
 
   user UserSettings @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
+  @@unique([userId, slotNum])
   @@index([userId])
 }

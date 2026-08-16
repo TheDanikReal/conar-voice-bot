@@ -10,12 +10,17 @@ class PrismaDatabase {
     prisma: PrismaClient
     cacheServers: LRUCache<string, Partial<Prisma.ServerSettingsCreateInput>>
     cacheChannels: LRUCache<string, Partial<Prisma.TempChannelCreateInput>>
+    cacheUsers: LRUCache<string, Partial<Prisma.UserSettingsCreateInput>>
     constructor() {
         this.cacheServers = new LRUCache<string, Partial<Prisma.ServerSettingsCreateInput>>({
             ttl: 1000 * 60 * 30,
             max: 100
         })
         this.cacheChannels = new LRUCache<string, Partial<Prisma.TempChannelCreateInput>>({
+            ttl: 1000 * 60 * 30,
+            max: 100
+        })
+        this.cacheUsers = new LRUCache<string, Partial<Prisma.UserSettingsCreateInput>>({
             ttl: 1000 * 60 * 30,
             max: 100
         })
@@ -92,6 +97,16 @@ class PrismaDatabase {
             }
         })
     }
+    async editChannel(channelId: string, details: Partial<Omit<Prisma.TempChannelCreateInput, "id">>) {
+        return await this.prisma.tempChannel.update({
+            where: {
+                id: channelId
+            },
+            data: {
+                ...details
+            }
+        })
+    }
     async editChannelIfExists(channelId: string, details: Omit<Prisma.TempChannelCreateInput, "id">) {
         this.cacheChannels.set(channelId, { id: channelId, ...details })
         if (
@@ -122,6 +137,51 @@ class PrismaDatabase {
             where: {
                 id: channelId
             }
+        })
+    }
+    async findUser(userId: string) {
+        const cachedUser = this.cacheUsers.get(userId)
+        if (cachedUser) {
+            return cachedUser
+        }
+        const user = await this.prisma.userSettings.findUnique({
+            where: {
+                userId
+            }
+        })
+        this.cacheUsers.set(userId, { ...user })
+        return user
+    }
+    async addUser(userId: string) {
+        const data = await this.prisma.userSettings.upsert({
+            where: { userId },
+            create: { userId },
+            update: {}
+        })
+        this.cacheUsers.set(userId, { ...data })
+        return data
+    }
+    async findSave(userId: string, slotNum: number) {
+        return await this.prisma.save.findUnique({
+            where: {
+                userId_slotNum: {
+                    userId,
+                    slotNum
+                }
+            }
+        })
+    }
+    async updateSave(userId: string, data: Prisma.SaveCreateInput) {
+        // todo: caching
+        await this.prisma.save.upsert({
+            where: {
+                userId_slotNum: {
+                    slotNum: data.slotNum,
+                    userId
+                }
+            },
+            create: data,
+            update: data
         })
     }
     async toggleInvites(channelId: string) {

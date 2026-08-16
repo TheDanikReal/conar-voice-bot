@@ -33,7 +33,9 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
             await database.addChannel(channel.id, {
                 messageId: message.id,
                 ownerId: member.id,
-                closed: false
+                closed: false,
+                maxMembers: 0,
+                requests: true
             })
             await member.voice.setChannel(channel, "Conor voice channels")
         }
