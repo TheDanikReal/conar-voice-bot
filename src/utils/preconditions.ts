@@ -74,6 +74,24 @@ export class UserNotFound extends Notice {
     }
 }
 
+export class ChannelNotFound extends Notice {
+    constructor() {
+        super(`channel not found`)
+    }
+
+    render(_ctx: RenderContext): ReplyResponse {
+        return {
+            components: [
+                new ContainerBuilder()
+                    .setAccentColor(red)
+                    .addTextDisplayComponents((builder) =>
+                        builder.setContent(":warning: It seems that channel's settings can't be found")
+                    )
+            ]
+        }
+    }
+}
+
 export class RaceConditionDetected extends Notice {
     constructor() {
         super(`race condition`)

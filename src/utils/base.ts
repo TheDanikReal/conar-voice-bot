@@ -151,7 +151,9 @@ class PrismaDatabase {
                 userId
             }
         })
-        this.cacheUsers.set(userId, { ...user })
+        if (user) {
+            this.cacheUsers.set(userId, { ...user })
+        }
         return user
     }
     async addUser(userId: string) {

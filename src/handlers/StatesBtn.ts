@@ -5,7 +5,7 @@ import { ButtonStyle, ChannelType } from "discord.js"
 import { database } from "../utils/base"
 import { basicColor } from "../utils/consts"
 import { LoadState, SaveState, StatesId } from "../utils/interactionIds"
-import { CheckRights } from "../utils/preconditions"
+import { ChannelNotFound, CheckRights } from "../utils/preconditions"
 import { blacklistUsers, rerenderDashboard } from "../utils/misc"
 
 @Gated(CheckRights())
@@ -50,14 +50,14 @@ export class SaveStateBtn extends ButtonHandler<[typeof SaveState]> {
     public async execute(): Promise<void> {
         const channel = this.event.channel
         if (!channel?.isVoiceBased()) return
+        await this.defer()
         const settings = await database.findChannel(channel.id)
-        if (!settings) return
+        if (!settings) throw new ChannelNotFound()
         const userId = this.event.user.id
         let userSettings = await database.findUser(userId)
         if (!userSettings) {
             userSettings = await database.addUser(userId)
         }
-        await this.defer()
         const blacklist = Array.isArray(settings.blacklist) ? settings.blacklist : []
         const managers = Array.isArray(settings.managers) ? settings.managers : []
         await database.updateSave(userId, {
