@@ -3,6 +3,7 @@ import { ChannelType, Events } from "discord.js"
 
 import { database } from "../utils/base"
 import { composeDashboard } from "../utils/dashboard"
+import { isInvited, removeInvite } from "../utils/inviteStatus"
 
 @RegisterEvent([Events.VoiceStateUpdate, { frequency: "on" }])
 export class Voice extends EventHandler<Events.VoiceStateUpdate> {
@@ -16,6 +17,12 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
         const category = settings?.voiceCategory
         if (!settings || !member || !category) return
         if (settings.voiceChannel === newState.channelId) {
+            const invite = isInvited(member.id)
+            if (invite) {
+                await member.voice.setChannel(invite)
+                removeInvite(member.id)
+                return
+            }
             const channel = await guild.channels.create({
                 name: `${member.user.globalName} channel`,
                 type: ChannelType.GuildVoice,

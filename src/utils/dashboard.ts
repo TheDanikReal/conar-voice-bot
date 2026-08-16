@@ -29,6 +29,7 @@ export function composeDashboard(settings: ChannelOptions): BaseMessageOptions {
     // max members, but that will require implementing close button first
     const closeChannelMessage = isClosed ? "Open channel" : "Close channel"
     const closeChannelId = isClosed ? Emojis.unlock : Emojis.lock
+    const invitesMessage = settings.disableRequests ? "Disable join requests" : "Enable join requests"
     const embed = new EmbedBuilder()
         .setTitle("Voice channel")
         .setColor(basicColor)
@@ -39,7 +40,7 @@ ${Emojis.edit} - Rename channel.
 ${Emojis.bitrate} - Set bitrate.
 ${Emojis.voiceLimited} - Set member limit.
 ${closeChannelId} - ${closeChannelMessage}.
-📨 - Disable join requests.
+📨 - ${invitesMessage}.
 ${Emojis.members} - Manage members.
 ${Emojis.setup} - Manage channel setting saves.`
         )
