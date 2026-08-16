@@ -32,12 +32,12 @@ export class BitrateModal extends ModalHandler<[typeof BitrateModalId]> {
         await this.defer()
         const bitrate = parseInt(this.event.fields.getTextInputValue("bitrate").trim(), 10)
         if (Number.isNaN(bitrate)) {
-            await this.reply(`:warning: Entered bitrate is incorrect`)
+            await this.edit(`:warning: Entered bitrate is incorrect`)
             return
         }
         const maxBitrate = getMaxBitrate(this.event.guild.premiumTier)
         if (bitrate < 8 || bitrate > maxBitrate) {
-            await this.reply(`:warning: Selected bitrate exceeds limits! ${bitrate}`)
+            await this.edit(`:warning: Selected bitrate exceeds limits! ${bitrate}`)
             return
         }
         await this.event.channel.setBitrate(bitrate * 1000)

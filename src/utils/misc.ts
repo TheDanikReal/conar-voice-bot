@@ -1,4 +1,3 @@
-
 import { database } from "./base"
 import { composeDashboard } from "./dashboard"
 import { getMainMessage } from "./embeds"
