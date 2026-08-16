@@ -3,7 +3,7 @@ import { LRUCache } from "lru-cache"
 
 import { PrismaClient } from "../generated/prisma/client.js"
 
-import type { Prisma } from "../generated/prisma/client.js"
+import { Prisma } from "../generated/prisma/client.js"
 import "dotenv/config"
 
 class PrismaDatabase {
@@ -85,7 +85,9 @@ class PrismaDatabase {
                 id: channelId
             }
         })
-        this.cacheChannels.set(channelId, { ...channel })
+        if (channel) {
+            this.cacheChannels.set(channelId, { ...channel })
+        }
         return channel
     }
     async addChannel(channelId: string, details: Omit<Prisma.TempChannelCreateInput, "id">) {
