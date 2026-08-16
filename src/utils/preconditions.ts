@@ -85,7 +85,7 @@ export class ChannelNotFound extends Notice {
                 new ContainerBuilder()
                     .setAccentColor(red)
                     .addTextDisplayComponents((builder) =>
-                        builder.setContent(":warning: It seems that channel's settings can't be found")
+                        builder.setContent(":warning: The channel's settings could not be found")
                     )
             ]
         }
