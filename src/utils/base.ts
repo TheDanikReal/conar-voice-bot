@@ -3,7 +3,7 @@ import { LRUCache } from "lru-cache"
 
 import { PrismaClient } from "../generated/prisma/client.js"
 
-import { Prisma } from "../generated/prisma/client.js"
+import type { Prisma } from "../generated/prisma/client.js"
 import "dotenv/config"
 
 class PrismaDatabase {
