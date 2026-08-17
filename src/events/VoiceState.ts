@@ -45,7 +45,7 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
             const channel = await guild.channels.create({
                 // todo: per server templates for channel name
                 name: slot?.name ?? `${member.user.globalName} channel`,
-                bitrate: slot?.bitrate ?? 64000,
+                bitrate: slot?.bitrate ?? 64_000,
                 userLimit: slot?.memberLimit ?? 0,
                 type: ChannelType.GuildVoice,
                 parent: category,

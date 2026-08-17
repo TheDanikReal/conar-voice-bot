@@ -2,12 +2,12 @@ import { database } from "./base"
 import { composeDashboard } from "./dashboard"
 import { getMainMessage } from "./embeds"
 
-import type { Guild, GuildPremiumTier, VoiceChannel } from "discord.js"
+import type { Guild, GuildPremiumTier, User, VoiceChannel } from "discord.js"
 
-const compareArrays = (arr1: string[], arr2: string[]) => {
-    return arr1.length === arr2.length &&
-        arr1.every((val, index) => val === arr2[index]);
-};
+const compareArrays = (arr1: string[], arr2: string[]) =>
+    arr1.length === arr2.length &&
+    arr1.every((val, index) => val === arr2[index]);
+
 
 export function getMaxBitrate(premiumTier: GuildPremiumTier) {
     const bitrate = {
@@ -25,22 +25,33 @@ export async function blacklistUsers(
     nextUsers: string[]
 ): Promise<void> {
     if (compareArrays(previousUsers, nextUsers)) return
-    const previousUserIds = new Set(previousUsers)
-    const nextUserIds = new Set(nextUsers)
+    const previousUserIds: Set<User> = new Set()
+    const nextUserIds: Set<User> = new Set()
 
-    for (const userId of nextUserIds) {
-        if (previousUserIds.has(userId)) continue
+    for (const user of previousUsers) {
+        const guildUser = await channel.guild.members.fetch(user)
+        if (!guildUser) continue
+        previousUserIds.add(guildUser.user)
+    }
+    for (const user of nextUsers) {
+        const guildUser = await channel.guild.members.fetch(user)
+        if (!guildUser) continue
+        nextUserIds.add(guildUser.user)
+    }
 
-        await channel.permissionOverwrites.edit(userId, {
+    for (const user of nextUserIds) {
+        if (previousUserIds.has(user)) continue
+
+        await channel.permissionOverwrites.edit(user, {
             Connect: false,
             Speak: false
         })
     }
 
-    for (const userId of previousUserIds) {
-        if (nextUserIds.has(userId)) continue
+    for (const user of previousUserIds) {
+        if (nextUserIds.has(user)) continue
 
-        await channel.permissionOverwrites.edit(userId, {
+        await channel.permissionOverwrites.edit(user, {
             Connect: null,
             Speak: null
         })
