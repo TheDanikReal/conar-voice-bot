@@ -9,8 +9,8 @@ import type { ButtonInteraction, CommandInteraction } from "discord.js"
 const red = 0xff_00_00
 
 export async function checkChannelRights(interaction: ButtonInteraction | CommandInteraction) {
-    const userId = interaction.user.id
     if (!interaction.channel) return false
+    const userId = interaction.user.id
     const channel = await database.findChannel(interaction.channel.id)
     const isManager = Array.isArray(channel?.managers) && channel.managers.includes(userId)
     if (channel?.ownerId !== userId && !isManager) return false

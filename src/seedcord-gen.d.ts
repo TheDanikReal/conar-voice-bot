@@ -14,18 +14,18 @@ declare module '@seedcord/gateway' {
 
     }
     interface EmojiMap {
-        bitrate: 'application';
-        booster: 'application';
-        delete: 'application';
-        edit: 'application';
-        kick: 'application';
-        lock: 'application';
-        members: 'application';
-        mod: 'application';
-        play: 'application';
-        setup: 'application';
-        unlock: 'application';
-        voiceLimited: 'application';
+        bitrate: 'guild';
+        booster: 'guild';
+        delete: 'guild';
+        edit: 'guild';
+        kick: 'guild';
+        lock: 'guild';
+        members: 'guild';
+        mod: 'guild';
+        play: 'guild';
+        setup: 'guild';
+        unlock: 'guild';
+        voiceLimited: 'guild';
     }
 }
 

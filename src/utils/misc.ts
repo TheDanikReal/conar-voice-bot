@@ -5,9 +5,7 @@ import { getMainMessage } from "./embeds"
 import type { Guild, GuildPremiumTier, User, VoiceChannel } from "discord.js"
 
 const compareArrays = (arr1: string[], arr2: string[]) =>
-    arr1.length === arr2.length &&
-    arr1.every((val, index) => val === arr2[index]);
-
+    arr1.length === arr2.length && arr1.every((val, index) => val === arr2[index])
 
 export function getMaxBitrate(premiumTier: GuildPremiumTier) {
     const bitrate = {
@@ -25,8 +23,8 @@ export async function blacklistUsers(
     nextUsers: string[]
 ): Promise<void> {
     if (compareArrays(previousUsers, nextUsers)) return
-    const previousUserIds: Set<User> = new Set()
-    const nextUserIds: Set<User> = new Set()
+    const previousUserIds = new Set<User>()
+    const nextUserIds = new Set<User>()
 
     for (const user of previousUsers) {
         try {

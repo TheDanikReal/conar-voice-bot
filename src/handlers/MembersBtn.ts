@@ -1,6 +1,6 @@
-import { ContainerBuilder, LabelBuilder, ModalBuilder, ActionRowBuilder } from "@discordjs/builders"
+import { ContainerBuilder, LabelBuilder, ModalBuilder, ActionRowBuilder, ButtonBuilder } from "@discordjs/builders"
 import { ButtonHandler, ButtonRoute, Emojis, Gated, ModalHandler, ModalRoute } from "@seedcord/gateway"
-import { ButtonBuilder, ButtonStyle, ChannelType } from "discord.js"
+import { ButtonStyle, ChannelType } from "discord.js"
 
 import { database } from "../utils/base"
 import { basicColor } from "../utils/consts"
@@ -23,15 +23,15 @@ export class ManageMembersBtn extends ButtonHandler<[typeof ManageMembersId]> {
         await this.defer()
         const kickButton = new ButtonBuilder()
             .setCustomId(KickMemberId.encode({}))
-            .setEmoji(Emojis.kick.id)
+            .setEmoji(Emojis.kick)
             .setStyle(ButtonStyle.Secondary)
         const blacklistButton = new ButtonBuilder()
             .setCustomId(BlacklistId.encode({}))
-            .setEmoji(Emojis.lock.id)
+            .setEmoji(Emojis.lock)
             .setStyle(ButtonStyle.Secondary)
         const managersButton = new ButtonBuilder()
             .setCustomId(ManagersId.encode({}))
-            .setEmoji(Emojis.mod.id)
+            .setEmoji(Emojis.mod)
             .setStyle(ButtonStyle.Secondary)
         const buttonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
             kickButton,

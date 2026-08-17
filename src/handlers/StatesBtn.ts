@@ -5,8 +5,8 @@ import { ButtonStyle, ChannelType } from "discord.js"
 import { database } from "../utils/base"
 import { basicColor } from "../utils/consts"
 import { LoadState, SaveState, StatesId } from "../utils/interactionIds"
-import { ChannelNotFound, CheckRights } from "../utils/preconditions"
 import { blacklistUsers, rerenderDashboard } from "../utils/misc"
+import { ChannelNotFound, CheckRights } from "../utils/preconditions"
 
 @Gated(CheckRights())
 @ButtonRoute(StatesId)
@@ -39,7 +39,7 @@ Here you can save/load current states in one of 3 available slots
 Slot 1 is being used by default when creating new channels
 Blue buttons - saving, green buttons - loading`)
         )
-        this.reply({ components: [container, saveRow, loadRow] })
+        await this.reply({ components: [container, saveRow, loadRow] })
     }
 }
 

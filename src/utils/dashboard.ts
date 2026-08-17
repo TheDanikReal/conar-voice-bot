@@ -1,6 +1,6 @@
-import { EmbedBuilder, ActionRowBuilder } from "@discordjs/builders"
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder } from "@discordjs/builders"
 import { Emojis } from "@seedcord/gateway"
-import { ButtonStyle, ButtonBuilder } from "discord.js"
+import { ButtonStyle } from "discord.js"
 
 import { basicColor } from "./consts"
 import {
@@ -50,40 +50,40 @@ ${Emojis.setup} - Manage channel setting saves.`
         })
     const rename = new ButtonBuilder()
         .setCustomId(RenameId.encode({}))
-        .setEmoji(Emojis.edit.id)
+        .setEmoji(Emojis.edit)
         .setStyle(ButtonStyle.Secondary)
     const bitrate = new ButtonBuilder()
         .setCustomId(BitrateId.encode({}))
-        .setEmoji(Emojis.bitrate.id)
+        .setEmoji(Emojis.bitrate)
         .setStyle(ButtonStyle.Secondary)
     const memberLimit = new ButtonBuilder()
         .setCustomId(MemberLimitId.encode({}))
         .setDisabled(isClosed ? true : false)
-        .setEmoji(Emojis.voiceLimited.id)
+        .setEmoji(Emojis.voiceLimited)
         .setStyle(ButtonStyle.Secondary)
     const close = new ButtonBuilder()
         .setCustomId(CloseId.encode({}))
-        .setEmoji(closeChannelId.id)
+        .setEmoji(closeChannelId)
         .setStyle(isClosed ? ButtonStyle.Danger : ButtonStyle.Secondary)
     const requests = new ButtonBuilder()
         .setCustomId(InvitesId.encode({}))
-        .setEmoji("📨")
+        .setEmoji({ name: "📨" })
         .setStyle(ButtonStyle.Secondary)
     // todo add other buttons and compose message, then send and add actions
     const firstRow = new ActionRowBuilder<ButtonBuilder>().addComponents(rename, bitrate, memberLimit, close, requests)
     const manageMembers = new ButtonBuilder()
         .setCustomId(ManageMembersId.encode({}))
-        .setEmoji(Emojis.members.id)
+        .setEmoji(Emojis.members)
         .setStyle(ButtonStyle.Primary)
     const manageSaves = new ButtonBuilder()
         .setCustomId(StatesId.encode({}))
-        .setEmoji(Emojis.setup.id)
+        .setEmoji(Emojis.setup)
         .setStyle(ButtonStyle.Primary)
     const secondRow = new ActionRowBuilder<ButtonBuilder>().addComponents(manageMembers, manageSaves)
     const deleteChannel = new ButtonBuilder()
         .setCustomId(DeleteId.encode({}))
         .setLabel("Delete")
-        .setEmoji(Emojis.delete.id)
+        .setEmoji(Emojis.delete)
         .setStyle(ButtonStyle.Danger)
     const thirdRow = new ActionRowBuilder<ButtonBuilder>().addComponents(deleteChannel)
     return { embeds: [embed], components: [firstRow, secondRow, thirdRow] }

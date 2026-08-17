@@ -5,9 +5,9 @@ import { ButtonStyle, ChannelType } from "discord.js"
 import { database } from "../utils/base"
 import { createGenericEmbed } from "../utils/embeds"
 import { InvitesActionId, InvitesId } from "../utils/interactionIds"
-import { ChannelNotFound, checkChannelRights, CheckRights } from "../utils/preconditions"
-import { rerenderDashboard } from "../utils/misc"
 import { inviteUser } from "../utils/inviteStatus"
+import { rerenderDashboard } from "../utils/misc"
+import { ChannelNotFound, checkChannelRights, CheckRights } from "../utils/preconditions"
 
 @ButtonRoute(InvitesId)
 export class InvitesButton extends ButtonHandler<[typeof InvitesId]> {
