@@ -12,9 +12,9 @@ export async function checkChannelRights(interaction: ButtonInteraction | Comman
     const userId = interaction.user.id
     if (!interaction.channel) return false
     const channel = await database.findChannel(interaction.channel.id)
-    //if (Array.isArray(channel?.managers)) channel.managers[0]
-    if (channel?.ownerId === userId) return true
-    return false
+    const isManager = Array.isArray(channel?.managers) && channel.managers.includes(userId)
+    if (channel?.ownerId !== userId && !isManager) return false
+    return true
 }
 
 export function CheckRights(): Gate<GateContextBase, "CheckRights"> {
@@ -101,7 +101,7 @@ export class RaceConditionDetected extends Notice {
         return {
             components: [
                 new ContainerBuilder()
-                    .setAccentColor(0xff_00_00)
+                    .setAccentColor(red)
                     .addTextDisplayComponents((builder) =>
                         builder.setContent(
                             ":warning: The channel changed while you were updating the limit. Check the current limit before retrying."

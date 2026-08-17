@@ -74,7 +74,7 @@ export class SaveStateBtn extends ButtonHandler<[typeof SaveState]> {
                 connect: { userId }
             }
         })
-        this.edit(`saved state`)
+        await this.edit(`saved state`)
     }
 }
 

@@ -3,6 +3,8 @@ import { ChannelType, Events } from "discord.js"
 
 import { database } from "../utils/base"
 import { composeDashboard } from "../utils/dashboard"
+import { isInvited, removeInvite } from "../utils/inviteStatus"
+import { blacklistUsers } from "../utils/misc"
 
 @RegisterEvent([Events.VoiceStateUpdate, { frequency: "on" }])
 export class Voice extends EventHandler<Events.VoiceStateUpdate> {
@@ -15,9 +17,36 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
         const member = newState.member
         const category = settings?.voiceCategory
         if (!settings || !member || !category) return
+        const oldId = oldState.channelId
+        const channel = oldId ? await database.findChannel(oldId) : undefined
+        if (oldId && channel?.id) {
+            const channel = oldState.channel
+            if (channel && channel.members.size === 0) {
+                await channel.delete("nobody is in channel")
+                try {
+                    await database.deleteChannel(oldId)
+                } catch {
+                    console.log("channel doesnt exist")
+                }
+            }
+        }
         if (settings.voiceChannel === newState.channelId) {
+            const invite = isInvited(member.id)
+            if (invite) {
+                await member.voice.setChannel(invite)
+                removeInvite(member.id, invite)
+                return
+            }
+            const slot = await database.findSave(member.id, 0)
+            let disableRequests: boolean
+            if (slot?.requestsEnabled !== undefined) {
+                disableRequests = !slot.requestsEnabled
+            } else disableRequests = false
             const channel = await guild.channels.create({
-                name: `${member.user.globalName} channel`,
+                // todo: per server templates for channel name
+                name: slot?.name ?? `${member.user.globalName} channel`,
+                bitrate: slot?.bitrate ?? 64_000,
+                userLimit: slot?.memberLimit ?? 0,
                 type: ChannelType.GuildVoice,
                 parent: category,
                 reason: "Conor voice channels"
@@ -25,30 +54,22 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
             //todo make this spaghetti code better, probably nove settings to database, make a store for saving and loading save slots so that users wont have to redo ig every time            })
             const message = await channel.send(
                 composeDashboard({
-                    disableRequests: false,
+                    disableRequests,
                     owner: member,
-                    closed: false
+                    closed: slot?.closed ?? false
                 })
             )
+            await blacklistUsers(channel, [], slot?.blacklist ?? [])
             await database.addChannel(channel.id, {
                 messageId: message.id,
                 ownerId: member.id,
-                closed: false,
-                maxMembers: 0,
-                requests: true
+                closed: slot?.closed ?? false,
+                maxMembers: slot?.memberLimit ?? 0,
+                requests: slot?.requestsEnabled ?? true,
+                blacklist: slot?.blacklist ?? [],
+                managers: slot?.managers ?? []
             })
             await member.voice.setChannel(channel, "Conor voice channels")
-        }
-        const oldId = oldState.channelId
-        if (oldId && (await database.findChannel(oldId))?.id) {
-            const channel = oldState.channel
-            if (!channel || channel.members.size > 0) return
-            await channel.delete("nobody is in channel")
-            try {
-                await database.deleteChannel(oldId)
-            } catch {
-                console.log("channel doesnt exist")
-            }
         }
     }
 }
