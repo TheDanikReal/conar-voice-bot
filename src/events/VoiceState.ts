@@ -16,11 +16,22 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
         const member = newState.member
         const category = settings?.voiceCategory
         if (!settings || !member || !category) return
+        const oldId = oldState.channelId
+        if (oldId && (await database.findChannel(oldId))?.id) {
+            const channel = oldState.channel
+            if (!channel || channel.members.size > 0) return
+            await channel.delete("nobody is in channel")
+            try {
+                await database.deleteChannel(oldId)
+            } catch {
+                console.log("channel doesnt exist")
+            }
+        }
         if (settings.voiceChannel === newState.channelId) {
             const invite = isInvited(member.id)
             if (invite) {
                 await member.voice.setChannel(invite)
-                removeInvite(member.id)
+                removeInvite(member.id, invite)
                 return
             }
             const channel = await guild.channels.create({
@@ -45,17 +56,6 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
                 requests: true
             })
             await member.voice.setChannel(channel, "Conor voice channels")
-        }
-        const oldId = oldState.channelId
-        if (oldId && (await database.findChannel(oldId))?.id) {
-            const channel = oldState.channel
-            if (!channel || channel.members.size > 0) return
-            await channel.delete("nobody is in channel")
-            try {
-                await database.deleteChannel(oldId)
-            } catch {
-                console.log("channel doesnt exist")
-            }
         }
     }
 }

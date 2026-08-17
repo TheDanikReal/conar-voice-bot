@@ -12,6 +12,6 @@ export function isInvited(user: string) {
     return inviteMap.get(user)
 }
 
-export function removeInvite(user: string) {
-    inviteMap.delete(user)
+export function removeInvite(user: string, channelId: string) {
+    if (inviteMap.get(user) === channelId) inviteMap.delete(user)
 }
