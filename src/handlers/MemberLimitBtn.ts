@@ -36,7 +36,7 @@ export class MemberLimitModal extends ModalHandler<[typeof MemberLimitModalId]> 
         const limit = parseInt(this.event.fields.getTextInputValue("limit").trim(), 10)
         if (!(channel && channel.type === ChannelType.GuildVoice && channel.isVoiceBased())) return
         if (limit < 0 || limit > 99 || Number.isNaN(limit)) {
-            await this.reply(`Incorrect limit was entered`)
+            await this.edit(`Incorrect limit was entered`)
             return
         }
         await channel.setUserLimit(limit)
@@ -45,6 +45,6 @@ export class MemberLimitModal extends ModalHandler<[typeof MemberLimitModalId]> 
             throw new RaceConditionDetected()
         }
         await rerenderDashboard(channel, this.event.guild)
-        await this.reply(`Set limit ${limit} members. ✅`)
+        await this.edit(`Set limit ${limit} members. ✅`)
     }
 }
