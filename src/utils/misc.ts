@@ -29,14 +29,22 @@ export async function blacklistUsers(
     const nextUserIds: Set<User> = new Set()
 
     for (const user of previousUsers) {
-        const guildUser = await channel.guild.members.fetch(user)
-        if (!guildUser) continue
-        previousUserIds.add(guildUser.user)
+        try {
+            const guildUser = await channel.guild.members.fetch(user)
+            if (!guildUser) continue
+            previousUserIds.add(guildUser.user)
+        } catch {
+            continue
+        }
     }
     for (const user of nextUsers) {
-        const guildUser = await channel.guild.members.fetch(user)
-        if (!guildUser) continue
-        nextUserIds.add(guildUser.user)
+        try {
+            const guildUser = await channel.guild.members.fetch(user)
+            if (!guildUser) continue
+            nextUserIds.add(guildUser.user)
+        } catch {
+            continue
+        }
     }
 
     for (const user of nextUserIds) {
