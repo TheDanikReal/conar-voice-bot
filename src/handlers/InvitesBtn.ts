@@ -56,7 +56,7 @@ export class InvitesAction extends ButtonHandler<[typeof InvitesActionId]> {
         const { userId, choice } = this.params
         const settings = await database.findChannel(this.event.channelId)
         const guild = await database.findServer(this.event.guildId)
-        if (!settings || !guild) throw new ChannelNotFound()
+        if (!settings || !guild?.voiceChannel) throw new ChannelNotFound()
         if (choice === "approve") {
             inviteUser(userId, this.event.channelId)
             await this.edit(
