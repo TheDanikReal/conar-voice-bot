@@ -12,7 +12,7 @@ import { inviteUser } from "../utils/inviteStatus"
 @ButtonRoute(InvitesId)
 export class InvitesButton extends ButtonHandler<[typeof InvitesId]> {
     public async execute(): Promise<void> {
-        if (this.event.channel?.type != ChannelType.GuildVoice) return
+        if (this.event.channel?.type !== ChannelType.GuildVoice) return
         await this.defer({ ephemeral: false })
         const isOwner = await checkChannelRights(this.event)
         const channelId = this.event.channel.id
@@ -57,7 +57,7 @@ export class InvitesAction extends ButtonHandler<[typeof InvitesActionId]> {
         const settings = await database.findChannel(this.event.channelId)
         const guild = await database.findServer(this.event.guildId)
         if (!settings) throw new ChannelNotFound()
-        if (choice == "approve") {
+        if (choice === "approve") {
             inviteUser(userId, this.event.channelId)
             await this.edit(
                 `<@${userId}>, your invitation has been accepted, you have 1 minute to join <#${guild?.voiceChannel}>`
