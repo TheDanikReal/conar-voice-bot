@@ -75,7 +75,7 @@ export class SaveStateBtn extends ButtonHandler<[typeof SaveState]> {
                 connect: { userId }
             }
         })
-        await this.edit({ components: [new FailedStatusComponent(`saved state`).component] })
+        await this.edit({ components: [new SuccessStatusComponent(`saved state`).component] })
     }
 }
 
