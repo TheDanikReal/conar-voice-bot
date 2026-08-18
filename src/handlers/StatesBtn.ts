@@ -4,6 +4,7 @@ import { ButtonStyle, ChannelType } from "discord.js"
 
 import { database } from "../utils/base"
 import { basicColor } from "../utils/consts"
+import { FailedStatusComponent, SuccessStatusComponent } from "../utils/embeds"
 import { LoadState, SaveState, StatesId } from "../utils/interactionIds"
 import { blacklistUsers, rerenderDashboard } from "../utils/misc"
 import { ChannelNotFound, CheckRights } from "../utils/preconditions"
@@ -74,7 +75,7 @@ export class SaveStateBtn extends ButtonHandler<[typeof SaveState]> {
                 connect: { userId }
             }
         })
-        await this.edit(`saved state`)
+        await this.edit({ components: [new FailedStatusComponent(`saved state`).component] })
     }
 }
 
@@ -90,7 +91,7 @@ export class LoadStateBtn extends ButtonHandler<[typeof LoadState]> {
         const oldBlacklist = Array.isArray(currentSettings.blacklist) ? currentSettings.blacklist : []
         const slotSettings = await database.findSave(this.event.user.id, this.params.slot)
         if (!slotSettings) {
-            await this.edit("unable to find slot settings")
+            await this.edit({ components: [new FailedStatusComponent("unable to find slot settings").component] })
             return
         }
         await channel.edit({
@@ -107,6 +108,6 @@ export class LoadStateBtn extends ButtonHandler<[typeof LoadState]> {
             requests: slotSettings.requestsEnabled
         })
         await rerenderDashboard(channel, this.event.guild)
-        await this.edit(`success`)
+        await this.edit({ components: [new SuccessStatusComponent().component] })
     }
 }

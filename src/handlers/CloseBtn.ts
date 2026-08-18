@@ -2,6 +2,7 @@ import { ButtonHandler, ButtonRoute, Gated } from "@seedcord/gateway"
 import { ChannelType } from "discord.js"
 
 import { database } from "../utils/base"
+import { SuccessStatusComponent } from "../utils/embeds"
 import { CloseId } from "../utils/interactionIds"
 import { rerenderDashboard } from "../utils/misc"
 import { CheckRights } from "../utils/preconditions"
@@ -29,6 +30,6 @@ export class CloseButton extends ButtonHandler<[typeof CloseId]> {
         await database.toggleClosed(channel.id)
         await rerenderDashboard(channel, this.event.guild)
         const message = !settings?.closed ? "closed" : "opened"
-        await this.edit(`successfully ${message} channel`)
+        await this.edit({ components: [new SuccessStatusComponent(`Successfully ${message} channel`).component] })
     }
 }
