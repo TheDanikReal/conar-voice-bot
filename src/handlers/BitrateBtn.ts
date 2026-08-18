@@ -39,7 +39,7 @@ export class BitrateModal extends ModalHandler<[typeof BitrateModalId]> {
         const maxBitrate = getMaxBitrate(this.event.guild.premiumTier)
         if (bitrate < 8 || bitrate > maxBitrate) {
             await this.edit({
-                components: [new FailedStatusComponent(`Selected bitrate exceeds limits! ${bitrate}`).component]
+                components: [new FailedStatusComponent(`Bitrate must be between 8 and ${maxBitrate} kbps`).component]
             })
             return
         }
