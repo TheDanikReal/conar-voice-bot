@@ -4,6 +4,7 @@
 // prettier-ignore
 declare module '@seedcord/gateway' {
     interface SlashOptionRegistry {
+        credits: {};
         ping: { detailed: { kind: 'boolean'; required: false } };
         setchannel: { channel: { kind: 'channel'; required: true; channelTypes: [2] }; category: { kind: 'channel'; required: true; channelTypes: [4] } };
     }

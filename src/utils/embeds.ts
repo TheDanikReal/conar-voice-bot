@@ -42,9 +42,7 @@ export class SuccessStatusComponent extends BuilderComponent<"container"> {
         super("container")
         this.instance
             .setAccentColor(statuses.success)
-            .addTextDisplayComponents((builder) =>
-                builder.setContent(message ?? "Successfully applied changes")
-            )
+            .addTextDisplayComponents((builder) => builder.setContent(message ?? "Successfully applied changes"))
     }
 }
 
