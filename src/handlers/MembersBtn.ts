@@ -4,6 +4,7 @@ import { ButtonStyle, ChannelType } from "discord.js"
 
 import { database } from "../utils/base"
 import { basicColor } from "../utils/consts"
+import { SuccessStatusComponent } from "../utils/embeds"
 import {
     BlacklistId,
     BlacklistModalId,
@@ -86,7 +87,7 @@ export class KickMemberModal extends ModalHandler<[typeof KickMemberModalId]> {
         if (!user) throw new UserNotFound()
         await channel.members.get(user.id)?.voice.setChannel(null)
         try {
-            await this.edit(`kicked user`)
+            await this.edit({ components: [new SuccessStatusComponent(`kicked user`).component] })
         } catch {}
         // if you kick yourself and you're the only member, channel will be deleted
         // so it's not guarranteed for message to be sent
@@ -126,7 +127,7 @@ export class BlacklistModal extends ModalHandler<[typeof BlacklistModalId]> {
         const previousUsers = Array.isArray(settings.blacklist) ? settings.blacklist : []
         await blacklistUsers(channel, previousUsers, currentUsers)
         await database.changeBlacklist(channel.id, currentUsers)
-        await this.edit("success")
+        await this.edit({ components: [new SuccessStatusComponent().component] })
     }
 }
 
@@ -158,6 +159,6 @@ export class ManageManagersModal extends ModalHandler<[typeof ManagersModalId]> 
         const channel = this.event.channel
         if (!channel) return
         await database.changeManagers(channel.id, users?.map((user) => user.id) ?? [])
-        await this.edit("success")
+        await this.edit({ components: [new SuccessStatusComponent().component] })
     }
 }

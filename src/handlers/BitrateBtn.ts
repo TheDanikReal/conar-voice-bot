@@ -32,7 +32,7 @@ export class BitrateModal extends ModalHandler<[typeof BitrateModalId]> {
         await this.defer()
         const bitrate = parseInt(this.event.fields.getTextInputValue("bitrate").trim(), 10)
         if (Number.isNaN(bitrate)) {
-            await this.edit(`:warning: Entered bitrate is incorrect`)
+            await this.edit(`:warning: Entered bitrate is not a number`)
             return
         }
         const maxBitrate = getMaxBitrate(this.event.guild.premiumTier)

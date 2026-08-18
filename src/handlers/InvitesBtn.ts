@@ -3,7 +3,7 @@ import { ButtonHandler, ButtonRoute, Gated } from "@seedcord/gateway"
 import { ButtonStyle, ChannelType } from "discord.js"
 
 import { database } from "../utils/base"
-import { createGenericEmbed } from "../utils/embeds"
+import { createGenericEmbed, FailedStatusComponent, SuccessStatusComponent } from "../utils/embeds"
 import { InvitesActionId, InvitesId } from "../utils/interactionIds"
 import { inviteUser } from "../utils/inviteStatus"
 import { rerenderDashboard } from "../utils/misc"
@@ -19,7 +19,9 @@ export class InvitesButton extends ButtonHandler<[typeof InvitesId]> {
         if (isOwner) {
             const result = await database.toggleInvites(channelId)
             await rerenderDashboard(this.event.channel, this.event.guild)
-            await this.edit(result ? "enabled" : "disabled")
+            await this.edit({
+                components: [new SuccessStatusComponent(`${result ? "Enabled" : "Disabled"} invites`).component]
+            })
             return
         }
         if (await database.areInvitesEnabled(channelId)) {
@@ -43,7 +45,7 @@ export class InvitesButton extends ButtonHandler<[typeof InvitesId]> {
                 components: [row]
             })
         } else {
-            await this.event.editReply("invites are disabled")
+            await this.event.editReply({ components: [new FailedStatusComponent("Invites are disabled").component] })
         }
     }
 }
@@ -59,12 +61,13 @@ export class InvitesAction extends ButtonHandler<[typeof InvitesActionId]> {
         if (!settings || !guild?.voiceChannel) throw new ChannelNotFound()
         if (choice === "approve") {
             inviteUser(userId, this.event.channelId)
-            await this.edit(
+            const component = new SuccessStatusComponent(
                 `<@${userId}>, your invitation has been accepted, you have 1 minute to join <#${guild?.voiceChannel}>`
             )
+            await this.edit({ components: [component.component] })
         } else {
-            await this.edit(`<@${userId}>'s invitation has been denied`)
+            const component = new FailedStatusComponent(`<@${userId}>'s invitation has been denied`)
+            await this.edit({ components: [component.component] })
         }
-        //await this.edit(`${userId} and ${choice}`)
     }
 }

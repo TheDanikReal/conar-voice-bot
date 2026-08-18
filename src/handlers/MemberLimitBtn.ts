@@ -3,6 +3,7 @@ import { ButtonHandler, ButtonRoute, Gated, ModalHandler, ModalRoute } from "@se
 import { ChannelType, TextInputStyle } from "discord.js"
 
 import { database } from "../utils/base"
+import { FailedStatusComponent, SuccessStatusComponent } from "../utils/embeds"
 import { MemberLimitId, MemberLimitModalId } from "../utils/interactionIds"
 import { rerenderDashboard } from "../utils/misc"
 import { CheckRights, RaceConditionDetected } from "../utils/preconditions"
@@ -36,7 +37,7 @@ export class MemberLimitModal extends ModalHandler<[typeof MemberLimitModalId]> 
         const limit = parseInt(this.event.fields.getTextInputValue("limit").trim(), 10)
         if (!(channel && channel.type === ChannelType.GuildVoice && channel.isVoiceBased())) return
         if (limit < 0 || limit > 99 || Number.isNaN(limit)) {
-            await this.edit(`Incorrect limit was entered`)
+            await this.edit({ components: [new FailedStatusComponent(`Incorrect limit was entered`).component] })
             return
         }
         await channel.setUserLimit(limit)
@@ -45,6 +46,6 @@ export class MemberLimitModal extends ModalHandler<[typeof MemberLimitModalId]> 
             throw new RaceConditionDetected()
         }
         await rerenderDashboard(channel, this.event.guild)
-        await this.edit(`Set limit ${limit} members. ✅`)
+        await this.edit({ components: [new SuccessStatusComponent(`Set limit ${limit} members.`).component] })
     }
 }

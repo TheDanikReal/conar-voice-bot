@@ -1,6 +1,7 @@
 import { EmbedBuilder } from "@discordjs/builders"
+import { BuilderComponent } from "@seedcord/gateway"
 
-import { basicColor } from "./consts"
+import { basicColor, failureColor } from "./consts"
 
 import type { TempChannelCreateInput } from "../generated/prisma/models"
 import type { GuildTextBasedChannel, User } from "discord.js"
@@ -34,4 +35,24 @@ export async function getMainMessage(channel: GuildTextBasedChannel, settings: P
     const message = await channel.messages.fetch(settings.messageId)
     if (!message) throw new Error("can't find main message")
     return message
+}
+
+export class SuccessStatusComponent extends BuilderComponent<"container"> {
+    constructor(message?: string) {
+        super("container")
+        this.instance
+            .setAccentColor(statuses.success)
+            .addTextDisplayComponents((builder) =>
+                builder.setContent(message ?? "Successfully applied changes")
+            )
+    }
+}
+
+export class FailedStatusComponent extends BuilderComponent<"container"> {
+    constructor(message?: string) {
+        super("container")
+        this.instance
+            .setAccentColor(failureColor)
+            .addTextDisplayComponents((builder) => builder.setContent(message ?? "Failed to execute command"))
+    }
 }
