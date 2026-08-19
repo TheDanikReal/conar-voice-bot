@@ -2,10 +2,10 @@ import { LabelBuilder, ModalBuilder } from "@discordjs/builders"
 import { ButtonHandler, ButtonRoute, Gated, ModalHandler, ModalRoute } from "@seedcord/gateway"
 import { ChannelType, TextInputStyle } from "discord.js"
 
+import { FailedStatusComponent, SuccessStatusComponent } from "../utils/embeds"
 import { BitrateId, BitrateModalId } from "../utils/interactionIds"
 import { getMaxBitrate } from "../utils/misc"
 import { CheckRights } from "../utils/preconditions"
-import { FailedStatusComponent, SuccessStatusComponent } from "../utils/embeds"
 
 @Gated(CheckRights())
 @ButtonRoute(BitrateId)
