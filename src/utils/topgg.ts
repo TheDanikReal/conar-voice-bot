@@ -18,8 +18,12 @@ export function updateGuildCounter(client: Client, guildCount: number): Promise<
             signal: AbortSignal.timeout(10_000)
         })
 
-        if (!response.ok) {
-            throw new Error(`Top.gg guild-count update failed: ${response.status}`)
+        try {
+            if (!response.ok) {
+                throw new Error(`Top.gg guild-count update failed: ${response.status}`)
+            }
+        } finally {
+            response.body?.cancel()
         }
     })
 
