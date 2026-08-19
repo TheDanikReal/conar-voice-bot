@@ -1,5 +1,5 @@
 import { SlashRoute, SlashHandler } from "@seedcord/gateway"
-import { ContainerBuilder } from "discord.js"
+import { ContainerBuilder } from "@discordjs/builders"
 
 @SlashRoute("cat")
 export class Cat extends SlashHandler<"cat"> {
