@@ -1,5 +1,6 @@
+import { ContainerBuilder } from "@discordjs/builders"
 import { SlashHandler, SlashRoute } from "@seedcord/gateway"
-import { ContainerBuilder, SeparatorSpacingSize } from "discord.js"
+import { SeparatorSpacingSize } from "discord.js"
 
 @SlashRoute("credits")
 export class Credits extends SlashHandler<"credits"> {
