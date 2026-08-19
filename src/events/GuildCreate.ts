@@ -1,18 +1,14 @@
-import { EventHandler, RegisterEvent } from "@seedcord/gateway"
-import { Events } from "discord.js"
+import { EventHandler, RegisterEvent } from "@seedcord/gateway";
+import { Events } from "discord.js";
 
-@RegisterEvent([Events.ClientReady, { frequency: "once" }])
-export class Ready extends EventHandler<Events.ClientReady> {
+@RegisterEvent([Events.GuildCreate, { frequency: "on" }])
+export class Ready extends EventHandler<Events.GuildCreate> {
     public async execute(): Promise<void> {
-        const [client] = this.event
-        const application = await client.application.fetch()
-        const guildCount = client.guilds.cache.size
-
-        this.logger.info(`${application.name} is in ${client.guilds.cache.size} servers`)
-
+        const client = this.event[0].client
         const token = process.env.TOPGG_TOKEN
         if (!token) return
 
+        const guildCount = client.guilds.cache.size
         const response = await fetch(`https://top.gg/api/bots/${client.user.id}/stats`, {
             method: "POST",
             headers: {
