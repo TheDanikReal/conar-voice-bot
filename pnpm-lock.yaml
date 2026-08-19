@@ -32,9 +32,6 @@ importers:
       lru-cache:
         specifier: ^11.5.2
         version: 11.5.2
-      prisma:
-        specifier: ^7.9.1
-        version: 7.9.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(typescript@6.0.3)
     devDependencies:
       '@seedcord/eslint-config':
         specifier: ^1.5.4
@@ -60,6 +57,9 @@ importers:
       prettier:
         specifier: ^3.9.6
         version: 3.9.6
+      prisma:
+        specifier: ^7.9.1
+        version: 7.9.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(typescript@6.0.3)
       seedcord:
         specifier: ^0.18.0
         version: 0.18.0(@types/node@26.2.0)(@types/react@19.2.18)(envapt@8.1.1)(esbuild@0.28.1)(typescript@6.0.3)(yaml@2.9.0)

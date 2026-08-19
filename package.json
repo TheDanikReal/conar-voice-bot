@@ -25,8 +25,7 @@
         "discord.js": "^14.27.0",
         "dotenv": "^17.4.2",
         "envapt": "^8.1.1",
-        "lru-cache": "^11.5.2",
-        "prisma": "^7.9.1"
+        "lru-cache": "^11.5.2"
     },
     "devDependencies": {
         "@seedcord/eslint-config": "^1.5.4",
@@ -37,6 +36,7 @@
         "eslint-plugin-security": "^4.0.1",
         "eslint-plugin-tsdoc": "^0.5.2",
         "prettier": "^3.9.6",
+        "prisma": "^7.9.1",
         "seedcord": "^0.18.0",
         "typescript": "~6.0.3"
     }
