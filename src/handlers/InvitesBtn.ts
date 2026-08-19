@@ -45,7 +45,7 @@ export class InvitesButton extends ButtonHandler<[typeof InvitesId]> {
                 components: [row]
             })
         } else {
-            await this.event.editReply({ components: [new FailedStatusComponent("Invites are disabled").component] })
+            await this.edit({ components: [new FailedStatusComponent("Invites are disabled").component] })
         }
     }
 }
