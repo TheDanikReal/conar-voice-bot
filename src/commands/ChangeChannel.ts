@@ -21,7 +21,6 @@ export class SetChannelCommand extends BuilderComponent<"command"> {
                     .setName("category")
                     .setDescription("category for temp channels")
                     .addChannelTypes(ChannelType.GuildCategory)
-                    .setRequired(true)
             )
             .addStringOption((builder) =>
                 builder
