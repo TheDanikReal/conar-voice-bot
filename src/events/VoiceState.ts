@@ -6,6 +6,8 @@ import { composeDashboard } from "../utils/dashboard"
 import { isInvited, removeInvite } from "../utils/inviteStatus"
 import { blacklistUsers } from "../utils/misc"
 
+import { Prisma } from "../generated/prisma/client"
+
 @RegisterEvent([Events.VoiceStateUpdate, { frequency: "on" }])
 export class Voice extends EventHandler<Events.VoiceStateUpdate> {
     public async execute(): Promise<void> {
@@ -25,8 +27,10 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
                 await channel.delete("nobody is in channel")
                 try {
                     await database.deleteChannel(oldId)
-                } catch {
-                    this.logger.info(`channel ${channel.id} doesnt exist`)
+                } catch (error) {
+                    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code == "P2025") return
+                    this.logger.error(`failed to delete ${channel.id}`)
+                    throw error
                 }
             }
         }
@@ -47,7 +51,6 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
                 ? settings.template.replace("{username}", member.user.username)
                 : `${member.user.username}'s channel`
             const channel = await guild.channels.create({
-                // todo: per server templates for channel name
                 name: slot?.name ?? templateName,
                 bitrate: slot?.bitrate ?? 64_000,
                 userLimit: slot?.memberLimit ?? 0,
