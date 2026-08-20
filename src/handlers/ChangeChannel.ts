@@ -25,7 +25,8 @@ export class ChangeChannel extends SlashHandler<"setchannel"> {
         await database.editServerIfExists({
             id: this.event.guildId,
             voiceChannel: this.options.getChannel("channel").id,
-            voiceCategory: this.options.getChannel("category").id
+            voiceCategory: this.options.getChannel("category").id,
+            template: this.options.getString("template")?.trim() ?? null
         })
         await this.edit({ components: [successDisplay] })
     }

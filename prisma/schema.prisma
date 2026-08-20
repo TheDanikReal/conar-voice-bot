@@ -16,6 +16,7 @@ model ServerSettings {
   id            String  @id
   voiceChannel  String?
   voiceCategory String?
+  template      String?
 }
 
 model TempChannel {
