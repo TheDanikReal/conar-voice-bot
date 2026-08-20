@@ -19,14 +19,15 @@ model ServerSettings {
 }
 
 model TempChannel {
-  id         String   @id
-  messageId  String
-  ownerId    String
-  managers   String[] @default([])
-  blacklist  String[] @default([])
-  requests   Boolean  @default(true)
-  closed     Boolean  @default(false)
-  maxMembers Int      @default(0)
+  id          String   @id
+  messageId   String
+  ownerId     String
+  managers    String[] @default([])
+  blacklist   String[] @default([])
+  requests    Boolean  @default(true)
+  closed      Boolean  @default(false)
+  maxMembers  Int      @default(0)
+  currentSlot Int      @default(0)
 }
 
 model UserSettings {
