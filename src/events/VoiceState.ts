@@ -16,7 +16,7 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
         const settings = await database.findServer(guild.id)
         const member = newState.member
         const category = settings?.voiceCategory
-        if (!settings?.voiceChannel || !member || !category) return
+        if (!settings || !member) return
         const oldId = oldState.channelId
         const channel = oldId ? await database.findChannel(oldId) : undefined
         if (oldId && channel?.id) {
@@ -26,10 +26,11 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
                 try {
                     await database.deleteChannel(oldId)
                 } catch {
-                    console.log("channel doesnt exist")
+                    this.logger.info(`channel ${channel.id} doesnt exist`)
                 }
             }
         }
+        if (!settings.voiceChannel) return
         if (settings.voiceChannel === newState.channelId) {
             const invite = isInvited(member.id)
             if (invite) {
@@ -51,7 +52,7 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
                 bitrate: slot?.bitrate ?? 64_000,
                 userLimit: slot?.memberLimit ?? 0,
                 type: ChannelType.GuildVoice,
-                parent: category,
+                parent: category ?? null,
                 reason: "Conor voice channels"
             })
             //todo make this spaghetti code better, probably nove settings to database, make a store for saving and loading save slots so that users wont have to redo ig every time            })
