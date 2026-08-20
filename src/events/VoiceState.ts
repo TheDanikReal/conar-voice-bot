@@ -67,7 +67,8 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
                 maxMembers: slot?.memberLimit ?? 0,
                 requests: slot?.requestsEnabled ?? true,
                 blacklist: slot?.blacklist ?? [],
-                managers: slot?.managers ?? []
+                managers: slot?.managers ?? [],
+                currentSlot: 0
             })
             await member.voice.setChannel(channel, "Conor voice channels")
         }

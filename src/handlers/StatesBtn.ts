@@ -13,34 +13,10 @@ import { ChannelNotFound, CheckRights } from "../utils/preconditions"
 @ButtonRoute(StatesId)
 export class ManageStatesBtn extends ButtonHandler<[typeof StatesId]> {
     public async execute(): Promise<void> {
-        const saveButtons: ButtonBuilder[] = []
-        for (let i = 0; i < 3; i++) {
-            saveButtons.push(
-                new ButtonBuilder()
-                    .setCustomId(SaveState.encode({ slot: i }))
-                    .setStyle(ButtonStyle.Primary)
-                    .setLabel(`Slot ${i + 1}`)
-            )
-        }
-        const loadButtons: ButtonBuilder[] = []
-        for (let i = 0; i < 3; i++) {
-            loadButtons.push(
-                new ButtonBuilder()
-                    .setCustomId(LoadState.encode({ slot: i }))
-                    .setStyle(ButtonStyle.Success)
-                    .setLabel(`Slot ${i + 1}`)
-            )
-        }
-        const saveRow = new ActionRowBuilder<ButtonBuilder>().addComponents(saveButtons)
-        const loadRow = new ActionRowBuilder<ButtonBuilder>().addComponents(loadButtons)
-
-        const container = new ContainerBuilder().setAccentColor(basicColor).addTextDisplayComponents((builder) =>
-            builder.setContent(`## Managing saves
-Here you can save/load current states in one of 3 available slots
-Slot 1 is being used by default when creating new channels
-Blue buttons - saving, green buttons - loading`)
-        )
-        await this.reply({ components: [container, saveRow, loadRow] })
+        const channelPromise = database.findChannel(this.event.channelId)
+        await this.defer({ ephemeral: false })
+        const channel = await channelPromise
+        await this.edit({ components: buildRows(channel?.currentSlot ?? 0) })
     }
 }
 
@@ -86,6 +62,8 @@ export class LoadStateBtn extends ButtonHandler<[typeof LoadState]> {
         const channel = this.event.channel
         if (!channel?.isVoiceBased() || !(channel.type === ChannelType.GuildVoice)) return
         await this.defer()
+        const parentMessage = await this.event.message.fetch(true)
+        await parentMessage.edit({ components: buildRows(this.params.slot) })
         const currentSettings = await database.findChannel(channel.id)
         if (!currentSettings) return
         const oldBlacklist = Array.isArray(currentSettings.blacklist) ? currentSettings.blacklist : []
@@ -105,9 +83,41 @@ export class LoadStateBtn extends ButtonHandler<[typeof LoadState]> {
             closed: slotSettings.closed,
             managers: slotSettings.managers,
             maxMembers: slotSettings.memberLimit,
-            requests: slotSettings.requestsEnabled
+            requests: slotSettings.requestsEnabled,
+            currentSlot: this.params.slot
         })
         await rerenderDashboard(channel, this.event.guild)
         await this.edit({ components: [new SuccessStatusComponent().component] })
     }
+}
+
+function buildRows(slot: number): (ContainerBuilder | ActionRowBuilder<ButtonBuilder>)[] {
+    const saveButtons: ButtonBuilder[] = []
+    for (let i = 0; i < 3; i++) {
+        saveButtons.push(
+            new ButtonBuilder()
+                .setCustomId(SaveState.encode({ slot: i }))
+                .setStyle(ButtonStyle.Primary)
+                .setLabel(`Slot ${i + 1}`)
+        )
+    }
+    const loadButtons: ButtonBuilder[] = []
+    for (let i = 0; i < 3; i++) {
+        loadButtons.push(
+            new ButtonBuilder()
+                .setCustomId(LoadState.encode({ slot: i }))
+                .setStyle(i === slot ? ButtonStyle.Success : ButtonStyle.Secondary)
+                .setLabel(`Slot ${i + 1}`)
+        )
+    }
+    const saveRow = new ActionRowBuilder<ButtonBuilder>().addComponents(saveButtons)
+    const loadRow = new ActionRowBuilder<ButtonBuilder>().addComponents(loadButtons)
+
+    const container = new ContainerBuilder().setAccentColor(basicColor).addTextDisplayComponents((builder) =>
+        builder.setContent(`## Managing saves
+Here you can save/load current states in one of 3 available slots
+Slot 1 is being used by default when creating new channels
+Blue buttons - saving, gray buttons - loading, green button - current slot`)
+    )
+    return [container, saveRow, loadRow]
 }
