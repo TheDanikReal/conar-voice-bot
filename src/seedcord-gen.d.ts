@@ -7,6 +7,7 @@ declare module '@seedcord/gateway' {
         cat: {};
         credits: {};
         ping: { detailed: { kind: 'boolean'; required: false } };
+        removechannel: {};
         setchannel: { channel: { kind: 'channel'; required: true; channelTypes: [2] }; category: { kind: 'channel'; required: false; channelTypes: [4] }; template: { kind: 'string'; required: false } };
     }
     interface UserContextMenuRegistry {

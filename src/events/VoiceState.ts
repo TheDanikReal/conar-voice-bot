@@ -16,7 +16,7 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
         const settings = await database.findServer(guild.id)
         const member = newState.member
         const category = settings?.voiceCategory
-        if (!settings || !member || !category) return
+        if (!settings?.voiceChannel || !member || !category) return
         const oldId = oldState.channelId
         const channel = oldId ? await database.findChannel(oldId) : undefined
         if (oldId && channel?.id) {
