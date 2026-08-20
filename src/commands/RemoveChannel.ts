@@ -8,7 +8,7 @@ export class RemoveChannel extends BuilderComponent<"command"> {
 
         this.instance
             .setName("removechannel")
-            .setDescription("Remove active temporary channel from database and make it a regular channel")
+            .setDescription("Disable temporary channel creation for this server")
             .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     }
 }
