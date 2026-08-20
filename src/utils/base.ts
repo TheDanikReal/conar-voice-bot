@@ -190,6 +190,16 @@ class PrismaDatabase {
             update: data
         })
     }
+    async deleteSave(userId: string, slotNum: number) {
+        await this.prisma.save.delete({
+            where: {
+                userId_slotNum: {
+                    slotNum: slotNum,
+                    userId
+                }
+            }
+        })
+    }
     async toggleInvites(channelId: string) {
         const data = await this.prisma.tempChannel.findFirst({
             where: {
