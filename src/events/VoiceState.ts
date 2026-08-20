@@ -42,9 +42,12 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
             if (slot?.requestsEnabled !== undefined) {
                 disableRequests = !slot.requestsEnabled
             } else disableRequests = false
+            const templateName = settings.template
+                ? settings.template.replace("{username}", member.user.username)
+                : `${member.user.globalName}'s channel`
             const channel = await guild.channels.create({
                 // todo: per server templates for channel name
-                name: slot?.name ?? `${member.user.globalName} channel`,
+                name: slot?.name ?? templateName,
                 bitrate: slot?.bitrate ?? 64_000,
                 userLimit: slot?.memberLimit ?? 0,
                 type: ChannelType.GuildVoice,

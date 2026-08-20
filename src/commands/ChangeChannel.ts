@@ -23,6 +23,14 @@ export class SetChannelCommand extends BuilderComponent<"command"> {
                     .addChannelTypes(ChannelType.GuildCategory)
                     .setRequired(true)
             )
+            .addStringOption((builder) =>
+                builder
+                    .setName("template")
+                    .setDescription("template for default channel names, use {username} for fetching username")
+                    .setMinLength(1)
+                    // 32 is limit for usernames
+                    .setMaxLength(100 - 32)
+            )
             .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     }
 }
