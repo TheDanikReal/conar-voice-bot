@@ -45,7 +45,7 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
             } else disableRequests = false
             const templateName = settings.template
                 ? settings.template.replace("{username}", member.user.username)
-                : `${member.user.globalName}'s channel`
+                : `${member.user.username}'s channel`
             const channel = await guild.channels.create({
                 // todo: per server templates for channel name
                 name: slot?.name ?? templateName,
