@@ -26,7 +26,8 @@ export class ChangeChannel extends SlashHandler<"setchannel"> {
             id: this.event.guildId,
             voiceChannel: this.options.getChannel("channel").id,
             voiceCategory: this.options.getChannel("category")?.id ?? null,
-            template: this.options.getString("template")?.trim() ?? null
+            template: this.options.getString("template")?.trim() ?? null,
+            language: this.options.getString("language") ?? "en"
         })
         await this.edit({ components: [successDisplay] })
     }

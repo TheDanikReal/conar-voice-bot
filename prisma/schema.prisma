@@ -17,6 +17,7 @@ model ServerSettings {
   voiceChannel  String?
   voiceCategory String?
   template      String?
+  language      String  @default("en")
 }
 
 model TempChannel {

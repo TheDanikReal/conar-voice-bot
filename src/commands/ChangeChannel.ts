@@ -30,6 +30,17 @@ export class SetChannelCommand extends BuilderComponent<"command"> {
                     // 32 is limit for usernames
                     .setMaxLength(100 - 32)
             )
+            .addStringOption((builder) =>
+                builder
+                    .setName("language")
+                    .setDescription("language to use for commands, dashboards in temp channels")
+                    .setChoices([
+                        {
+                            name: "English",
+                            value: "en"
+                        }
+                    ])
+            )
             .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     }
 }
