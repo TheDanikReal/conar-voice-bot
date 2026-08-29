@@ -1,6 +1,10 @@
 import * as fs from "node:fs"
 import * as path from "node:path"
 
+// ============================================================================
+// Types & Interfaces
+// ============================================================================
+
 export type PluralCategory = "zero" | "one" | "two" | "few" | "many" | "other"
 export type PluralObject = Partial<Record<PluralCategory, string>>
 export type TranslationValue = string | PluralObject
@@ -11,83 +15,130 @@ export interface ParsedParam {
     type: string
 }
 
-export interface ParsedTemplate {
-    params: ParsedParam[]
-    template: string
-}
+const PLURAL_KEYS = new Set(["zero", "one", "two", "few", "many", "other"])
 
-/** plural object type guard */
+// ============================================================================
+// Utility Functions
+// ============================================================================
+
+/**
+ * Strict type guard to verify if an object is a valid plural configuration.
+ */
 function isPluralObject(value: unknown): value is PluralObject {
-    return (
-        typeof value === "object" &&
-        value !== null &&
-        !Array.isArray(value) &&
-        Object.keys(value).some((key) => ["zero", "one", "two", "few", "many", "other"].includes(key))
-    )
+    if (typeof value !== "object" || value === null || Array.isArray(value)) {
+        return false
+    }
+
+    const keys = Object.keys(value)
+
+    // Object must have at least one key, and ALL keys must be valid plural categories
+    return keys.length > 0 && keys.every((key) => PLURAL_KEYS.has(key))
 }
 
-// 3. template parser ({name:string}, {count:number})
-function parseTemplate(text: string): ParsedTemplate {
-    const matches = [...text.matchAll(/\{(\w+)(?::(\w+))?\}/g)]
+/**
+ * Parses a translation string, escapes syntax characters, and extracts variables.
+ * Transforms "{param}" into "${p.param}" for JavaScript template literals.
+ */
+function extractParamsAndTemplate(text: string) {
+    // 1. Escape backticks and existing template literal expressions to prevent syntax errors
+    const safeText = text.replace(/`/g, "\\`").replace(/\$\{/g, "\\${")
+
+    const matches = [...safeText.matchAll(/\{(\w+)(?::(\w+))?\}/g)]
     const paramMap = new Map<string, string>()
 
+    // extract parameters and infer their types
     for (const match of matches) {
-        const paramName = match[1]
+        const paramName = match[1]!
         const explicitType = match[2]
 
-        if (paramName && !paramMap.has(paramName)) {
-            // if name is count/amount/days we make it number, else we set it as string
-            const defaultType = ["count", "amount", "days", "num", "total"].includes(paramName) ? "number" : "string"
+        if (!paramMap.has(paramName)) {
+            // infer type based on common names if no explicit type is provided
+            const isNumberParam = ["count", "amount", "days", "num", "total"].includes(paramName)
+            const resolvedType = explicitType ?? (isNumberParam ? "number" : "string")
 
-            paramMap.set(paramName, explicitType ?? defaultType)
+            paramMap.set(paramName, resolvedType)
         }
     }
 
-    const params: ParsedParam[] = Array.from(paramMap.entries()).map(([name, type]) => ({
-        name,
-        type
-    }))
+    // 3. Replace {param:type} with ${p.param}
+    const template = safeText.replace(/\{(\w+)(?::\w+)?\}/g, "${p.$1}")
 
-    // replace {param:type} to ${p.param} as template literal
-    const template = text.replace(/\{(\w+)(?::\w+)?\}/g, "${p.$1}")
-
-    return { params, template }
+    return {
+        params: Array.from(paramMap.entries()).map(([name, type]) => ({ name, type })),
+        template
+    }
 }
 
-// language function generator
-function generateFunctions(lang: string, dict: TranslationDictionary): string {
-    const lines: string[] = []
+// ============================================================================
+// Code Generators
+// ============================================================================
+
+/**
+ * Builds a TypeScript method for a plural translation object.
+ */
+function buildPluralMethod(locale: string, key: string, pluralObj: PluralObject): string {
+    const allParams = new Map<string, string>()
+
+    // 'count' is mandatory for pluralization logic
+    allParams.set("count", "number")
+
+    const branches = Object.entries(pluralObj).map(([pluralRule, text]) => {
+        const { params, template } = extractParamsAndTemplate(text)
+
+        // Collect all unique parameters across all plural branches
+        for (const { name, type } of params) {
+            allParams.set(name, type)
+        }
+
+        return `    ${pluralRule}: \`${template}\``
+    })
+
+    const typeSignature = Array.from(allParams.entries())
+        .map(([name, type]) => `${name}: ${type}`)
+        .join("; ")
+
+    return `  ${key}: (p: { ${typeSignature} }) => plural('${locale}', p.count, {\n${branches.join(",\n")}\n  })`
+}
+
+/**
+ * Builds a TypeScript method for a standard string translation.
+ */
+function buildStringMethod(key: string, text: string): string {
+    const { params, template } = extractParamsAndTemplate(text)
+
+    if (params.length === 0) {
+        // No parameters needed, safely return the raw string
+        return `  ${key}: () => ${JSON.stringify(text)}`
+    }
+
+    const typeSignature = params.map((p) => `${p.name}: ${p.type}`).join("; ")
+    return `  ${key}: (p: { ${typeSignature} }) => \`${template}\``
+}
+
+/**
+ * Iterates over the dictionary and generates the corresponding TypeScript methods.
+ */
+function generateDictionaryCode(locale: string, dict: TranslationDictionary): string {
+    const methods: string[] = []
 
     for (const [key, value] of Object.entries(dict)) {
+        // Skip metadata or comment keys
         if (key.startsWith("@")) continue
+
         if (isPluralObject(value)) {
-            const branches = Object.entries(value)
-                .map(([k, text]) => {
-                    const { template } = parseTemplate(text)
-                    return `    ${k}: \`${template}\``
-                })
-                .join(",\n")
-
-            lines.push(`  ${key}: (p: { count: number }) => plural('${lang}', p.count, {\n${branches}\n  })`)
-            continue
-        }
-
-        if (typeof value === "string") {
-            const { params, template } = parseTemplate(value)
-
-            if (params.length === 0) {
-                lines.push(`  ${key}: () => ${JSON.stringify(value)}`)
-            } else {
-                const typeSignature = params.map((p) => `${p.name}: ${p.type}`).join("; ")
-                lines.push(`  ${key}: (p: { ${typeSignature} }) => \`${template}\``)
-            }
+            methods.push(buildPluralMethod(locale, key, value))
+        } else if (typeof value === "string") {
+            methods.push(buildStringMethod(key, value))
         }
     }
 
-    return lines.join(",\n")
+    return methods.join(",\n")
 }
 
-// main compiler function
+// ============================================================================
+// Main Compiler
+// ============================================================================
+
 export function compileI18n(
     localesDir = "./i18n/locales",
     outputFile = "./src/generated/i18n.ts",
@@ -97,30 +148,28 @@ export function compileI18n(
     const resolvedOutputFile = path.resolve(outputFile)
 
     if (!fs.existsSync(resolvedLocalesDir)) {
-        throw new Error(`locale dir not found: ${resolvedLocalesDir}`)
+        throw new Error(`Locale directory not found: ${resolvedLocalesDir}`)
     }
 
-    // read all jsons
+    // 1. Discover and read all JSON dictionaries
     const files = fs.readdirSync(resolvedLocalesDir).filter((file) => file.endsWith(".json"))
     const locales = files.map((file) => path.basename(file, ".json"))
 
     if (!locales.includes(baseLocale)) {
-        throw new Error(`base locale "${baseLocale}.json" does not exist in ${localesDir}`)
+        throw new Error(`Base locale "${baseLocale}.json" does not exist in ${localesDir}`)
     }
 
     const dictionaries: Record<string, TranslationDictionary> = {}
-
     for (const locale of locales) {
         const filePath = path.join(resolvedLocalesDir, `${locale}.json`)
         const content = fs.readFileSync(filePath, "utf-8")
         dictionaries[locale] = JSON.parse(content) as TranslationDictionary
     }
 
-    // creating plural rules for all langs
-    const pluralRulesEntries = locales.map((locale) => `  ${locale}: new Intl.PluralRules('${locale}')`).join(",\n")
+    // 2. Prepare code sections
+    const pluralRulesCode = locales.map((locale) => `  ${locale}: new Intl.PluralRules('${locale}')`).join(",\n")
 
-    // generating dicts (with ...en fallback)
-    const baseDictCode = `export const ${baseLocale} = {\n${generateFunctions(
+    const baseDictCode = `export const ${baseLocale} = {\n${generateDictionaryCode(
         baseLocale,
         dictionaries[baseLocale]!
     )}\n} as const;\n\nexport type Dict = typeof ${baseLocale};`
@@ -128,24 +177,25 @@ export function compileI18n(
     const otherLocalesCode = locales
         .filter((l) => l !== baseLocale)
         .map((locale) => {
-            return `export const ${locale}: Dict = {\n  ...${baseLocale},\n${generateFunctions(
+            return `export const ${locale}: Dict = {\n  ...${baseLocale},\n${generateDictionaryCode(
                 locale,
                 dictionaries[locale]!
             )}\n};`
         })
         .join("\n\n")
 
-    const dictMapEntries = locales.map((l) => `  ${l}`).join(",\n")
+    const dictMapCode = locales.map((l) => `  ${l}`).join(",\n")
 
-    // generated ts file
-    const generatedCode = `// this file was generated by i18n/build.ts, do not edit manually
+    // 3. Assemble the final TypeScript file
+    const generatedCode = `// THIS FILE WAS GENERATED BY i18n/build.ts. DO NOT EDIT MANUALLY.
 
 
 const prs: Record<string, Intl.PluralRules> = {
-${pluralRulesEntries}
+${pluralRulesCode}
 };
 
 
+// @ts-ignore: can be unused, suppressing unused function error
 function plural(lang: string, count: number, forms: Partial<Record<Intl.LDMLPluralRule, string>>): string {
   const rule = prs[lang]?.select(count) ?? 'other';
   return forms[rule] ?? forms.other ?? '';
@@ -159,7 +209,7 @@ ${otherLocalesCode}
 
 
 export const dictionaries = {
-${dictMapEntries}
+${dictMapCode}
 } as const;
 
 
@@ -174,12 +224,13 @@ export function getT(locale?: string): Dict {
 }
 `
 
-    // creating folder
+    // 4. Write output to disk
     fs.mkdirSync(path.dirname(resolvedOutputFile), { recursive: true })
     fs.writeFileSync(resolvedOutputFile, generatedCode, "utf-8")
 
-    console.log(`locales successfully compiled to: ${outputFile}`)
-    console.log(`found locales: ${locales.join(", ")} (base: ${baseLocale})`)
+    console.log(`Locales successfully compiled to: ${outputFile}`)
+    console.log(`Found locales: ${locales.join(", ")} (Base: ${baseLocale})`)
 }
 
+// Execute compiler
 compileI18n()

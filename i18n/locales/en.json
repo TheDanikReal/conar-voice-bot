@@ -1,4 +1,7 @@
 {
     "catTags": "Tags",
-    "catAASSource": "A cat from CatAAS"
+    "catAASSource": "A cat from CatAAS",
+    "bye": "bye!",
+    "slot": "Slot",
+    "userRequestedDelete": "User requested delete"
 }
