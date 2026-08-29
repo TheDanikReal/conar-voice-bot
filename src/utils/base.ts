@@ -75,6 +75,25 @@ class PrismaDatabase {
             data
         })
     }
+    async removeServerTempChannel(serverId: string) {
+        if (
+            !(await this.prisma.serverSettings.findFirst({
+                where: {
+                    id: serverId
+                }
+            }))
+        )
+            return
+        await this.prisma.serverSettings.update({
+            where: {
+                id: serverId
+            },
+            data: {
+                voiceChannel: null
+            }
+        })
+        this.patchCachedServer(serverId, { voiceChannel: null })
+    }
     async findChannel(channelId: string) {
         const cachedChannel = this.cacheChannels.get(channelId)
         if (cachedChannel) {
@@ -282,6 +301,15 @@ class PrismaDatabase {
         if (cachedChannel) {
             this.cacheChannels.set(channelId, {
                 ...cachedChannel,
+                ...patch
+            })
+        }
+    }
+    private patchCachedServer(serverId: string, patch: Partial<Prisma.ServerSettingsCreateInput>) {
+        const cachedServer = this.cacheServers.get(serverId)
+        if (cachedServer) {
+            this.cacheServers.set(serverId, {
+                ...cachedServer,
                 ...patch
             })
         }
