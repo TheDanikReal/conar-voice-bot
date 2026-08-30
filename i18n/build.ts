@@ -26,7 +26,14 @@ const PLURAL_KEYS = new Set(["zero", "one", "two", "few", "many", "other"])
  * type errors
  */
 function safeName(locale: string): string {
-    return locale.replace("-", "_")
+    return locale.replaceAll("-", "_")
+}
+
+/**
+ * converts locale back to its original name, reverting safeName actions
+ */
+function unsafeName(locale: string): string {
+    return locale.replaceAll("_", "-")
 }
 
 /**
@@ -177,7 +184,7 @@ export function compileI18n(
     }
 
     // 2. Prepare code sections
-    const pluralRulesCode = safeLocales.map((locale) => `  ${locale}: new Intl.PluralRules('${locale}')`).join(",\n")
+    const pluralRulesCode = safeLocales.map((locale) => `  ${locale}: new Intl.PluralRules('${unsafeName(locale)}')`).join(",\n")
 
     const baseDictCode = `export const ${baseLocale} = {\n${generateDictionaryCode(
         baseLocale,
