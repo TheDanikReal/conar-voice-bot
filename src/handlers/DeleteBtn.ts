@@ -2,8 +2,8 @@ import { ButtonHandler, ButtonRoute, Gated } from "@seedcord/gateway"
 
 import { database } from "../utils/base"
 import { DeleteId } from "../utils/interactionIds"
-import { CheckRights } from "../utils/preconditions"
 import { getLocale } from "../utils/misc"
+import { CheckRights } from "../utils/preconditions"
 
 @Gated(CheckRights())
 @ButtonRoute(DeleteId)

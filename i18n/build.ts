@@ -8,7 +8,8 @@ import * as path from "node:path"
 export type PluralCategory = "zero" | "one" | "two" | "few" | "many" | "other"
 export type PluralObject = Partial<Record<PluralCategory, string>>
 export type TranslationValue = string | PluralObject | TranslationDictionary
-export type TranslationDictionary = { [key: string]: TranslationValue }
+
+export interface TranslationDictionary { [key: string]: TranslationValue }
 
 export interface ParsedParam {
     name: string
@@ -149,7 +150,9 @@ function generateDictionaryCode(
         const value = dict[key]
 
         if (isPluralObject(baseValue)) {
-            const valToUse = (value && isPluralObject(value)) ? value : baseValue
+            const valToUse = value && isPluralObject(value)
+                ? { ...baseValue, ...value }
+                : baseValue
             methods.push(`${indent}${buildPluralMethod(locale, key, valToUse).trimStart()}`)
         } else if (typeof baseValue === "string") {
             const valToUse = (typeof value === "string") ? value : baseValue
@@ -209,13 +212,11 @@ export function compileI18n(
 
     const otherLocalesCode = safeLocales
         .filter((l) => l !== baseLocale)
-        .map((locale) => {
-            return `export const ${locale}: Dict = {\n${generateDictionaryCode(
+        .map((locale) => `export const ${locale}: Dict = {\n${generateDictionaryCode(
                 locale,
                 dictionaries[locale]!,
                 dictionaries[baseLocale]!
-            )}\n};`
-        })
+            )}\n};`)
         .join("\n\n")
 
     const dictMapCode = safeLocales.map((l) => `  ${l}`).join(",\n")

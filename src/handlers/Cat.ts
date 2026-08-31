@@ -1,5 +1,6 @@
 import { ContainerBuilder } from "@discordjs/builders"
 import { SlashRoute, SlashHandler } from "@seedcord/gateway"
+
 import { getLocale } from "../utils/misc"
 
 @SlashRoute("cat")

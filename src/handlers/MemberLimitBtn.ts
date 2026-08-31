@@ -32,9 +32,9 @@ export class MemberLimitButton extends ButtonHandler<[typeof MemberLimitId]> {
 @ModalRoute(MemberLimitModalId)
 export class MemberLimitModal extends ModalHandler<[typeof MemberLimitModalId]> {
     public async execute(): Promise<void> {
-        const [t] = await Promise.all([getLocale({ serverId: this.event.guildId }), this.defer()])
         const channel = this.event.channel
         if (!(channel && channel.type === ChannelType.GuildVoice && channel.isVoiceBased())) return
+        const [t] = await Promise.all([getLocale({ serverId: this.event.guildId }), this.defer()])
         const limit = parseInt(this.event.fields.getTextInputValue("limit").trim(), 10)
         if (limit < 0 || limit > 99 || Number.isNaN(limit)) {
             await this.edit({ components: [new FailedStatusComponent(t.setLimitIncorrect()).component] })

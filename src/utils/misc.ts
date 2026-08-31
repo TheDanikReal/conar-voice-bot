@@ -1,10 +1,10 @@
 import { database } from "./base"
 import { composeDashboard } from "./dashboard"
 import { getMainMessage } from "./embeds"
-
-import type { Guild, GuildPremiumTier, Snowflake, User, VoiceChannel } from "discord.js"
 import { getT } from "../generated/i18n"
-import { ServerSettingsCreateInput } from "../generated/prisma/models"
+
+import type { ServerSettingsCreateInput } from "../generated/prisma/models"
+import type { Guild, GuildPremiumTier, Snowflake, User, VoiceChannel } from "discord.js"
 
 const compareArrays = (arr1: string[], arr2: string[]) =>
     arr1.length === arr2.length && arr1.every((val, index) => val === arr2[index])

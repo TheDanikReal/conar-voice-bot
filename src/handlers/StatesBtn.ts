@@ -2,13 +2,15 @@ import { ActionRowBuilder, ContainerBuilder, ButtonBuilder } from "@discordjs/bu
 import { ButtonHandler, ButtonRoute, Gated } from "@seedcord/gateway"
 import { ButtonStyle, ChannelType } from "discord.js"
 
+import { getT } from "../generated/i18n"
 import { database } from "../utils/base"
 import { basicColor } from "../utils/consts"
 import { FailedStatusComponent, SuccessStatusComponent } from "../utils/embeds"
 import { DeleteCurrentState, LoadState, SaveState, StatesId } from "../utils/interactionIds"
 import { blacklistUsers, getLocale, rerenderDashboard } from "../utils/misc"
 import { ChannelNotFound, CheckRights } from "../utils/preconditions"
-import { Dict, getT } from "../generated/i18n"
+
+import type { Dict } from "../generated/i18n"
 
 @Gated(CheckRights())
 @ButtonRoute(StatesId)

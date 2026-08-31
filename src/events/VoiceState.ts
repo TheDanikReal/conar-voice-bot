@@ -1,12 +1,11 @@
 import { EventHandler, RegisterEvent } from "@seedcord/gateway"
 import { ChannelType, Events } from "discord.js"
 
+import { Prisma } from "../generated/prisma/client"
 import { database } from "../utils/base"
 import { composeDashboard } from "../utils/dashboard"
 import { isInvited, removeInvite } from "../utils/inviteStatus"
 import { blacklistUsers } from "../utils/misc"
-
-import { Prisma } from "../generated/prisma/client"
 
 @RegisterEvent([Events.VoiceStateUpdate, { frequency: "on" }])
 export class Voice extends EventHandler<Events.VoiceStateUpdate> {
