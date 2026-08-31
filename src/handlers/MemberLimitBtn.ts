@@ -5,9 +5,8 @@ import { ChannelType, TextInputStyle } from "discord.js"
 import { database } from "../utils/base"
 import { FailedStatusComponent, SuccessStatusComponent } from "../utils/embeds"
 import { MemberLimitId, MemberLimitModalId } from "../utils/interactionIds"
-import { rerenderDashboard } from "../utils/misc"
+import { getLocale, rerenderDashboard } from "../utils/misc"
 import { CheckRights, RaceConditionDetected } from "../utils/preconditions"
-import { getT } from "../generated/i18n"
 
 @Gated(CheckRights())
 @ButtonRoute(MemberLimitId)
@@ -33,8 +32,7 @@ export class MemberLimitButton extends ButtonHandler<[typeof MemberLimitId]> {
 @ModalRoute(MemberLimitModalId)
 export class MemberLimitModal extends ModalHandler<[typeof MemberLimitModalId]> {
     public async execute(): Promise<void> {
-        const [server] = await Promise.all([database.findServer(this.event.guildId), this.defer()])
-        const t = getT(server?.language)
+        const [t] = await Promise.all([getLocale({ serverId: this.event.guildId }), this.defer()])
         const channel = this.event.channel
         const limit = parseInt(this.event.fields.getTextInputValue("limit").trim(), 10)
         if (!(channel && channel.type === ChannelType.GuildVoice && channel.isVoiceBased())) return

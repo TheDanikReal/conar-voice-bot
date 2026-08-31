@@ -6,19 +6,20 @@ import { database } from "../utils/base"
 import { basicColor } from "../utils/consts"
 import { FailedStatusComponent, SuccessStatusComponent } from "../utils/embeds"
 import { DeleteCurrentState, LoadState, SaveState, StatesId } from "../utils/interactionIds"
-import { blacklistUsers, rerenderDashboard } from "../utils/misc"
+import { blacklistUsers, getLocale, rerenderDashboard } from "../utils/misc"
 import { ChannelNotFound, CheckRights } from "../utils/preconditions"
-import { getT } from "../generated/i18n"
+import { Dict, getT } from "../generated/i18n"
 
 @Gated(CheckRights())
 @ButtonRoute(StatesId)
 export class ManageStatesBtn extends ButtonHandler<[typeof StatesId]> {
     public async execute(): Promise<void> {
-        const [channel] = await Promise.all([
+        const [channel, t] = await Promise.all([
             database.findChannel(this.event.channelId),
+            getLocale({ serverId: this.event.guildId }),
             this.defer({ ephemeral: false })
         ])
-        await this.edit({ components: buildRows(channel?.currentSlot ?? 0) })
+        await this.edit({ components: buildRows(channel?.currentSlot ?? 0, t) })
     }
 }
 
@@ -57,7 +58,7 @@ export class SaveStateBtn extends ButtonHandler<[typeof SaveState]> {
             }
         })
         await this.edit({
-            components: [new SuccessStatusComponent(getT(serverSettings?.language).statesSaveState()).component]
+            components: [new SuccessStatusComponent(getT(serverSettings?.language).states.save()).component]
         })
     }
 }
@@ -68,13 +69,16 @@ export class LoadStateBtn extends ButtonHandler<[typeof LoadState]> {
     public async execute(): Promise<void> {
         const channel = this.event.channel
         if (!channel?.isVoiceBased() || !(channel.type === ChannelType.GuildVoice)) return
-        await this.defer()
-        const currentSettings = await database.findChannel(channel.id)
+        const [currentSettings, t] = await Promise.all([
+            database.findChannel(channel.id),
+            getLocale({ serverId: this.event.guildId }),
+            this.defer()
+        ])
         if (!currentSettings) return
         const oldBlacklist = Array.isArray(currentSettings.blacklist) ? currentSettings.blacklist : []
         const slotSettings = await database.findSave(this.event.user.id, this.params.slot)
         if (!slotSettings) {
-            await this.edit({ components: [new FailedStatusComponent("unable to find slot settings").component] })
+            await this.edit({ components: [new FailedStatusComponent(t.states.unableToFind()).component] })
             return
         }
         await channel.edit({
@@ -96,7 +100,7 @@ export class LoadStateBtn extends ButtonHandler<[typeof LoadState]> {
         // will throw if user deleted message
         try {
             const parentMessage = await this.event.message.fetch(true)
-            await parentMessage.edit({ components: buildRows(this.params.slot) })
+            await parentMessage.edit({ components: buildRows(this.params.slot, t) })
         } catch {}
     }
 }
@@ -107,11 +111,13 @@ export class DeleteStateBtn extends ButtonHandler<[typeof DeleteCurrentState]> {
     public async execute(): Promise<void> {
         const userId = this.event.user.id
         const slot = this.params.slot
-        const settingsPromise = database.findSave(userId, slot)
-        await this.defer()
-        const settings = await settingsPromise
+        const [settings, t] = await Promise.all([
+            database.findSave(userId, slot),
+            getLocale({ serverId: this.event.guildId }),
+            this.defer()
+        ])
         if (!settings) {
-            await this.edit({ components: [new FailedStatusComponent("unable to find slot settings").component] })
+            await this.edit({ components: [new FailedStatusComponent(t.states.unableToFind()).component] })
             return
         }
         await database.deleteSave(userId, slot)
@@ -119,14 +125,14 @@ export class DeleteStateBtn extends ButtonHandler<[typeof DeleteCurrentState]> {
     }
 }
 
-function buildRows(slot: number): (ContainerBuilder | ActionRowBuilder<ButtonBuilder>)[] {
+function buildRows(slot: number, t: Dict): (ContainerBuilder | ActionRowBuilder<ButtonBuilder>)[] {
     const saveButtons: ButtonBuilder[] = []
     for (let i = 0; i < 3; i++) {
         saveButtons.push(
             new ButtonBuilder()
                 .setCustomId(SaveState.encode({ slot: i }))
                 .setStyle(ButtonStyle.Primary)
-                .setLabel(`Slot ${i + 1}`)
+                .setLabel(`${t.states.slot()} ${i + 1}`)
         )
     }
     const loadButtons: ButtonBuilder[] = []
@@ -135,7 +141,7 @@ function buildRows(slot: number): (ContainerBuilder | ActionRowBuilder<ButtonBui
             new ButtonBuilder()
                 .setCustomId(LoadState.encode({ slot: i }))
                 .setStyle(i === slot ? ButtonStyle.Success : ButtonStyle.Secondary)
-                .setLabel(`Slot ${i + 1}`)
+                .setLabel(`${t.states.slot()} ${i + 1}`)
         )
     }
     const saveRow = new ActionRowBuilder<ButtonBuilder>().addComponents(saveButtons)
@@ -144,14 +150,11 @@ function buildRows(slot: number): (ContainerBuilder | ActionRowBuilder<ButtonBui
         new ButtonBuilder()
             .setCustomId(DeleteCurrentState.encode({ slot }))
             .setStyle(ButtonStyle.Danger)
-            .setLabel("Delete current slot")
+            .setLabel(t.states.deleteSlot())
     )
 
     const container = new ContainerBuilder().setAccentColor(basicColor).addTextDisplayComponents((builder) =>
-        builder.setContent(`## Managing saves
-Here you can save/load current states in one of 3 available slots
-Slot 1 is being used by default when creating new channels
-Blue buttons - saving, gray buttons - loading, green button - current slot`)
+        builder.setContent(t.states.manageSavesDescription())
     )
     return [container, saveRow, loadRow, deleteCurrentRow]
 }

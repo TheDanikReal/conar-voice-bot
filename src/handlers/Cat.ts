@@ -10,10 +10,11 @@ export class Cat extends SlashHandler<"cat"> {
                 Accept: "application/json"
             }
         })
-        const langPromise = getLocale({ serverId: this.event.guildId })
-        await this.defer({ ephemeral: false })
-        const t = await langPromise
-        const cat = await catPromise
+        const [t, cat] = await Promise.all([
+            getLocale({ serverId: this.event.guildId }),
+            catPromise,
+            this.defer({ ephemeral: false })
+        ])
         const catObject = (await cat.json()) as { tags: string[]; url: string }
         await this.edit({
             components: [

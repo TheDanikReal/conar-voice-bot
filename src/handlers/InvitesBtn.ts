@@ -6,20 +6,25 @@ import { database } from "../utils/base"
 import { createGenericEmbed, FailedStatusComponent, SuccessStatusComponent } from "../utils/embeds"
 import { InvitesActionId, InvitesId } from "../utils/interactionIds"
 import { inviteUser } from "../utils/inviteStatus"
-import { rerenderDashboard } from "../utils/misc"
+import { getLocale, rerenderDashboard } from "../utils/misc"
 import { ChannelNotFound, checkChannelRights, CheckRights } from "../utils/preconditions"
 
 @ButtonRoute(InvitesId)
 export class InvitesButton extends ButtonHandler<[typeof InvitesId]> {
     public async execute(): Promise<void> {
         if (this.event.channel?.type !== ChannelType.GuildVoice) return
-        const [isOwner] = await Promise.all([await checkChannelRights(this.event), this.defer({ ephemeral: false })])
+        const [isOwner, t] = await Promise.all([
+            checkChannelRights(this.event),
+            getLocale({ serverId: this.event.guildId }),
+            this.defer({ ephemeral: false })
+        ])
         const channelId = this.event.channel.id
         if (isOwner) {
             const result = await database.toggleInvites(channelId)
+            const status = result ? t.enabled() : t.disabled()
             await rerenderDashboard(this.event.channel, this.event.guild)
             await this.edit({
-                components: [new SuccessStatusComponent(`${result ? "Enabled" : "Disabled"} invites`).component]
+                components: [new SuccessStatusComponent(t.invites.status({ status })).component]
             })
             return
         }
@@ -29,11 +34,11 @@ export class InvitesButton extends ButtonHandler<[typeof InvitesId]> {
             const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder()
                     .setCustomId(InvitesActionId.encode({ choice: "approve", userId: this.event.user.id }))
-                    .setLabel("Accept")
+                    .setLabel(t.invites.accept())
                     .setStyle(ButtonStyle.Success),
                 new ButtonBuilder()
                     .setCustomId(InvitesActionId.encode({ choice: "deny", userId: this.event.user.id }))
-                    .setLabel("Deny")
+                    .setLabel(t.invites.deny())
                     .setStyle(ButtonStyle.Danger)
             )
             await this.event.editReply({

@@ -2,15 +2,32 @@
     "catTags": "Tags",
     "catAASSource": "A cat from CatAAS",
     "bye": "bye!",
-    "slot": "Slot",
-    "userRequestedDelete": "User requested delete",
+    "states": {
+        "slot": "Slot",
+        "deleteSlot": "Delete current slot",
+        "save": "saved state",
+        "manageSavesDescription": "## Managing saves\nHere you can save/load current states in one of 3 available slots\nSlot 1 is being used by default when creating new channels\nBlue buttons - saving, gray buttons - loading, green button - current slot",
+        "unableToFind": "unable to find slot settings"
+    },
+    "userRequestedDelete": "User requested deletion",
     "setLimitSuccess": {
         "one": "Set limit {count} member.",
         "other": "Set limit {count} members."
     },
-    "setLimitIncorrect": "Incorrect limit was entered",
-    "statesSaveState": "saved state",
-    "statusClosed": "closed",
-    "statusOpened": "opened",
-    "statusChanged": "Successfully {status} channel"
+    "setLimitIncorrect": "An incorrect limit was entered",
+    "status": {
+        "closed": "closed",
+        "opened": "opened",
+        "changed": "Successfully {status} channel"
+    },
+    "invites": {
+        "accept": "Accept",
+        "deny": "Deny",
+        "status": "{status} invites",
+        "@status": {
+            "description": "eg. 'Enabled invites', uses 'enabled' and 'disabled' keys"
+        }
+    },
+    "enabled": "Enabled",
+    "disabled": "Disabled"
 }
