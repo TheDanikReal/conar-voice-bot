@@ -28,6 +28,12 @@
             "description": "eg. 'Enabled invites', uses 'enabled' and 'disabled' keys"
         }
     },
+    "members": {
+        "managing": "Managing members",
+        "kick": "Kick member",
+        "manageBlacklist": "Manage channel's blacklist",
+        "manageManagers": "Manage channel's managers"
+    },
     "enabled": "Enabled",
     "disabled": "Disabled"
 }

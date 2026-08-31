@@ -14,14 +14,14 @@ import {
     ManagersId,
     ManagersModalId
 } from "../utils/interactionIds"
-import { blacklistUsers } from "../utils/misc"
+import { blacklistUsers, getLocale } from "../utils/misc"
 import { CheckOwnerRights, CheckRights, UserNotFound } from "../utils/preconditions"
 
 @Gated(CheckRights())
 @ButtonRoute(ManageMembersId)
 export class ManageMembersBtn extends ButtonHandler<[typeof ManageMembersId]> {
     public async execute(): Promise<void> {
-        await this.defer()
+        const [t] = await Promise.all([getLocale({ serverId: this.event.guildId }), this.defer()])
         const kickButton = new ButtonBuilder()
             .setCustomId(KickMemberId.encode({}))
             .setEmoji(Emojis.kick)
@@ -42,10 +42,10 @@ export class ManageMembersBtn extends ButtonHandler<[typeof ManageMembersId]> {
         await this.edit({
             components: [
                 new ContainerBuilder().setAccentColor(basicColor).addTextDisplayComponents((builder) =>
-                    builder.setContent(`## Managing members
-${Emojis.kick} - Kick member
-${Emojis.lock} - Manage channel's blacklist
-${Emojis.mod} - Manage channel's managers
+                    builder.setContent(`## ${t.members.managing()}
+${Emojis.kick} - ${t.members.kick()}
+${Emojis.lock} - ${t.members.manageBlacklist()}
+${Emojis.mod} - ${t.members.manageManagers()}
 `)
                 ),
                 buttonRow

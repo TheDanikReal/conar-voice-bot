@@ -153,8 +153,8 @@ function buildRows(slot: number, t: Dict): (ContainerBuilder | ActionRowBuilder<
             .setLabel(t.states.deleteSlot())
     )
 
-    const container = new ContainerBuilder().setAccentColor(basicColor).addTextDisplayComponents((builder) =>
-        builder.setContent(t.states.manageSavesDescription())
-    )
+    const container = new ContainerBuilder()
+        .setAccentColor(basicColor)
+        .addTextDisplayComponents((builder) => builder.setContent(t.states.manageSavesDescription()))
     return [container, saveRow, loadRow, deleteCurrentRow]
 }
