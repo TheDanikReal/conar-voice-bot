@@ -7,8 +7,8 @@ import * as path from "node:path"
 
 export type PluralCategory = "zero" | "one" | "two" | "few" | "many" | "other"
 export type PluralObject = Partial<Record<PluralCategory, string>>
-export type TranslationValue = string | PluralObject
-export type TranslationDictionary = Record<string, TranslationValue>
+export type TranslationValue = string | PluralObject | TranslationDictionary
+export type TranslationDictionary = { [key: string]: TranslationValue }
 
 export interface ParsedParam {
     name: string
@@ -133,17 +133,21 @@ function buildStringMethod(key: string, text: string): string {
 /**
  * Iterates over the dictionary and generates the corresponding TypeScript methods.
  */
-function generateDictionaryCode(locale: string, dict: TranslationDictionary): string {
+function generateDictionaryCode(locale: string, dict: TranslationDictionary, depth = 1): string {
     const methods: string[] = []
+    const indent = "  ".repeat(depth)
 
     for (const [key, value] of Object.entries(dict)) {
         // Skip metadata or comment keys
         if (key.startsWith("@")) continue
 
         if (isPluralObject(value)) {
-            methods.push(buildPluralMethod(locale, key, value))
+            methods.push(`${indent}${buildPluralMethod(locale, key, value).trimStart()}`)
         } else if (typeof value === "string") {
-            methods.push(buildStringMethod(key, value))
+            methods.push(`${indent}${buildStringMethod(key, value).trimStart()}`)
+        } else if (typeof value === "object" && value !== null) {
+            // Generate code for nested translation keys
+            methods.push(`${indent}${key}: {\n${generateDictionaryCode(locale, value as TranslationDictionary, depth + 1)}\n${indent}}`)
         }
     }
 
