@@ -18,7 +18,9 @@ export class Cat extends SlashHandler<"cat"> {
         await this.edit({
             components: [
                 new ContainerBuilder()
-                    .addTextDisplayComponents((builder) => builder.setContent(`### ${t.catTags()}: ${catObject.tags.join(", ")}`))
+                    .addTextDisplayComponents((builder) =>
+                        builder.setContent(`### ${t.catTags()}: ${catObject.tags.join(", ")}`)
+                    )
                     .addMediaGalleryComponents((builder) =>
                         builder.addItems((mediaGalleryItem) =>
                             mediaGalleryItem.setDescription(t.catAASSource()).setURL(catObject.url)

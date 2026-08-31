@@ -3,5 +3,14 @@
     "catAASSource": "A cat from CatAAS",
     "bye": "bye!",
     "slot": "Slot",
-    "userRequestedDelete": "User requested delete"
+    "userRequestedDelete": "User requested delete",
+    "setLimitSuccess": {
+        "one": "Set limit {count} member.",
+        "other": "Set limit {count} members."
+    },
+    "setLimitIncorrect": "Incorrect limit was entered",
+    "statesSaveState": "saved state",
+    "statusClosed": "closed",
+    "statusOpened": "opened",
+    "statusChanged": "Successfully {status} channel"
 }

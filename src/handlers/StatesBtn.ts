@@ -8,14 +8,16 @@ import { FailedStatusComponent, SuccessStatusComponent } from "../utils/embeds"
 import { DeleteCurrentState, LoadState, SaveState, StatesId } from "../utils/interactionIds"
 import { blacklistUsers, rerenderDashboard } from "../utils/misc"
 import { ChannelNotFound, CheckRights } from "../utils/preconditions"
+import { getT } from "../generated/i18n"
 
 @Gated(CheckRights())
 @ButtonRoute(StatesId)
 export class ManageStatesBtn extends ButtonHandler<[typeof StatesId]> {
     public async execute(): Promise<void> {
-        const channelPromise = database.findChannel(this.event.channelId)
-        await this.defer({ ephemeral: false })
-        const channel = await channelPromise
+        const [channel] = await Promise.all([
+            database.findChannel(this.event.channelId),
+            this.defer({ ephemeral: false })
+        ])
         await this.edit({ components: buildRows(channel?.currentSlot ?? 0) })
     }
 }
@@ -27,11 +29,14 @@ export class SaveStateBtn extends ButtonHandler<[typeof SaveState]> {
     public async execute(): Promise<void> {
         const channel = this.event.channel
         if (!channel?.isVoiceBased()) return
-        await this.defer()
-        const settings = await database.findChannel(channel.id)
-        if (!settings) throw new ChannelNotFound()
         const userId = this.event.user.id
-        let userSettings = await database.findUser(userId)
+        let [settings, userSettings, serverSettings] = await Promise.all([
+            database.findChannel(channel.id),
+            database.findUser(userId),
+            database.findServer(this.event.guildId),
+            this.defer()
+        ])
+        if (!settings) throw new ChannelNotFound()
         if (!userSettings) {
             userSettings = await database.addUser(userId)
         }
@@ -51,7 +56,9 @@ export class SaveStateBtn extends ButtonHandler<[typeof SaveState]> {
                 connect: { userId }
             }
         })
-        await this.edit({ components: [new SuccessStatusComponent(`saved state`).component] })
+        await this.edit({
+            components: [new SuccessStatusComponent(getT(serverSettings?.language).statesSaveState()).component]
+        })
     }
 }
 

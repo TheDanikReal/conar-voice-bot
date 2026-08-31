@@ -12,6 +12,6 @@ export class DeleteButton extends ButtonHandler<[typeof DeleteId]> {
         if (this.event.user.id !== (await database.findChannel(this.event.channel?.id!))?.ownerId) return
         const t = await getLocale({ serverId: this.event.guildId })
         await this.reply(t.bye())
-        await this.event.channel?.delete("user requested delete")
+        await this.event.channel?.delete(t.userRequestedDelete())
     }
 }

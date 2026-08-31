@@ -13,8 +13,7 @@ import { ChannelNotFound, checkChannelRights, CheckRights } from "../utils/preco
 export class InvitesButton extends ButtonHandler<[typeof InvitesId]> {
     public async execute(): Promise<void> {
         if (this.event.channel?.type !== ChannelType.GuildVoice) return
-        await this.defer({ ephemeral: false })
-        const isOwner = await checkChannelRights(this.event)
+        const [isOwner] = await Promise.all([await checkChannelRights(this.event), this.defer({ ephemeral: false })])
         const channelId = this.event.channel.id
         if (isOwner) {
             const result = await database.toggleInvites(channelId)
