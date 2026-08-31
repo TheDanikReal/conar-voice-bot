@@ -133,21 +133,32 @@ function buildStringMethod(key: string, text: string): string {
 /**
  * Iterates over the dictionary and generates the corresponding TypeScript methods.
  */
-function generateDictionaryCode(locale: string, dict: TranslationDictionary, depth = 1): string {
+function generateDictionaryCode(
+    locale: string, 
+    dict: TranslationDictionary, 
+    baseDict: TranslationDictionary, 
+    depth = 1
+): string {
     const methods: string[] = []
     const indent = "  ".repeat(depth)
 
-    for (const [key, value] of Object.entries(dict)) {
-        // Skip metadata or comment keys
+    // Iterate over baseDict to ensure all keys required by the 'Dict' type are generated
+    for (const [key, baseValue] of Object.entries(baseDict)) {
         if (key.startsWith("@")) continue
 
-        if (isPluralObject(value)) {
-            methods.push(`${indent}${buildPluralMethod(locale, key, value).trimStart()}`)
-        } else if (typeof value === "string") {
-            methods.push(`${indent}${buildStringMethod(key, value).trimStart()}`)
-        } else if (typeof value === "object" && value !== null) {
-            // Generate code for nested translation keys
-            methods.push(`${indent}${key}: {\n${generateDictionaryCode(locale, value as TranslationDictionary, depth + 1)}\n${indent}}`)
+        const value = dict[key]
+
+        if (isPluralObject(baseValue)) {
+            const valToUse = (value && isPluralObject(value)) ? value : baseValue
+            methods.push(`${indent}${buildPluralMethod(locale, key, valToUse).trimStart()}`)
+        } else if (typeof baseValue === "string") {
+            const valToUse = (typeof value === "string") ? value : baseValue
+            methods.push(`${indent}${buildStringMethod(key, valToUse).trimStart()}`)
+        } else if (typeof baseValue === "object" && baseValue !== null) {
+            const subDict = (typeof value === "object" && value !== null && !isPluralObject(value)) 
+                ? value as TranslationDictionary 
+                : {}
+            methods.push(`${indent}${key}: {\n${generateDictionaryCode(locale, subDict, baseValue as TranslationDictionary, depth + 1)}\n${indent}}`)
         }
     }
 
@@ -192,15 +203,17 @@ export function compileI18n(
 
     const baseDictCode = `export const ${baseLocale} = {\n${generateDictionaryCode(
         baseLocale,
+        dictionaries[baseLocale]!,
         dictionaries[baseLocale]!
     )}\n} as const;\n\nexport type Dict = typeof ${baseLocale};`
 
     const otherLocalesCode = safeLocales
         .filter((l) => l !== baseLocale)
         .map((locale) => {
-            return `export const ${locale}: Dict = {\n  ...${baseLocale},\n${generateDictionaryCode(
+            return `export const ${locale}: Dict = {\n${generateDictionaryCode(
                 locale,
-                dictionaries[locale]!
+                dictionaries[locale]!,
+                dictionaries[baseLocale]!
             )}\n};`
         })
         .join("\n\n")
