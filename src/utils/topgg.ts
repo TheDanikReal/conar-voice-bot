@@ -23,7 +23,7 @@ export function updateGuildCounter(client: Client, guildCount: number): Promise<
                 throw new Error(`Top.gg guild-count update failed: ${response.status}`)
             }
         } finally {
-            response.body?.cancel()
+            await response.body?.cancel()
         }
     })
 
