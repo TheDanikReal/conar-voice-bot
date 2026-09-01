@@ -69,6 +69,21 @@
         "notAvailableInDms": "Editing settings is not available in dms",
         "success": "Successfully applied settings"
     },
+    "dashboard": {
+        "openChannel": "Open channel",
+        "closeChannel": "Close channel",
+        "enableRequests": "Enable join requests",
+        "disableRequests": "Disable join requests",
+        "voiceChannel": "Voice channel",
+        "owner": "{user} is controlling channel!",
+        "ownerText": "Owner: {user}",
+        "rename": "Rename channel",
+        "bitrate": "Set bitrate",
+        "memberLimit": "Set member limit",
+        "members": "Manage members",
+        "settingSaves": "Manage channel setting states",
+        "delete": "Delete"
+    },
     "inputNumber": "Input number:",
     "enabled": "Enabled",
     "disabled": "Disabled"

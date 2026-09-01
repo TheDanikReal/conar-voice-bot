@@ -67,7 +67,7 @@ export async function blacklistUsers(
 }
 
 export async function rerenderDashboard(channel: VoiceChannel, guild: Guild): Promise<void> {
-    const settings = await database.findChannel(channel.id)
+    const [settings, t] = await Promise.all([database.findChannel(channel.id), getLocale({ serverId: guild.id })])
     if (!settings) return
     const mainMessage = await getMainMessage(channel, settings)
     await mainMessage.edit(
@@ -75,7 +75,7 @@ export async function rerenderDashboard(channel: VoiceChannel, guild: Guild): Pr
             disableRequests: !settings.requests,
             owner: await guild.members.fetch(settings.ownerId!),
             closed: settings.closed!
-        })
+        }, t)
     )
 }
 
