@@ -65,9 +65,10 @@ export class KickMemberBtn extends ButtonHandler<[typeof KickMemberId]> {
         // has <=25 (limit for select menus) members in future
         const channel = this.event.channel
         if (!(channel && channel.type === ChannelType.GuildVoice && channel.isVoiceBased())) return
-        const modal = new ModalBuilder().setCustomId(KickMemberModalId.encode({})).setTitle("Kick member")
+        const t = await getLocale({ serverId: this.event.guildId })
+        const modal = new ModalBuilder().setCustomId(KickMemberModalId.encode({})).setTitle(t.members.kick())
         const label = new LabelBuilder()
-            .setLabel("Choose user")
+            .setLabel(t.members.selectUsers())
             .setUserSelectMenuComponent((builder) =>
                 builder.setCustomId("id").setMinValues(1).setMaxValues(1).setRequired(true)
             )
@@ -100,11 +101,14 @@ export class BlacklistBtn extends ButtonHandler<[typeof BlacklistId]> {
     public async execute(): Promise<void> {
         const channel = this.event.channel
         if (!channel) return
-        const settings = await database.findChannel(channel.id)
+        const [settings, t] = await Promise.all([
+            database.findChannel(channel.id),
+            getLocale({ serverId: this.event.guildId })
+        ])
         const managers = Array.isArray(settings?.blacklist) ? settings.blacklist : []
-        const modal = new ModalBuilder().setCustomId(BlacklistModalId.encode({})).setTitle("Manage blacklist")
+        const modal = new ModalBuilder().setCustomId(BlacklistModalId.encode({})).setTitle(t.members.manageBlacklist())
         const label = new LabelBuilder()
-            .setLabel("Select users")
+            .setLabel(t.members.selectUsers())
             .setUserSelectMenuComponent((builder) =>
                 builder.setCustomId("id").addDefaultUsers(managers).setMinValues(0).setMaxValues(25).setRequired(false)
             )
@@ -122,12 +126,19 @@ export class BlacklistModal extends ModalHandler<[typeof BlacklistModalId]> {
         const currentUsers = users?.map((user) => user.id) ?? []
         const channel = this.event.channel
         if (!(channel && channel.type === ChannelType.GuildVoice && channel.isVoiceBased())) return
-        const settings = await database.findChannel(channel.id)
+        const [settings, t] = await Promise.all([
+            database.findChannel(channel.id),
+            getLocale({ serverId: this.event.guildId })
+        ])
         if (!settings) return
         const previousUsers = Array.isArray(settings.blacklist) ? settings.blacklist : []
         await blacklistUsers(channel, previousUsers, currentUsers)
         await database.changeBlacklist(channel.id, currentUsers)
-        await this.edit({ components: [new SuccessStatusComponent().component] })
+        await this.edit({
+            components: [
+                new SuccessStatusComponent(t.members.editedBlacklist({ count: currentUsers.length })).component
+            ]
+        })
     }
 }
 
@@ -137,11 +148,14 @@ export class ManageManagersBtn extends ButtonHandler<[typeof ManagersId]> {
     public async execute(): Promise<void> {
         const channel = this.event.channel
         if (!channel) return
-        const settings = await database.findChannel(channel.id)
+        const [settings, t] = await Promise.all([
+            database.findChannel(channel.id),
+            getLocale({ serverId: this.event.guildId })
+        ])
         const managers = Array.isArray(settings?.managers) ? settings.managers : []
-        const modal = new ModalBuilder().setCustomId(ManagersModalId.encode({})).setTitle("Manage managers")
+        const modal = new ModalBuilder().setCustomId(ManagersModalId.encode({})).setTitle(t.members.manageManagers())
         const label = new LabelBuilder()
-            .setLabel("Select users")
+            .setLabel(t.members.selectUsers())
             .setUserSelectMenuComponent((builder) =>
                 builder.setCustomId("id").addDefaultUsers(managers).setMinValues(0).setMaxValues(25).setRequired(false)
             )
@@ -158,7 +172,14 @@ export class ManageManagersModal extends ModalHandler<[typeof ManagersModalId]> 
         const users = this.event.fields.getSelectedUsers("id", false)
         const channel = this.event.channel
         if (!channel) return
-        await database.changeManagers(channel.id, users?.map((user) => user.id) ?? [])
-        await this.edit({ components: [new SuccessStatusComponent().component] })
+        const [t] = await Promise.all([
+            getLocale({ serverId: this.event.guildId }),
+            database.changeManagers(channel.id, users?.map((user) => user.id) ?? [])
+        ])
+        await this.edit({
+            components: [
+                new SuccessStatusComponent(t.members.editedManagers({ count: users?.keys.length ?? 0 })).component
+            ]
+        })
     }
 }

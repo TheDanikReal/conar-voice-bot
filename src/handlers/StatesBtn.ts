@@ -60,7 +60,7 @@ export class SaveStateBtn extends ButtonHandler<[typeof SaveState]> {
             }
         })
         await this.edit({
-            components: [new SuccessStatusComponent(getT(serverSettings?.language).states.save()).component]
+            components: [new SuccessStatusComponent(getT(serverSettings?.language).states.successSave()).component]
         })
     }
 }
@@ -98,7 +98,7 @@ export class LoadStateBtn extends ButtonHandler<[typeof LoadState]> {
             currentSlot: this.params.slot
         })
         await rerenderDashboard(channel, this.event.guild)
-        await this.edit({ components: [new SuccessStatusComponent().component] })
+        await this.edit({ components: [new SuccessStatusComponent(t.states.successLoad()).component] })
         // will throw if user deleted message
         try {
             const parentMessage = await this.event.message.fetch(true)
@@ -123,7 +123,7 @@ export class DeleteStateBtn extends ButtonHandler<[typeof DeleteCurrentState]> {
             return
         }
         await database.deleteSave(userId, slot)
-        await this.edit({ components: [new SuccessStatusComponent().component] })
+        await this.edit({ components: [new SuccessStatusComponent(t.states.successDelete()).component] })
     }
 }
 
