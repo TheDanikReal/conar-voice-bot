@@ -15,6 +15,7 @@ import {
 } from "./interactionIds"
 
 import type { BaseMessageOptions, GuildMember } from "discord.js"
+import { Dict, getT } from "../generated/i18n"
 
 interface ChannelOptions {
     disableRequests: boolean
@@ -22,30 +23,31 @@ interface ChannelOptions {
     closed: boolean
 }
 
-export function composeDashboard(settings: ChannelOptions): BaseMessageOptions {
+export function composeDashboard(settings: ChannelOptions, t?: Dict): BaseMessageOptions {
+    if (!t) t = getT()
     const isClosed = settings.closed
     // these closeChannel stuff look just bad
     // todo: make so that isClosed variable was depended on close button instead of
     // max members, but that will require implementing close button first
-    const closeChannelMessage = isClosed ? "Open channel" : "Close channel"
+    const closeChannelMessage = isClosed ? t.dashboard.openChannel() : t.dashboard.closeChannel()
     const closeChannelId = isClosed ? Emojis.unlock : Emojis.lock
-    const invitesMessage = settings.disableRequests ? "Enable join requests" : "Disable join requests"
+    const invitesMessage = settings.disableRequests ? t.dashboard.enableRequests() : t.dashboard.disableRequests()
     const embed = new EmbedBuilder()
-        .setTitle("Voice channel")
+        .setTitle(t.dashboard.voiceChannel())
         .setColor(basicColor)
         .setDescription(
-            `${settings.owner.displayName} is controlling!
+            `${t.dashboard.owner({ user: settings.owner.displayName })}
 
-${Emojis.edit} - Rename channel.
-${Emojis.bitrate} - Set bitrate.
-${Emojis.voiceLimited} - Set member limit.
+${Emojis.edit} - ${t.dashboard.rename()}.
+${Emojis.bitrate} - ${t.dashboard.bitrate()}.
+${Emojis.voiceLimited} - ${t.dashboard.memberLimit()}.
 ${closeChannelId} - ${closeChannelMessage}.
 📨 - ${invitesMessage}.
-${Emojis.members} - Manage members.
-${Emojis.setup} - Manage channel setting saves.`
+${Emojis.members} - ${t.dashboard.members()}.
+${Emojis.setup} - ${t.dashboard.settingSaves()}.`
         )
         .setFooter({
-            text: `Owner: ${settings.owner.displayName}`,
+            text: t.dashboard.ownerText({ user: settings.owner.displayName }),
             iconURL: settings.owner.displayAvatarURL()
         })
     const rename = new ButtonBuilder()
@@ -82,7 +84,7 @@ ${Emojis.setup} - Manage channel setting saves.`
     const secondRow = new ActionRowBuilder<ButtonBuilder>().addComponents(manageMembers, manageSaves)
     const deleteChannel = new ButtonBuilder()
         .setCustomId(DeleteId.encode({}))
-        .setLabel("Delete")
+        .setLabel(t.dashboard.delete())
         .setEmoji(Emojis.delete)
         .setStyle(ButtonStyle.Danger)
     const thirdRow = new ActionRowBuilder<ButtonBuilder>().addComponents(deleteChannel)

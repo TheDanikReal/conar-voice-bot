@@ -1,0 +1,90 @@
+{
+    "catTags": "Tags",
+    "catAASSource": "A cat from CatAAS",
+    "bye": "bye!",
+    "states": {
+        "slot": "Slot",
+        "deleteSlot": "Delete current slot",
+        "successSave": "Successfully saved state",
+        "manageSavesDescription": "## Managing saves\nHere you can save/load current states in one of 3 available slots\nSlot 1 is being used by default when creating new channels\nBlue buttons - saving, gray buttons - loading, green button - current slot",
+        "unableToFind": "unable to find slot settings",
+        "successLoad": "Successfully loaded state",
+        "successDelete": "Successfully deleted state"
+    },
+    "userRequestedDelete": "User requested deletion",
+    "status": {
+        "closed": "closed",
+        "opened": "opened",
+        "changed": "Successfully {status} channel"
+    },
+    "invites": {
+        "accept": "Accept",
+        "deny": "Deny",
+        "status": "{status} invites",
+        "@status": {
+            "description": "eg. 'Enabled invites', uses 'enabled' and 'disabled' keys"
+        },
+        "someoneSentRequest": "{mention} sent you a request to join this channel.",
+        "disabled": "Invites are disabled",
+        "accepted": "{mention}, your invitation has been accepted, you have 1 minute to join {channel}",
+        "denied": "{mention}'s invitation has been denied"
+    },
+    "members": {
+        "managing": "Managing members",
+        "kick": "Kick member",
+        "manageBlacklist": "Manage channel's blacklist",
+        "manageManagers": "Manage channel's managers",
+        "selectUsers": "Select users",
+        "editedManagers": {
+            "one": "{count} member is now a manager",
+            "other": "{count} members are now managers"
+        },
+        "editedBlacklist": {
+            "one": "{count} member is now on the blacklist",
+            "other": "{count} members are now in the blacklist"
+        }
+    },
+    "memberLimit": {
+        "input": "Input member limit",
+        "success": {
+            "one": "Set limit to {count} member.",
+            "other": "Set limit to {count} member."
+        },
+        "incorrect": "An incorrect limit was entered"
+    },
+    "bitrate": {
+        "set": "Set bitrate",
+        "inputKbps": "Input number (kbps):",
+        "nan": "Entered bitrate is not a number",
+        "limitsViolated": "Bitrate must be between 8 and {maxBitrate:number} kbps",
+        "success": "Successfully set {bitrate:number} kbps bitrate."
+    },
+    "rename": {
+        "channel": "Rename channel",
+        "name": "Name:",
+        "channelName": "Channel name",
+        "success": "Changed channel name"
+    },
+    "settings": {
+        "notAvailableInDms": "Editing settings is not available in dms",
+        "success": "Successfully applied settings"
+    },
+    "dashboard": {
+        "openChannel": "Open channel",
+        "closeChannel": "Close channel",
+        "enableRequests": "Enable join requests",
+        "disableRequests": "Disable join requests",
+        "voiceChannel": "Voice channel",
+        "owner": "{user} is controlling channel!",
+        "ownerText": "Owner: {user}",
+        "rename": "Rename channel",
+        "bitrate": "Set bitrate",
+        "memberLimit": "Set member limit",
+        "members": "Manage members",
+        "settingSaves": "Manage channel setting states",
+        "delete": "Delete"
+    },
+    "inputNumber": "Input number:",
+    "enabled": "Enabled",
+    "disabled": "Disabled"
+}

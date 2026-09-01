@@ -5,8 +5,9 @@
         "rootDir": "./",
         "outDir": "./dist",
         "skipLibCheck": true,
-        "noImplicitAny": true
+        "noImplicitAny": true,
+        "types": ["node"]
     },
-    "include": ["src/**/*.ts", "seedcord.config.ts"],
+    "include": ["src/**/*.ts", "seedcord.config.ts", "i18n/build.ts"],
     "exclude": ["node_modules", "dist"]
 }

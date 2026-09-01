@@ -2,6 +2,7 @@ import { ButtonHandler, ButtonRoute, Gated } from "@seedcord/gateway"
 
 import { database } from "../utils/base"
 import { DeleteId } from "../utils/interactionIds"
+import { getLocale } from "../utils/misc"
 import { CheckRights } from "../utils/preconditions"
 
 @Gated(CheckRights())
@@ -9,7 +10,8 @@ import { CheckRights } from "../utils/preconditions"
 export class DeleteButton extends ButtonHandler<[typeof DeleteId]> {
     public async execute(): Promise<void> {
         if (this.event.user.id !== (await database.findChannel(this.event.channel?.id!))?.ownerId) return
-        await this.reply("bye!")
-        await this.event.channel?.delete("user requested delete")
+        const t = await getLocale({ serverId: this.event.guildId })
+        await this.reply(t.bye())
+        await this.event.channel?.delete(t.userRequestedDelete())
     }
 }

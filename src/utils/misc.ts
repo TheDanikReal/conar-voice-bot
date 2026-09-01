@@ -1,8 +1,10 @@
 import { database } from "./base"
 import { composeDashboard } from "./dashboard"
 import { getMainMessage } from "./embeds"
+import { getT } from "../generated/i18n"
 
-import type { Guild, GuildPremiumTier, User, VoiceChannel } from "discord.js"
+import type { ServerSettingsCreateInput } from "../generated/prisma/models"
+import type { Guild, GuildPremiumTier, Snowflake, User, VoiceChannel } from "discord.js"
 
 const compareArrays = (arr1: string[], arr2: string[]) =>
     arr1.length === arr2.length && arr1.every((val, index) => val === arr2[index])
@@ -65,7 +67,7 @@ export async function blacklistUsers(
 }
 
 export async function rerenderDashboard(channel: VoiceChannel, guild: Guild): Promise<void> {
-    const settings = await database.findChannel(channel.id)
+    const [settings, t] = await Promise.all([database.findChannel(channel.id), getLocale({ serverId: guild.id })])
     if (!settings) return
     const mainMessage = await getMainMessage(channel, settings)
     await mainMessage.edit(
@@ -73,6 +75,18 @@ export async function rerenderDashboard(channel: VoiceChannel, guild: Guild): Pr
             disableRequests: !settings.requests,
             owner: await guild.members.fetch(settings.ownerId!),
             closed: settings.closed!
-        })
+        }, t)
     )
+}
+
+export async function getLocale({
+    serverId,
+    server
+}: {
+    serverId?: Snowflake
+    server?: Partial<ServerSettingsCreateInput>
+}) {
+    if (!serverId && !server) return getT("en")
+    const data = server ? server : await database.findServer(serverId!)
+    return getT(data?.language)
 }

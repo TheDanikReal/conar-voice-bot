@@ -3,20 +3,21 @@ import { Gated, RequirePermissions, SlashHandler, SlashRoute } from "@seedcord/g
 import { PermissionFlagsBits } from "discord.js"
 
 import { database } from "../utils/base"
-
-const notAvailableDisplay = new TextDisplayBuilder({
-    content: "not available in dms"
-})
-
-const successDisplay = new TextDisplayBuilder({
-    content: "success"
-})
+import { getLocale } from "../utils/misc"
 
 @Gated(RequirePermissions([PermissionFlagsBits.ManageGuild]))
 @SlashRoute("removechannel")
 export class RemoveChannel extends SlashHandler<"removechannel"> {
     public async execute(): Promise<void> {
-        await this.defer()
+        const [t] = await Promise.all([getLocale({ serverId: this.event.guildId }), this.defer()])
+
+        const notAvailableDisplay = new TextDisplayBuilder({
+            content: t.settings.notAvailableInDms()
+        })
+
+        const successDisplay = new TextDisplayBuilder({
+            content: t.settings.success()
+        })
 
         if (!this.event.guildId) {
             await this.edit({ components: [notAvailableDisplay] })

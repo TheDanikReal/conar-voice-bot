@@ -5,7 +5,7 @@ import { ChannelType, TextInputStyle } from "discord.js"
 import { database } from "../utils/base"
 import { FailedStatusComponent, SuccessStatusComponent } from "../utils/embeds"
 import { MemberLimitId, MemberLimitModalId } from "../utils/interactionIds"
-import { rerenderDashboard } from "../utils/misc"
+import { getLocale, rerenderDashboard } from "../utils/misc"
 import { CheckRights, RaceConditionDetected } from "../utils/preconditions"
 
 @Gated(CheckRights())
@@ -13,9 +13,10 @@ import { CheckRights, RaceConditionDetected } from "../utils/preconditions"
 export class MemberLimitButton extends ButtonHandler<[typeof MemberLimitId]> {
     public async execute(): Promise<void> {
         if (this.event.channel?.type !== ChannelType.GuildVoice) return
-        const modal = new ModalBuilder().setCustomId(MemberLimitModalId.encode({})).setTitle("Input member limit")
+        const t = await getLocale({ serverId: this.event.guildId })
+        const modal = new ModalBuilder().setCustomId(MemberLimitModalId.encode({})).setTitle(t.memberLimit.input())
         const label = new LabelBuilder()
-            .setLabel("Input number:")
+            .setLabel(t.inputNumber())
             .setTextInputComponent((builder) =>
                 builder
                     .setCustomId("limit")
@@ -32,12 +33,12 @@ export class MemberLimitButton extends ButtonHandler<[typeof MemberLimitId]> {
 @ModalRoute(MemberLimitModalId)
 export class MemberLimitModal extends ModalHandler<[typeof MemberLimitModalId]> {
     public async execute(): Promise<void> {
-        await this.defer()
         const channel = this.event.channel
-        const limit = parseInt(this.event.fields.getTextInputValue("limit").trim(), 10)
         if (!(channel && channel.type === ChannelType.GuildVoice && channel.isVoiceBased())) return
+        const [t] = await Promise.all([getLocale({ serverId: this.event.guildId }), this.defer()])
+        const limit = parseInt(this.event.fields.getTextInputValue("limit").trim(), 10)
         if (limit < 0 || limit > 99 || Number.isNaN(limit)) {
-            await this.edit({ components: [new FailedStatusComponent(`Incorrect limit was entered`).component] })
+            await this.edit({ components: [new FailedStatusComponent(t.memberLimit.incorrect()).component] })
             return
         }
         await channel.setUserLimit(limit)
@@ -46,6 +47,6 @@ export class MemberLimitModal extends ModalHandler<[typeof MemberLimitModalId]> 
             throw new RaceConditionDetected()
         }
         await rerenderDashboard(channel, this.event.guild)
-        await this.edit({ components: [new SuccessStatusComponent(`Set limit ${limit} members.`).component] })
+        await this.edit({ components: [new SuccessStatusComponent(t.memberLimit.success({ count: limit })).component] })
     }
 }
