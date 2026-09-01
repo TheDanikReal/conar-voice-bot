@@ -42,6 +42,10 @@ export class SetChannelCommand extends BuilderComponent<"command"> {
                         {
                             name: "Беларуская мова (Belarusian)",
                             value: "be"
+                        },
+                        {
+                            name: "Русский язык (Russian)",
+                            value: "ru"
                         }
                     ])
             )
