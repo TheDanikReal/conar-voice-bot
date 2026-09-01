@@ -178,7 +178,7 @@ export class ManageManagersModal extends ModalHandler<[typeof ManagersModalId]> 
         ])
         await this.edit({
             components: [
-                new SuccessStatusComponent(t.members.editedManagers({ count: users?.keys.length ?? 0 })).component
+                new SuccessStatusComponent(t.members.editedManagers({ count: users?.size ?? 0 })).component
             ]
         })
     }

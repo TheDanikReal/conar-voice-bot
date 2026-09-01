@@ -36,19 +36,19 @@
         "manageManagers": "Manage channel's managers",
         "selectUsers": "Select users",
         "editedManagers": {
-            "one": "{count} member is now manager",
+            "one": "{count} member is now a manager",
             "other": "{count} members are now managers"
         },
         "editedBlacklist": {
-            "one": "{count} member is now in blacklist",
-            "other": "{count} members are now in blacklist"
+            "one": "{count} member is now on the blacklist",
+            "other": "{count} members are now in the blacklist"
         }
     },
     "memberLimit": {
         "input": "Input member limit",
         "success": {
-            "one": "Set limit {count} member.",
-            "other": "Set limit {count} members."
+            "one": "Set limit to {count} member.",
+            "other": "Set limit to {count} member."
         },
         "incorrect": "An incorrect limit was entered"
     },
