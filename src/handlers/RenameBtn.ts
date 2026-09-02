@@ -4,8 +4,8 @@ import { ChannelType, TextInputStyle } from "discord.js"
 
 import { createStatusEmbed } from "../utils/embeds"
 import { RenameId, RenameModalId } from "../utils/interactionIds"
-import { CheckRights } from "../utils/preconditions"
 import { getLocale } from "../utils/misc"
+import { CheckRights } from "../utils/preconditions"
 
 @Gated(CheckRights())
 @ButtonRoute(RenameId)

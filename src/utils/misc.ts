@@ -71,11 +71,14 @@ export async function rerenderDashboard(channel: VoiceChannel, guild: Guild): Pr
     if (!settings) return
     const mainMessage = await getMainMessage(channel, settings)
     await mainMessage.edit(
-        composeDashboard({
-            disableRequests: !settings.requests,
-            owner: await guild.members.fetch(settings.ownerId!),
-            closed: settings.closed!
-        }, t)
+        composeDashboard(
+            {
+                disableRequests: !settings.requests,
+                owner: await guild.members.fetch(settings.ownerId!),
+                closed: settings.closed!
+            },
+            t
+        )
     )
 }
 

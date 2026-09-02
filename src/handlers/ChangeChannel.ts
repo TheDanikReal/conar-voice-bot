@@ -5,14 +5,12 @@ import { PermissionFlagsBits } from "discord.js"
 import { database } from "../utils/base"
 import { getLocale } from "../utils/misc"
 
-
-
 @Gated(RequirePermissions([PermissionFlagsBits.ManageGuild]))
 @SlashRoute("setchannel")
 export class ChangeChannel extends SlashHandler<"setchannel"> {
     public async execute(): Promise<void> {
         const [t] = await Promise.all([getLocale({ serverId: this.event.guildId }), this.defer()])
-        
+
         const notAvailableDisplay = new TextDisplayBuilder({
             content: t.settings.notAvailableInDms()
         })

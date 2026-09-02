@@ -84,6 +84,18 @@
         "settingSaves": "Manage channel setting states",
         "delete": "Delete"
     },
+    "setup": {
+        "channelAlreadyExists": "You already have voice channel connected, are you sure you want to overwrite it?",
+        "overwriteButtonLabel": "Overwrite",
+        "categoryName": "Temporary voice channels",
+        "creatorChannelName": "🔊 Create",
+        "template": "(username)'s voice",
+        "@template": {
+            "description": "using () instead of {} to avoid it being converted to a parameter"
+        },
+        "success": "Successfully created category and {channel} channel, applied changes to database.",
+        "successButton": "Done!"
+    },
     "inputNumber": "Input number:",
     "enabled": "Enabled",
     "disabled": "Disabled"

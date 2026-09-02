@@ -177,9 +177,7 @@ export class ManageManagersModal extends ModalHandler<[typeof ManagersModalId]> 
             database.changeManagers(channel.id, users?.map((user) => user.id) ?? [])
         ])
         await this.edit({
-            components: [
-                new SuccessStatusComponent(t.members.editedManagers({ count: users?.size ?? 0 })).component
-            ]
+            components: [new SuccessStatusComponent(t.members.editedManagers({ count: users?.size ?? 0 })).component]
         })
     }
 }

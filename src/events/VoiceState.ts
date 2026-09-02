@@ -1,12 +1,12 @@
 import { EventHandler, RegisterEvent } from "@seedcord/gateway"
 import { ChannelType, Events } from "discord.js"
 
+import { getT } from "../generated/i18n"
 import { Prisma } from "../generated/prisma/client"
 import { database } from "../utils/base"
 import { composeDashboard } from "../utils/dashboard"
 import { isInvited, removeInvite } from "../utils/inviteStatus"
 import { blacklistUsers } from "../utils/misc"
-import { getT } from "../generated/i18n"
 
 @RegisterEvent([Events.VoiceStateUpdate, { frequency: "on" }])
 export class Voice extends EventHandler<Events.VoiceStateUpdate> {
@@ -60,11 +60,14 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
             })
             //todo make this spaghetti code better, probably nove settings to database, make a store for saving and loading save slots so that users wont have to redo ig every time            })
             const message = await channel.send(
-                composeDashboard({
-                    disableRequests,
-                    owner: member,
-                    closed: slot?.closed ?? false
-                }, getT(settings.language))
+                composeDashboard(
+                    {
+                        disableRequests,
+                        owner: member,
+                        closed: slot?.closed ?? false
+                    },
+                    getT(settings.language)
+                )
             )
             await blacklistUsers(channel, [], slot?.blacklist ?? [])
             await database.addChannel(channel.id, {
