@@ -11,10 +11,11 @@ import {
 import { ButtonStyle, ChannelType, MessageFlags, PermissionFlagsBits } from "discord.js"
 
 import { database } from "../utils/base"
+import { withBlocking } from "../utils/blocking"
 import { FailedStatusComponent, SuccessStatusComponent } from "../utils/embeds"
 import { ForceSetupId } from "../utils/interactionIds"
 import { getLocale } from "../utils/misc"
-import { withBlocking } from "../utils/queue"
+import { ActionInProgress } from "../utils/preconditions"
 
 import type { Dict } from "../generated/i18n"
 import type { MessageActionRowComponentBuilder } from "@discordjs/builders"
@@ -29,7 +30,7 @@ export class Setup extends SlashHandler<"setup"> {
     public async execute(): Promise<void> {
         const [t] = await Promise.all([getLocale({ serverId: this.event.guildId }), this.defer({ ephemeral: false })])
 
-        await withBlocking(this.event.guildId, async () => {
+        const result = await withBlocking(this.event.guildId, async () => {
             const settings = await database.findServer(this.event.guildId)
 
             if (settings?.voiceChannel) {
@@ -57,6 +58,7 @@ export class Setup extends SlashHandler<"setup"> {
                 components: [new SuccessStatusComponent(t.setup.success({ channel: `<#${channelId}>` })).component]
             })
         })
+        if (result === null) throw new ActionInProgress()
     }
 }
 
@@ -69,7 +71,7 @@ export class ForceSetupButton extends ButtonHandler<[typeof ForceSetupId]> {
     public async execute(): Promise<void> {
         const [t] = await Promise.all([getLocale({ serverId: this.event.guildId }), this.defer()])
 
-        await withBlocking(this.event.guildId, async () => {
+        const result = await withBlocking(this.event.guildId, async () => {
             const channelId = await autoSetup(this.event.guild, t)
 
             await this.event.message.edit({
@@ -79,6 +81,7 @@ export class ForceSetupButton extends ButtonHandler<[typeof ForceSetupId]> {
 
             await this.edit(t.setup.successButton())
         })
+        if (result === null) throw new ActionInProgress()
     }
 }
 
