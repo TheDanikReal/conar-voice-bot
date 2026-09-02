@@ -28,3 +28,5 @@ export const StatesId = new CustomId("states")
 export const SaveState = new CustomId("savestate").int("slot")
 export const LoadState = new CustomId("loadstate").int("slot")
 export const DeleteCurrentState = new CustomId("deletestate").int("slot")
+
+export const ForceSetupId = new CustomId("setup")

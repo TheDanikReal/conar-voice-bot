@@ -13,9 +13,10 @@ import {
     RenameId,
     StatesId
 } from "./interactionIds"
+import { getT } from "../generated/i18n"
 
+import type { Dict } from "../generated/i18n"
 import type { BaseMessageOptions, GuildMember } from "discord.js"
-import { Dict, getT } from "../generated/i18n"
 
 interface ChannelOptions {
     disableRequests: boolean
