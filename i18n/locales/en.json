@@ -85,7 +85,7 @@
         "delete": "Delete"
     },
     "setup": {
-        "channelAlreadyExists": "You already have voice channel connected, are you sure you want to overwrite it?",
+        "channelAlreadyExists": "You already have a temporary voice channel, are you sure you want to create a new one and abandon the old one?",
         "overwriteButtonLabel": "Overwrite",
         "categoryName": "Temporary voice channels",
         "creatorChannelName": "🔊 Create",
@@ -93,7 +93,7 @@
         "@template": {
             "description": "using () instead of {} to avoid it being converted to a parameter"
         },
-        "success": "Successfully created category and {channel} channel, applied changes to database.",
+        "success": "Successfully created category and {channel} channel, applied the changes to the database.",
         "successButton": "Done!"
     },
     "inputNumber": "Input number:",

@@ -56,24 +56,15 @@ class PrismaDatabase {
         })
     }
     async editServerIfExists(data: Prisma.ServerSettingsCreateInput) {
-        this.cacheServers.set(data.id, data)
-        if (
-            await this.prisma.serverSettings.findFirst({
-                where: {
-                    id: data.id
-                }
-            })
-        ) {
-            return await this.prisma.serverSettings.update({
-                where: {
-                    id: data.id
-                },
-                data
-            })
-        }
-        return await this.prisma.serverSettings.create({
-            data
+        const settings = await this.prisma.serverSettings.upsert({
+            where: {
+                id: data.id
+            },
+            update: data,
+            create: data
         })
+        this.cacheServers.set(data.id, settings)
+        return settings
     }
     async removeServerTempChannel(serverId: string) {
         if (
