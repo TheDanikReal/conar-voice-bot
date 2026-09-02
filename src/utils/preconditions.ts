@@ -104,9 +104,30 @@ export class RaceConditionDetected extends Notice {
                     .setAccentColor(red)
                     .addTextDisplayComponents((builder) =>
                         builder.setContent(
-                            ":warning: The channel changed while you were updating the limit. Check the current limit before retrying."
+                            ":warning: Error happened" +
+                                "The channel changed while you were updating the limit. Check the current limit before retrying."
                         )
                     )
+            ]
+        }
+    }
+}
+
+export class ActionInProgress extends Notice {
+    constructor() {
+        super(`action triggered when previous was pending`)
+    }
+
+    render(_ctx: RenderContext): ReplyResponse {
+        return {
+            components: [
+                new ContainerBuilder().setAccentColor(red).addTextDisplayComponents((builder) =>
+                    // todo: translate notices, currently i don't want to do this for some reason
+                    builder.setContent(
+                        ":warning: Error happened" +
+                            "You edited settings when other operation was pending, please wait other operation to finish"
+                    )
+                )
             ]
         }
     }
