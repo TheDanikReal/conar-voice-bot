@@ -74,6 +74,15 @@
         "channelName": "Назва канала",
         "success": "Назва канала зменена"
     },
+    "setup": {
+        "channelAlreadyExists": "У вас ужо ёсць часовы галасавы канал, вы ўпэўненыя, што хочаце стварыць новы і адключыць стары?",
+        "overwriteButtonLabel": "Стварыць новы",
+        "categoryName": "Часовыя галасавыя каналы",
+        "creatorChannelName": "🔊 Стварыць",
+        "template": "Канал (username)",
+        "success": "Паспяхова створаны катэгорыя і канал {channel}, унесены змены ў базу дадзеных..",
+        "successButton": "Гатова!"
+    },
     "inputNumber": "Увядзіце лік:",
     "enabled": "Уключаны",
     "disabled": "Адключаны",
