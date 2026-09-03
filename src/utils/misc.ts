@@ -81,13 +81,7 @@ export async function rerenderDashboard(channel: VoiceChannel, guild: Guild): Pr
     })
 }
 
-export async function getLocale({
-    serverId,
-    server
-}: {
-    serverId?: Snowflake
-    server?: { language?: string }
-}) {
+export async function getLocale({ serverId, server }: { serverId?: Snowflake; server?: { language?: string } }) {
     if (!serverId && !server) return getT("en")
     const data = server ? server : await database.findServer(serverId!)
     return getT(data?.language)

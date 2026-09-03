@@ -27,7 +27,6 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
                 try {
                     await database.deleteChannel(oldId)
                 } catch (error) {
-                    
                     // todo: return without error if it's an error related to record not existing
                     // in db anymore (i didnt find how to get error description in prisma 8)
                     this.logger.error(`failed to delete ${channel.id}`)
@@ -54,7 +53,7 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
             const channel = await guild.channels.create({
                 name: slot?.name ?? templateName,
                 bitrate: slot?.bitrate ?? 64_000,
-                userLimit: slot?.memberLimit ?? 0,
+                userLimit: slot?.closed ? 0 : (slot?.memberLimit ?? 0),
                 type: ChannelType.GuildVoice,
                 parent: category ?? null,
                 reason: "Conor voice channels"
