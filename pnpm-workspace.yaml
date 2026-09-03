@@ -4,5 +4,7 @@ packages:
 allowBuilds:
   '@prisma/engines': false
   esbuild: false
+  msgpackr-extract: false
   prisma: false
   unrs-resolver: false
+  workerd: false

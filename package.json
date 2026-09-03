@@ -7,8 +7,8 @@
         "node": ">=24.11"
     },
     "scripts": {
-        "prebuild": "node --strip-types i18n/build.ts && prisma7 generate && seedcord codegen",
-        "prelint": "node --strip-types i18n/build.ts && prisma7 generate && seedcord codegen",
+        "prebuild": "node --strip-types i18n/build.ts && prisma contract emit && seedcord codegen",
+        "prelint": "node --strip-types i18n/build.ts && prisma contract emit && seedcord codegen",
         "dev": "seedcord dev",
         "build": "seedcord build",
         "start": "node --enable-source-maps dist/index.mjs",
@@ -17,12 +17,10 @@
         "lint:fix": "eslint 'src/**/*.ts' --fix --cache",
         "fmt": "prettier --write 'src/**/*.{ts,json,md}' --cache",
         "tc": "tsc --noEmit",
-        "database:deploy": "prisma migrate deploy && prisma generate"
+        "database:deploy": "prisma db migrate --advance-ref db && prisma contract emit"
     },
     "dependencies": {
         "@discordjs/builders": "^1.14.1",
-        "@prisma/adapter-pg": "^7.9.1",
-        "@prisma/client": "^7.10.0",
         "@prisma/orm-postgres": "8.0.0-rc.8",
         "@seedcord/gateway": "^0.2.0",
         "discord.js": "^14.27.0",
@@ -31,7 +29,6 @@
         "lru-cache": "^11.5.2"
     },
     "devDependencies": {
-        "@prisma/prisma7": "^7.10.0",
         "@seedcord/eslint-config": "^1.5.4",
         "@seedcord/eslint-plugin": "^0.2.0",
         "@seedcord/tsconfig": "^2.0.3",

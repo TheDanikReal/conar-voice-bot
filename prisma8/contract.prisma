@@ -1,0 +1,51 @@
+// use prisma-next
+// Contract inferred from the live database schema. Edit as needed, then run `prisma contract emit`.
+
+model UserSettings {
+  userId String @id(map: "UserSettings_pkey")
+  saves  Save[]
+
+  @@map("UserSettings")
+}
+
+model Save {
+  id              String       @id(map: "Save_pkey")
+  userId          String
+  name            String
+  bitrate         Int
+  memberLimit     Int          @default(0)
+  requestsEnabled Boolean      @default(true)
+  blacklist       String[]?    @noCheck(elementNotNull)
+  closed          Boolean      @default(false)
+  managers        String[]?    @noCheck(elementNotNull)
+  slotNum         Int
+  user            UserSettings @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade, map: "Save_userId_fkey")
+
+  @@index([userId], map: "Save_userId_idx")
+  @@index([userId, slotNum], map: "Save_userId_slotNum_key", unique: true)
+  @@map("Save")
+}
+
+model ServerSettings {
+  id            String  @id(map: "ServerSettings_pkey")
+  voiceChannel  String?
+  voiceCategory String?
+  template      String?
+  language      String  @default("en")
+
+  @@map("ServerSettings")
+}
+
+model TempChannel {
+  id          String   @id(map: "TempChannel_pkey")
+  messageId   String
+  ownerId     String
+  blacklist   String[] @noCheck(elementNotNull)
+  closed      Boolean  @default(false)
+  managers    String[] @noCheck(elementNotNull)
+  maxMembers  Int      @default(0)
+  requests    Boolean  @default(true)
+  currentSlot Int      @default(0)
+
+  @@map("TempChannel")
+}

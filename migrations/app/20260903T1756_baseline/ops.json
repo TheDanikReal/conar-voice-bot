@@ -1,0 +1,295 @@
+[
+  {
+    "id": "schema.public",
+    "label": "Create schema \"public\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Create schema \"public\"",
+        "sql": "CREATE SCHEMA IF NOT EXISTS \"public\"",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "table.Save",
+    "label": "Create table \"Save\"",
+    "summary": "Creates table \"Save\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Save"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Save\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Save\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Save\"",
+        "sql": "CREATE TABLE \"public\".\"Save\" (\n  \"bitrate\" int4 NOT NULL,\n  \"blacklist\" text[] DEFAULT '{}' NOT NULL,\n  \"closed\" bool DEFAULT false NOT NULL,\n  \"id\" text NOT NULL,\n  \"managers\" text[] DEFAULT '{}' NOT NULL,\n  \"memberLimit\" int4 DEFAULT 0 NOT NULL,\n  \"name\" text NOT NULL,\n  \"requestsEnabled\" bool DEFAULT true NOT NULL,\n  \"slotNum\" int4 NOT NULL,\n  \"userId\" text NOT NULL,\n  CONSTRAINT \"Save_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Save\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Save\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.ServerSettings",
+    "label": "Create table \"ServerSettings\"",
+    "summary": "Creates table \"ServerSettings\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "ServerSettings"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"ServerSettings\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ServerSettings\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"ServerSettings\"",
+        "sql": "CREATE TABLE \"public\".\"ServerSettings\" (\n  \"id\" text NOT NULL,\n  \"language\" text DEFAULT 'en' NOT NULL,\n  \"template\" text,\n  \"voiceCategory\" text,\n  \"voiceChannel\" text,\n  CONSTRAINT \"ServerSettings_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"ServerSettings\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ServerSettings\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.TempChannel",
+    "label": "Create table \"TempChannel\"",
+    "summary": "Creates table \"TempChannel\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "TempChannel"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"TempChannel\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"TempChannel\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"TempChannel\"",
+        "sql": "CREATE TABLE \"public\".\"TempChannel\" (\n  \"blacklist\" text[] DEFAULT '{}' NOT NULL,\n  \"closed\" bool DEFAULT false NOT NULL,\n  \"currentSlot\" int4 DEFAULT 0 NOT NULL,\n  \"id\" text NOT NULL,\n  \"managers\" text[] DEFAULT '{}' NOT NULL,\n  \"maxMembers\" int4 DEFAULT 0 NOT NULL,\n  \"messageId\" text NOT NULL,\n  \"ownerId\" text NOT NULL,\n  \"requests\" bool DEFAULT true NOT NULL,\n  CONSTRAINT \"TempChannel_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"TempChannel\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"TempChannel\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.UserSettings",
+    "label": "Create table \"UserSettings\"",
+    "summary": "Creates table \"UserSettings\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "UserSettings"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"UserSettings\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"UserSettings\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"UserSettings\"",
+        "sql": "CREATE TABLE \"public\".\"UserSettings\" (\n  \"userId\" text NOT NULL,\n  CONSTRAINT \"UserSettings_pkey\" PRIMARY KEY (\"userId\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"UserSettings\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"UserSettings\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Save.Save_userId_idx",
+    "label": "Create index \"Save_userId_idx\" on \"Save\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Save_userId_idx",
+        "table": "Save"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Save_userId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Save_userId_idx\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Save_userId_idx\"",
+        "sql": "CREATE INDEX \"Save_userId_idx\" ON \"public\".\"Save\" (\"userId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Save_userId_idx\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Save_userId_idx\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Save.Save_userId_slotNum_key",
+    "label": "Create index \"Save_userId_slotNum_key\" on \"Save\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Save_userId_slotNum_key",
+        "table": "Save"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Save_userId_slotNum_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Save_userId_slotNum_key\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Save_userId_slotNum_key\"",
+        "sql": "CREATE UNIQUE INDEX \"Save_userId_slotNum_key\" ON \"public\".\"Save\" (\"userId\", \"slotNum\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Save_userId_slotNum_key\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Save_userId_slotNum_key\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Save.Save_userId_fkey",
+    "label": "Add foreign key \"Save_userId_fkey\" on \"Save\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Save_userId_fkey",
+        "table": "Save"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Save_userId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Save_userId_fkey",
+          "public",
+          "\"public\".\"Save\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Save_userId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Save\"\nADD CONSTRAINT \"Save_userId_fkey\"\nFOREIGN KEY (\"userId\")\nREFERENCES \"public\".\"UserSettings\" (\"userId\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Save_userId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Save_userId_fkey",
+          "public",
+          "\"public\".\"Save\""
+        ]
+      }
+    ]
+  }
+]

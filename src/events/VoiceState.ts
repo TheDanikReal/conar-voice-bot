@@ -2,7 +2,6 @@ import { EventHandler, RegisterEvent } from "@seedcord/gateway"
 import { ChannelType, Events } from "discord.js"
 
 import { getT } from "../generated/i18n"
-import { Prisma } from "../generated/prisma/client"
 import { database } from "../utils/base"
 import { composeDashboard } from "../utils/dashboard"
 import { isInvited, removeInvite } from "../utils/inviteStatus"
@@ -28,7 +27,9 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
                 try {
                     await database.deleteChannel(oldId)
                 } catch (error) {
-                    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code == "P2025") return
+                    
+                    // todo: return without error if it's an error related to record not existing
+                    // in db anymore (i didnt find how to get error description in prisma 8)
                     this.logger.error(`failed to delete ${channel.id}`)
                     throw error
                 }
@@ -69,7 +70,9 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
                     getT(settings.language)
                 )
             )
-            await blacklistUsers(channel, [], slot?.blacklist ?? [])
+            // blacklist is now readonly??? idk but it doesnt throw ts error in prisma 8 if i cast it
+            // as string[]
+            await blacklistUsers(channel, [], (slot?.blacklist ?? []) as string[])
             await database.addChannel(channel.id, {
                 messageId: message.id,
                 ownerId: member.id,
