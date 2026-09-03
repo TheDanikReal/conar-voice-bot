@@ -8,6 +8,6 @@
         "noImplicitAny": true,
         "types": ["node"]
     },
-    "include": ["src/**/*.ts", "seedcord.config.ts", "i18n/build.ts"],
+    "include": ["src/**/*.ts", "seedcord.config.ts", "i18n/build.ts", "prisma7.config.ts"],
     "exclude": ["node_modules", "dist"]
 }
