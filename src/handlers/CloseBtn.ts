@@ -13,10 +13,10 @@ export class CloseButton extends ButtonHandler<[typeof CloseId]> {
     public async execute(): Promise<void> {
         const channel = this.event.channel
         if (channel?.type !== ChannelType.GuildVoice) return
-        await this.defer()
         const [settings, t] = await Promise.all([
             database.findChannel(channel.id),
-            getLocale({ serverId: this.event.guildId })
+            getLocale({ serverId: this.event.guildId }),
+            this.defer()
         ])
         switch (settings?.closed) {
             case true: {
