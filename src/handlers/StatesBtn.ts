@@ -1,7 +1,8 @@
+import { randomUUID } from "node:crypto"
+
 import { ActionRowBuilder, ContainerBuilder, ButtonBuilder } from "@discordjs/builders"
 import { ButtonHandler, ButtonRoute, Gated } from "@seedcord/gateway"
 import { ButtonStyle, ChannelType } from "discord.js"
-import { randomUUID } from "node:crypto"
 
 import { getT } from "../generated/i18n"
 import { database } from "../utils/base"
