@@ -6,7 +6,8 @@ import {
     Gated,
     RequirePermissions,
     RequireBotPermissions,
-    ButtonRoute
+    ButtonRoute,
+    Emojis
 } from "@seedcord/gateway"
 import { ButtonStyle, ChannelType, MessageFlags, PermissionFlagsBits } from "discord.js"
 
@@ -37,6 +38,7 @@ export class Setup extends SlashHandler<"setup"> {
                 // todo: replace label with an icon
                 const forceSetupBtn = new ButtonBuilder()
                     .setLabel(t.setup.overwriteButtonLabel())
+                    .setEmoji(Emojis.sync)
                     .setStyle(ButtonStyle.Danger)
                     .setCustomId(ForceSetupId.encode({}))
                 const actionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents([

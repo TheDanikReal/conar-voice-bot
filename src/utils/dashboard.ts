@@ -1,6 +1,6 @@
-import { EmbedBuilder, ActionRowBuilder, ButtonBuilder } from "@discordjs/builders"
+import { ActionRowBuilder, ButtonBuilder, ContainerBuilder } from "@discordjs/builders"
 import { Emojis } from "@seedcord/gateway"
-import { ButtonStyle } from "discord.js"
+import { ButtonStyle, MessageFlags, SeparatorSpacingSize  } from "discord.js"
 
 import { basicColor } from "./consts"
 import {
@@ -16,7 +16,7 @@ import {
 import { getT } from "../generated/i18n"
 
 import type { Dict } from "../generated/i18n"
-import type { BaseMessageOptions, GuildMember } from "discord.js"
+import type { MessageCreateOptions, MessageEditOptions, GuildMember  } from "discord.js";
 
 interface ChannelOptions {
     disableRequests: boolean
@@ -24,7 +24,7 @@ interface ChannelOptions {
     closed: boolean
 }
 
-export function composeDashboard(settings: ChannelOptions, t?: Dict): BaseMessageOptions {
+export function composeDashboard(settings: ChannelOptions, t?: Dict): MessageCreateOptions & MessageEditOptions {
     if (!t) t = getT()
     const isClosed = settings.closed
     // these closeChannel stuff look just bad
@@ -33,24 +33,6 @@ export function composeDashboard(settings: ChannelOptions, t?: Dict): BaseMessag
     const closeChannelMessage = isClosed ? t.dashboard.openChannel() : t.dashboard.closeChannel()
     const closeChannelId = isClosed ? Emojis.unlock : Emojis.lock
     const invitesMessage = settings.disableRequests ? t.dashboard.enableRequests() : t.dashboard.disableRequests()
-    const embed = new EmbedBuilder()
-        .setTitle(t.dashboard.voiceChannel())
-        .setColor(basicColor)
-        .setDescription(
-            `${t.dashboard.owner({ user: settings.owner.displayName })}
-
-${Emojis.edit} - ${t.dashboard.rename()}.
-${Emojis.bitrate} - ${t.dashboard.bitrate()}.
-${Emojis.voiceLimited} - ${t.dashboard.memberLimit()}.
-${closeChannelId} - ${closeChannelMessage}.
-📨 - ${invitesMessage}.
-${Emojis.members} - ${t.dashboard.members()}.
-${Emojis.setup} - ${t.dashboard.settingSaves()}.`
-        )
-        .setFooter({
-            text: t.dashboard.ownerText({ user: settings.owner.displayName }),
-            iconURL: settings.owner.displayAvatarURL()
-        })
     const rename = new ButtonBuilder()
         .setCustomId(RenameId.encode({}))
         .setEmoji(Emojis.edit)
@@ -68,12 +50,8 @@ ${Emojis.setup} - ${t.dashboard.settingSaves()}.`
         .setCustomId(CloseId.encode({}))
         .setEmoji(closeChannelId)
         .setStyle(isClosed ? ButtonStyle.Danger : ButtonStyle.Secondary)
-    const requests = new ButtonBuilder()
-        .setCustomId(InvitesId.encode({}))
-        .setEmoji({ name: "📨" })
-        .setStyle(ButtonStyle.Secondary)
     // todo add other buttons and compose message, then send and add actions
-    const firstRow = new ActionRowBuilder<ButtonBuilder>().addComponents(rename, bitrate, memberLimit, close, requests)
+    const firstRow = new ActionRowBuilder<ButtonBuilder>().addComponents(rename, bitrate, memberLimit, close)
     const manageMembers = new ButtonBuilder()
         .setCustomId(ManageMembersId.encode({}))
         .setEmoji(Emojis.members)
@@ -82,12 +60,34 @@ ${Emojis.setup} - ${t.dashboard.settingSaves()}.`
         .setCustomId(StatesId.encode({}))
         .setEmoji(Emojis.setup)
         .setStyle(ButtonStyle.Primary)
-    const secondRow = new ActionRowBuilder<ButtonBuilder>().addComponents(manageMembers, manageSaves)
+    const requests = new ButtonBuilder()
+        .setCustomId(InvitesId.encode({}))
+        .setEmoji(Emojis.requests)
+        .setStyle(ButtonStyle.Primary)
+    const secondRow = new ActionRowBuilder<ButtonBuilder>().addComponents(manageMembers, manageSaves, requests)
+    const container = new ContainerBuilder()
+        .setAccentColor(basicColor)
+        .addTextDisplayComponents([
+            (builder) => builder.setContent(`### ${t.dashboard.voiceChannel()}`),
+            (builder) =>
+                builder.setContent(`${Emojis.edit} - ${t.dashboard.rename()}.
+${Emojis.bitrate} - ${t.dashboard.bitrate()}.
+${Emojis.voiceLimited} - ${t.dashboard.memberLimit()}.
+${closeChannelId} - ${closeChannelMessage}.
+${Emojis.members} - ${t.dashboard.members()}.
+${Emojis.setup} - ${t.dashboard.settingSaves()}.
+${Emojis.requests} - ${invitesMessage}.`)
+        ])
+        .addSeparatorComponents((builder) => builder.setSpacing(SeparatorSpacingSize.Small))
+        .addActionRowComponents(firstRow, secondRow)
+        .addTextDisplayComponents((builder) =>
+            builder.setContent(`-# ${t.dashboard.ownerText({ user: settings.owner.displayName })}`)
+        )
     const deleteChannel = new ButtonBuilder()
         .setCustomId(DeleteId.encode({}))
         .setLabel(t.dashboard.delete())
         .setEmoji(Emojis.delete)
         .setStyle(ButtonStyle.Danger)
     const thirdRow = new ActionRowBuilder<ButtonBuilder>().addComponents(deleteChannel)
-    return { embeds: [embed], components: [firstRow, secondRow, thirdRow] }
+    return { flags: MessageFlags.IsComponentsV2, components: [container, thirdRow] }
 }

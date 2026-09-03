@@ -70,8 +70,8 @@ export async function rerenderDashboard(channel: VoiceChannel, guild: Guild): Pr
     const [settings, t] = await Promise.all([database.findChannel(channel.id), getLocale({ serverId: guild.id })])
     if (!settings) return
     const mainMessage = await getMainMessage(channel, settings)
-    await mainMessage.edit(
-        composeDashboard(
+    await mainMessage.edit({
+        ...composeDashboard(
             {
                 disableRequests: !settings.requests,
                 owner: await guild.members.fetch(settings.ownerId!),
@@ -79,7 +79,7 @@ export async function rerenderDashboard(channel: VoiceChannel, guild: Guild): Pr
             },
             t
         )
-    )
+    })
 }
 
 export async function getLocale({

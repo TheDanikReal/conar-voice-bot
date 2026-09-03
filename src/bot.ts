@@ -32,7 +32,9 @@ export const seedcord = new Seedcord({
             play: ["play", "964544146444546088"],
             delete: ["delete", "964544146444546088"],
             kick: ["kick", "964544146444546088"],
-            mod: ["mod", "964544146444546088"]
+            mod: ["mod", "964544146444546088"],
+            sync: ["sync", "964544146444546088"],
+            requests: ["requests", "964544146444546088"]
         }
     },
     subscribers: {
