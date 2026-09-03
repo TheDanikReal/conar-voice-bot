@@ -1,6 +1,7 @@
 import { ActionRowBuilder, ContainerBuilder, ButtonBuilder } from "@discordjs/builders"
 import { ButtonHandler, ButtonRoute, Gated } from "@seedcord/gateway"
 import { ButtonStyle, ChannelType } from "discord.js"
+import { randomUUID } from "node:crypto"
 
 import { getT } from "../generated/i18n"
 import { database } from "../utils/base"
@@ -33,10 +34,11 @@ export class SaveStateBtn extends ButtonHandler<[typeof SaveState]> {
         const channel = this.event.channel
         if (!channel?.isVoiceBased()) return
         const userId = this.event.user.id
-        let [settings, userSettings, serverSettings] = await Promise.all([
+        let [settings, userSettings, serverSettings, existingSave] = await Promise.all([
             database.findChannel(channel.id),
             database.findUser(userId),
             database.findServer(this.event.guildId),
+            database.findSave(userId, this.params.slot),
             this.defer()
         ])
         if (!settings) throw new ChannelNotFound()
@@ -45,7 +47,11 @@ export class SaveStateBtn extends ButtonHandler<[typeof SaveState]> {
         }
         const blacklist = Array.isArray(settings.blacklist) ? settings.blacklist : []
         const managers = Array.isArray(settings.managers) ? settings.managers : []
+        // looking on how this code changed with prisma 8 i now want to watch
+        // gordon ramsay tbh
         await database.updateSave(userId, {
+            id: existingSave?.id ?? randomUUID(),
+            userId,
             bitrate: channel.bitrate,
             closed: settings.closed ?? false,
             memberLimit: settings.maxMembers ?? 0,
@@ -53,11 +59,7 @@ export class SaveStateBtn extends ButtonHandler<[typeof SaveState]> {
             requestsEnabled: settings.requests ?? true,
             slotNum: this.params.slot,
             blacklist,
-            managers: managers,
-            user: {
-                // is this really the intended way to connect it to user? coderabbit please comment on this
-                connect: { userId }
-            }
+            managers
         })
         await this.edit({
             components: [new SuccessStatusComponent(getT(serverSettings?.language).states.successSave()).component]
@@ -83,18 +85,20 @@ export class LoadStateBtn extends ButtonHandler<[typeof LoadState]> {
             await this.edit({ components: [new FailedStatusComponent(t.states.unableToFind()).component] })
             return
         }
+        const blacklist = slotSettings.blacklist ? [...slotSettings.blacklist] : []
+        const managers = slotSettings.managers ? [...slotSettings.managers] : []
         await channel.edit({
-            bitrate: slotSettings.bitrate,
-            userLimit: slotSettings.closed ? 1 : slotSettings.memberLimit,
-            name: slotSettings.name
+            bitrate: slotSettings.bitrate ?? channel.bitrate,
+            userLimit: slotSettings.closed ? 1 : (slotSettings.memberLimit ?? 0),
+            name: slotSettings.name ?? channel.name
         })
-        await blacklistUsers(channel, oldBlacklist, slotSettings.blacklist)
+        await blacklistUsers(channel, oldBlacklist, blacklist)
         await database.editChannel(channel.id, {
-            blacklist: slotSettings.blacklist,
-            closed: slotSettings.closed,
-            managers: slotSettings.managers,
-            maxMembers: slotSettings.memberLimit,
-            requests: slotSettings.requestsEnabled,
+            blacklist,
+            closed: slotSettings.closed ?? false,
+            managers,
+            maxMembers: slotSettings.memberLimit ?? 0,
+            requests: slotSettings.requestsEnabled ?? true,
             currentSlot: this.params.slot
         })
         await rerenderDashboard(channel, this.event.guild)

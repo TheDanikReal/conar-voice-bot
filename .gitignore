@@ -12,3 +12,9 @@ seedcord_src/
 !.env.example
 
 .DS_Store
+
+# prisma skills
+.claude
+.cursor
+.agents
+.devin

@@ -3,8 +3,9 @@ import { BuilderComponent } from "@seedcord/gateway"
 
 import { basicColor, failureColor } from "./consts"
 
-import type { TempChannelCreateInput } from "../generated/prisma/models"
 import type { GuildTextBasedChannel, User } from "discord.js"
+import type { Contract } from "../generated/prisma/contract.js"
+import type { CreateInput } from "@prisma/orm-postgres/orm-client"
 
 const statuses = {
     success: 0x00_ff_00,
@@ -28,7 +29,7 @@ export function createGenericEmbed(user: User, description: string, color = basi
         .setDescription(description)
 }
 
-export async function getMainMessage(channel: GuildTextBasedChannel, settings: Partial<TempChannelCreateInput> | null) {
+export async function getMainMessage(channel: GuildTextBasedChannel, settings: Partial<CreateInput<Contract, "TempChannel", "public">> | null) {
     if (!settings?.messageId) {
         throw new Error("missing main message id")
     }

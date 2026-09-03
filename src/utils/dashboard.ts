@@ -1,6 +1,6 @@
 import { ActionRowBuilder, ButtonBuilder, ContainerBuilder } from "@discordjs/builders"
 import { Emojis } from "@seedcord/gateway"
-import { ButtonStyle, MessageFlags, SeparatorSpacingSize  } from "discord.js"
+import { ButtonStyle, MessageFlags, SeparatorSpacingSize } from "discord.js"
 
 import { basicColor } from "./consts"
 import {
@@ -16,7 +16,7 @@ import {
 import { getT } from "../generated/i18n"
 
 import type { Dict } from "../generated/i18n"
-import type { MessageCreateOptions, MessageEditOptions, GuildMember  } from "discord.js";
+import type { MessageCreateOptions, MessageEditOptions, GuildMember } from "discord.js"
 
 interface ChannelOptions {
     disableRequests: boolean

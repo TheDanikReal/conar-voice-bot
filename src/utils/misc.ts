@@ -3,7 +3,6 @@ import { composeDashboard } from "./dashboard"
 import { getMainMessage } from "./embeds"
 import { getT } from "../generated/i18n"
 
-import type { ServerSettingsCreateInput } from "../generated/prisma/models"
 import type { Guild, GuildPremiumTier, Snowflake, User, VoiceChannel } from "discord.js"
 
 const compareArrays = (arr1: string[], arr2: string[]) =>
@@ -87,7 +86,7 @@ export async function getLocale({
     server
 }: {
     serverId?: Snowflake
-    server?: Partial<ServerSettingsCreateInput>
+    server?: { language?: string }
 }) {
     if (!serverId && !server) return getT("en")
     const data = server ? server : await database.findServer(serverId!)
