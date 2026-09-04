@@ -8,12 +8,17 @@ import type { Contract } from "../generated/prisma/contract.js"
 import type { CreateInput } from "@prisma/orm-postgres/orm-client"
 import type { PostgresClient } from "@prisma/orm-postgres/runtime"
 
+type ServerSettingsCreateInput = CreateInput<Contract, "ServerSettings", "public">
+type TempChannelCreateInput = CreateInput<Contract, "TempChannel", "public">
+type UserSettingsCreateInput = CreateInput<Contract, "UserSettings", "public">
+type SaveCreateInput = CreateInput<Contract, "Save", "public">
+
 class PrismaDatabase {
     db: PostgresClient<Contract>
-    cacheServers: LRUCache<string, Partial<CreateInput<Contract, "ServerSettings", "public">>>
-    cacheChannels: LRUCache<string, Partial<CreateInput<Contract, "TempChannel", "public">>>
-    cacheUsers: LRUCache<string, Partial<CreateInput<Contract, "UserSettings", "public">>>
-    cacheSaves: LRUCache<string, Partial<CreateInput<Contract, "Save", "public">>>
+    cacheServers: LRUCache<string, Partial<ServerSettingsCreateInput>>
+    cacheChannels: LRUCache<string, Partial<TempChannelCreateInput>>
+    cacheUsers: LRUCache<string, Partial<UserSettingsCreateInput>>
+    cacheSaves: LRUCache<string, Partial<SaveCreateInput>>
     constructor() {
         // this feels weird but because of no-magic-numbers i should do that
         const thirtyMinutes = 1000 * 60 * 30
@@ -52,13 +57,13 @@ class PrismaDatabase {
         }
         return server
     }
-    async addServer(data: CreateInput<Contract, "ServerSettings", "public">) {
+    async addServer(data: ServerSettingsCreateInput) {
         this.cacheServers.set(data.id, data)
         return await this.db.orm.public.ServerSettings.create({
             ...data
         })
     }
-    async editServerIfExists(data: CreateInput<Contract, "ServerSettings", "public">) {
+    async editServerIfExists(data: ServerSettingsCreateInput) {
         const settings = await this.db.orm.public.ServerSettings.where({ id: data.id }).upsert({
             update: data,
             create: data
@@ -86,21 +91,21 @@ class PrismaDatabase {
         }
         return channel
     }
-    async addChannel(channelId: string, details: Omit<CreateInput<Contract, "TempChannel", "public">, "id">) {
+    async addChannel(channelId: string, details: Omit<TempChannelCreateInput, "id">) {
         this.cacheChannels.set(channelId, { id: channelId, ...details })
         return await this.db.orm.public.TempChannel.create({
             id: channelId,
             ...details
         })
     }
-    async editChannel(channelId: string, details: Partial<Omit<CreateInput<Contract, "TempChannel", "public">, "id">>) {
+    async editChannel(channelId: string, details: Partial<Omit<TempChannelCreateInput, "id">>) {
         const updated = await this.db.orm.public.TempChannel.where({ id: channelId }).update({
             ...details
         })
         this.patchCachedChannel(channelId, details)
         return updated
     }
-    async editChannelIfExists(channelId: string, details: Omit<CreateInput<Contract, "TempChannel", "public">, "id">) {
+    async editChannelIfExists(channelId: string, details: Omit<TempChannelCreateInput, "id">) {
         this.cacheChannels.set(channelId, { id: channelId, ...details })
         return await this.db.orm.public.TempChannel.where({ id: channelId }).upsert({
             update: details,
@@ -149,7 +154,7 @@ class PrismaDatabase {
         }
         return save
     }
-    async updateSave(userId: string, data: CreateInput<Contract, "Save", "public">) {
+    async updateSave(userId: string, data: SaveCreateInput) {
         await this.db.orm.public.Save.where({
             userId,
             slotNum: data.slotNum
@@ -193,7 +198,7 @@ class PrismaDatabase {
         await this.db.orm.public.TempChannel.where({ id: channelId }).update({ blacklist })
         this.patchCachedChannel(channelId, { blacklist })
     }
-    private patchCachedChannel(channelId: string, patch: Partial<CreateInput<Contract, "TempChannel", "public">>) {
+    private patchCachedChannel(channelId: string, patch: Partial<TempChannelCreateInput>) {
         const cachedChannel = this.cacheChannels.get(channelId)
         if (cachedChannel) {
             this.cacheChannels.set(channelId, {
@@ -202,7 +207,7 @@ class PrismaDatabase {
             })
         }
     }
-    private patchCachedServer(serverId: string, patch: Partial<CreateInput<Contract, "ServerSettings", "public">>) {
+    private patchCachedServer(serverId: string, patch: Partial<ServerSettingsCreateInput>) {
         const cachedServer = this.cacheServers.get(serverId)
         if (cachedServer) {
             this.cacheServers.set(serverId, {
@@ -211,11 +216,7 @@ class PrismaDatabase {
             })
         }
     }
-    private patchCachedSave(
-        userId: string,
-        patch: Partial<CreateInput<Contract, "Save", "public">> &
-            Pick<CreateInput<Contract, "Save", "public">, "slotNum">
-    ) {
+    private patchCachedSave(userId: string, patch: Partial<SaveCreateInput> & Pick<SaveCreateInput, "slotNum">) {
         const cachedSave = this.cacheSaves.get(userId + patch.slotNum.toString())
         if (cachedSave) {
             this.cacheSaves.set(userId + patch.slotNum.toString(), {
