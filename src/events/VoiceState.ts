@@ -53,7 +53,7 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
             const channel = await guild.channels.create({
                 name: slot?.name ?? templateName,
                 bitrate: slot?.bitrate ?? 64_000,
-                userLimit: slot?.closed ? 0 : (slot?.memberLimit ?? 0),
+                userLimit: slot?.closed ? 1 : (slot?.memberLimit ?? 0),
                 type: ChannelType.GuildVoice,
                 parent: category ?? null,
                 reason: "Conor voice channels"
