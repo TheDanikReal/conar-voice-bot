@@ -216,10 +216,10 @@ class PrismaDatabase {
             })
         }
     }
-    private patchCachedSave(userId: string, patch: Partial<SaveCreateInput> & Pick<SaveCreateInput, "slotNum">) {
-        const cachedSave = this.cacheSaves.get(userId + patch.slotNum.toString())
+    private patchCachedSave(keyId: string, patch: Partial<SaveCreateInput>) {
+        const cachedSave = this.cacheSaves.get(keyId)
         if (cachedSave) {
-            this.cacheSaves.set(userId + patch.slotNum.toString(), {
+            this.cacheSaves.set(keyId, {
                 ...cachedSave,
                 ...patch
             })
