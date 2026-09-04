@@ -47,7 +47,9 @@ class PrismaDatabase {
             return cachedServer
         }
         const server = await this.db.orm.public.ServerSettings.where({ id: serverId }).first()
-        this.cacheServers.set(serverId, { ...server })
+        if (server) {
+            this.cacheServers.set(serverId, { ...server })
+        }
         return server
     }
     async addServer(data: CreateInput<Contract, "ServerSettings", "public">) {
@@ -180,7 +182,7 @@ class PrismaDatabase {
         return !isClosed
     }
     async changeMaxMembers(channelId: string, maxMembers: number) {
-        await this.db.orm.public.TempChannel.where({ id: channelId }).update(maxMembers)
+        await this.db.orm.public.TempChannel.where({ id: channelId }).update({ maxMembers })
         this.patchCachedChannel(channelId, { maxMembers })
     }
     async changeManagers(channelId: string, managers: string[]) {
@@ -209,10 +211,14 @@ class PrismaDatabase {
             })
         }
     }
-    private patchCachedSave(userId: string, patch: Partial<CreateInput<Contract, "Save", "public">>) {
-        const cachedSave = this.cacheSaves.get(userId)
+    private patchCachedSave(
+        userId: string,
+        patch: Partial<CreateInput<Contract, "Save", "public">> &
+            Pick<CreateInput<Contract, "Save", "public">, "slotNum">
+    ) {
+        const cachedSave = this.cacheSaves.get(userId + patch.slotNum.toString())
         if (cachedSave) {
-            this.cacheSaves.set(userId, {
+            this.cacheSaves.set(userId + patch.slotNum.toString(), {
                 ...cachedSave,
                 ...patch
             })
