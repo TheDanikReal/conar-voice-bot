@@ -5,5 +5,5 @@ export default createConfig({
     registerDiscordjsPlugin: true,
     registerSeedcordPlugin: true,
     registerPrettierPlugin: false,
-    generalIgnores: ["**/seedcord-gen.d.ts"]
+    generalIgnores: ["**/seedcord-gen.d.ts", "src/generated/**/*.ts"]
 })
