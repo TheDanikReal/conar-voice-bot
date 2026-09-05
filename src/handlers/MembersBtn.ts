@@ -131,7 +131,7 @@ export class BlacklistModal extends ModalHandler<[typeof BlacklistModalId]> {
             getLocale({ serverId: this.event.guildId })
         ])
         if (!settings) return
-        const previousUsers = settings.blacklist ? [...settings.blacklist] : []
+        const previousUsers = settings.blacklist ?? []
         await blacklistUsers(channel, previousUsers, currentUsers)
         await database.changeBlacklist(channel.id, currentUsers)
         await this.edit({
