@@ -5,5 +5,10 @@ export default createConfig({
     registerDiscordjsPlugin: true,
     registerSeedcordPlugin: true,
     registerPrettierPlugin: false,
+    userConfigs: [{
+        rules: {
+            "@typescript-eslint/restrict-template-expressions": "off"
+        }
+    }],
     generalIgnores: ["**/seedcord-gen.d.ts", "src/generated/**/*.ts"]
 })
