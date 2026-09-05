@@ -31,7 +31,7 @@ export class Setup extends SlashHandler<"setup"> {
     public async execute(): Promise<void> {
         const [t] = await Promise.all([getLocale({ serverId: this.event.guildId }), this.defer({ ephemeral: false })])
 
-        const result = await withBlocking(this.event.guildId, async () => {
+        const result = await withBlocking(this.event.guildId, "setup", async () => {
             const settings = await database.findServer(this.event.guildId)
 
             if (settings?.voiceChannel) {
@@ -73,7 +73,7 @@ export class ForceSetupButton extends ButtonHandler<[typeof ForceSetupId]> {
     public async execute(): Promise<void> {
         const [t] = await Promise.all([getLocale({ serverId: this.event.guildId }), this.defer()])
 
-        const result = await withBlocking(this.event.guildId, async () => {
+        const result = await withBlocking(this.event.guildId, "setup", async () => {
             const channelId = await autoSetup(this.event.guild, t)
 
             await this.event.message.edit({
