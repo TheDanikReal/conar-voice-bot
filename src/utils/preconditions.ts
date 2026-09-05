@@ -17,24 +17,23 @@ export async function checkChannelRights(interaction: ButtonInteraction | Comman
     return true
 }
 
-export function CheckRights(): Gate<GateContextBase, "CheckRights"> {
-    return defineGate("CheckRights", async (ctx) => {
-        const userId = ctx.userId
-        if (!userId) throw new NoRights("manager")
-        const channel = await database.findChannel(ctx.channelId!)
-        const isManager = Array.isArray(channel?.managers) && channel.managers.includes(userId)
-        if (channel?.ownerId !== userId && !isManager) throw new NoRights("manager")
-    })
-}
+export const CheckRights: Gate<GateContextBase, "CheckRights"> = defineGate("CheckRights", async (ctx) => {
+    const userId = ctx.userId
+    if (!userId) throw new NoRights("manager")
+    const channel = await database.findChannel(ctx.channelId!)
+    const isManager = Array.isArray(channel?.managers) && channel.managers.includes(userId)
+    if (channel?.ownerId !== userId && !isManager) throw new NoRights("manager")
+})
 
-export function CheckOwnerRights(): Gate<GateContextBase, "CheckOwnerRights"> {
-    return defineGate("CheckOwnerRights", async (ctx) => {
+export const CheckOwnerRights: Gate<GateContextBase, "CheckOwnerRights"> = defineGate(
+    "CheckOwnerRights",
+    async (ctx) => {
         const userId = ctx.userId
         if (!userId) throw new NoRights("owner")
         const channel = await database.findChannel(ctx.channelId!)
         if (channel?.ownerId !== userId) throw new NoRights("owner")
-    })
-}
+    }
+)
 
 export class NoRights extends Notice {
     level: "manager" | "owner"

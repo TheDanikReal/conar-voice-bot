@@ -9,7 +9,7 @@ import { getLocale, rerenderDashboard } from "../utils/misc"
 import { withBlocking } from "../utils/mutexes"
 import { CheckRights, RaceConditionDetected } from "../utils/preconditions"
 
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ButtonRoute(MemberLimitId)
 export class MemberLimitButton extends ButtonHandler<[typeof MemberLimitId]> {
     public async execute(): Promise<void> {

@@ -8,7 +8,7 @@ import { getLocale, rerenderDashboard } from "../utils/misc"
 import { withBlocking } from "../utils/mutexes"
 import { CheckRights, RaceConditionDetected } from "../utils/preconditions"
 
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ButtonRoute(CloseId)
 export class CloseButton extends ButtonHandler<[typeof CloseId]> {
     public async execute(): Promise<void> {

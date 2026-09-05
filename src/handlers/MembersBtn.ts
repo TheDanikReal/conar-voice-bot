@@ -17,7 +17,7 @@ import {
 import { blacklistUsers, getLocale } from "../utils/misc"
 import { CheckOwnerRights, CheckRights, UserNotFound } from "../utils/preconditions"
 
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ButtonRoute(ManageMembersId)
 export class ManageMembersBtn extends ButtonHandler<[typeof ManageMembersId]> {
     public async execute(): Promise<void> {
@@ -54,7 +54,7 @@ ${Emojis.mod} - ${t.members.manageManagers()}
     }
 }
 
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ButtonRoute(KickMemberId)
 export class KickMemberBtn extends ButtonHandler<[typeof KickMemberId]> {
     public async execute(): Promise<void> {
@@ -77,7 +77,7 @@ export class KickMemberBtn extends ButtonHandler<[typeof KickMemberId]> {
     }
 }
 
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ModalRoute(KickMemberModalId)
 export class KickMemberModal extends ModalHandler<[typeof KickMemberModalId]> {
     public async execute(): Promise<void> {
@@ -95,7 +95,7 @@ export class KickMemberModal extends ModalHandler<[typeof KickMemberModalId]> {
     }
 }
 
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ButtonRoute(BlacklistId)
 export class BlacklistBtn extends ButtonHandler<[typeof BlacklistId]> {
     public async execute(): Promise<void> {
@@ -117,7 +117,7 @@ export class BlacklistBtn extends ButtonHandler<[typeof BlacklistId]> {
     }
 }
 
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ModalRoute(BlacklistModalId)
 export class BlacklistModal extends ModalHandler<[typeof BlacklistModalId]> {
     public async execute(): Promise<void> {
@@ -142,7 +142,7 @@ export class BlacklistModal extends ModalHandler<[typeof BlacklistModalId]> {
     }
 }
 
-@Gated(CheckOwnerRights())
+@Gated(CheckOwnerRights)
 @ButtonRoute(ManagersId)
 export class ManageManagersBtn extends ButtonHandler<[typeof ManagersId]> {
     public async execute(): Promise<void> {
@@ -164,7 +164,7 @@ export class ManageManagersBtn extends ButtonHandler<[typeof ManagersId]> {
     }
 }
 
-@Gated(CheckOwnerRights())
+@Gated(CheckOwnerRights)
 @ModalRoute(ManagersModalId)
 export class ManageManagersModal extends ModalHandler<[typeof ManagersModalId]> {
     public async execute(): Promise<void> {

@@ -52,7 +52,7 @@ export class InvitesButton extends ButtonHandler<[typeof InvitesId]> {
     }
 }
 
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ButtonRoute(InvitesActionId)
 export class InvitesAction extends ButtonHandler<[typeof InvitesActionId]> {
     public async execute(): Promise<void> {
