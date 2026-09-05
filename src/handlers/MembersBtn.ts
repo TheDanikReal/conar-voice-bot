@@ -15,7 +15,7 @@ import {
     ManagersModalId
 } from "../utils/interactionIds"
 import { blacklistUsers, getLocale } from "../utils/misc"
-import { CheckOwnerRights, CheckRights, NotVoice, UserNotFound } from "../utils/preconditions"
+import { ChannelNotFound, CheckOwnerRights, CheckRights, NotVoice, UserNotFound } from "../utils/preconditions"
 
 @Gated(CheckRights)
 @ButtonRoute(ManageMembersId)
@@ -130,7 +130,7 @@ export class BlacklistModal extends ModalHandler<[typeof BlacklistModalId]> {
             database.findChannel(channel.id),
             getLocale({ serverId: this.event.guildId })
         ])
-        if (!settings) return
+        if (!settings) throw new ChannelNotFound()
         const previousUsers = settings.blacklist ?? []
         await blacklistUsers(channel, previousUsers, currentUsers)
         await database.changeBlacklist(channel.id, currentUsers)
