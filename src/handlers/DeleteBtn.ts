@@ -5,7 +5,7 @@ import { DeleteId } from "../utils/interactionIds"
 import { getLocale } from "../utils/misc"
 import { CheckOwnerRights, NoRights } from "../utils/preconditions"
 
-@Gated(CheckOwnerRights())
+@Gated(CheckOwnerRights)
 @ButtonRoute(DeleteId)
 export class DeleteButton extends ButtonHandler<[typeof DeleteId]> {
     public async execute(): Promise<void> {

@@ -7,7 +7,7 @@ import { BitrateId, BitrateModalId } from "../utils/interactionIds"
 import { getLocale, getMaxBitrate } from "../utils/misc"
 import { CheckRights } from "../utils/preconditions"
 
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ButtonRoute(BitrateId)
 export class BitrateButton extends ButtonHandler<[typeof BitrateId]> {
     public async execute(): Promise<void> {

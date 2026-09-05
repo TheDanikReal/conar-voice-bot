@@ -7,7 +7,7 @@ import { RenameId, RenameModalId } from "../utils/interactionIds"
 import { getLocale } from "../utils/misc"
 import { CheckRights } from "../utils/preconditions"
 
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ButtonRoute(RenameId)
 export class RenameButton extends ButtonHandler<[typeof RenameId]> {
     public async execute(): Promise<void> {
