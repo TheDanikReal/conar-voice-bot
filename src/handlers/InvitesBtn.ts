@@ -7,12 +7,12 @@ import { createGenericEmbed, FailedStatusComponent, SuccessStatusComponent } fro
 import { InvitesActionId, InvitesId } from "../utils/interactionIds"
 import { inviteUser } from "../utils/inviteStatus"
 import { getLocale, rerenderDashboard } from "../utils/misc"
-import { ChannelNotFound, checkChannelRights, CheckRights } from "../utils/preconditions"
+import { ChannelNotFound, checkChannelRights, CheckRights, NotVoice } from "../utils/preconditions"
 
 @ButtonRoute(InvitesId)
 export class InvitesButton extends ButtonHandler<[typeof InvitesId]> {
     public async execute(): Promise<void> {
-        if (this.event.channel?.type !== ChannelType.GuildVoice) return
+        if (this.event.channel?.type !== ChannelType.GuildVoice) throw new NotVoice()
         const [isOwner, t] = await Promise.all([
             checkChannelRights(this.event),
             getLocale({ serverId: this.event.guildId }),
@@ -52,7 +52,7 @@ export class InvitesButton extends ButtonHandler<[typeof InvitesId]> {
     }
 }
 
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ButtonRoute(InvitesActionId)
 export class InvitesAction extends ButtonHandler<[typeof InvitesActionId]> {
     public async execute(): Promise<void> {

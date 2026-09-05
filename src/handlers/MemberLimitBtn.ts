@@ -7,13 +7,13 @@ import { FailedStatusComponent, SuccessStatusComponent } from "../utils/embeds"
 import { MemberLimitId, MemberLimitModalId } from "../utils/interactionIds"
 import { getLocale, rerenderDashboard } from "../utils/misc"
 import { withBlocking } from "../utils/mutexes"
-import { CheckRights, RaceConditionDetected } from "../utils/preconditions"
+import { CheckRights, NotVoice, RaceConditionDetected } from "../utils/preconditions"
 
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ButtonRoute(MemberLimitId)
 export class MemberLimitButton extends ButtonHandler<[typeof MemberLimitId]> {
     public async execute(): Promise<void> {
-        if (this.event.channel?.type !== ChannelType.GuildVoice) return
+        if (this.event.channel?.type !== ChannelType.GuildVoice) throw new NotVoice()
         const t = await getLocale({ serverId: this.event.guildId })
         const modal = new ModalBuilder().setCustomId(MemberLimitModalId.encode({})).setTitle(t.memberLimit.input())
         const label = new LabelBuilder()
@@ -35,7 +35,7 @@ export class MemberLimitButton extends ButtonHandler<[typeof MemberLimitId]> {
 export class MemberLimitModal extends ModalHandler<[typeof MemberLimitModalId]> {
     public async execute(): Promise<void> {
         const channel = this.event.channel
-        if (!(channel?.type === ChannelType.GuildVoice && channel.isVoiceBased())) return
+        if (!(channel?.type === ChannelType.GuildVoice && channel.isVoiceBased())) throw new NotVoice()
         const result = await withBlocking(this.event.guildId, "memberLimit", async () => {
             const [t, settings] = await Promise.all([
                 getLocale({ serverId: this.event.guildId }),

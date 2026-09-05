@@ -14,7 +14,7 @@ import { ChannelNotFound, CheckRights } from "../utils/preconditions"
 
 import type { Dict } from "../generated/i18n"
 
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ButtonRoute(StatesId)
 export class ManageStatesBtn extends ButtonHandler<[typeof StatesId]> {
     public async execute(): Promise<void> {
@@ -28,7 +28,7 @@ export class ManageStatesBtn extends ButtonHandler<[typeof StatesId]> {
 }
 
 // managers should be able to load and save their states as well
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ButtonRoute(SaveState)
 export class SaveStateBtn extends ButtonHandler<[typeof SaveState]> {
     public async execute(): Promise<void> {
@@ -66,7 +66,7 @@ export class SaveStateBtn extends ButtonHandler<[typeof SaveState]> {
     }
 }
 
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ButtonRoute(LoadState)
 export class LoadStateBtn extends ButtonHandler<[typeof LoadState]> {
     public async execute(): Promise<void> {
@@ -110,7 +110,7 @@ export class LoadStateBtn extends ButtonHandler<[typeof LoadState]> {
     }
 }
 
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ButtonRoute(DeleteCurrentState)
 export class DeleteStateBtn extends ButtonHandler<[typeof DeleteCurrentState]> {
     public async execute(): Promise<void> {

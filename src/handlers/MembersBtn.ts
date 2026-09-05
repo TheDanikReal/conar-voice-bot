@@ -15,9 +15,9 @@ import {
     ManagersModalId
 } from "../utils/interactionIds"
 import { blacklistUsers, getLocale } from "../utils/misc"
-import { CheckOwnerRights, CheckRights, UserNotFound } from "../utils/preconditions"
+import { CheckOwnerRights, CheckRights, NotVoice, UserNotFound } from "../utils/preconditions"
 
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ButtonRoute(ManageMembersId)
 export class ManageMembersBtn extends ButtonHandler<[typeof ManageMembersId]> {
     public async execute(): Promise<void> {
@@ -54,7 +54,7 @@ ${Emojis.mod} - ${t.members.manageManagers()}
     }
 }
 
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ButtonRoute(KickMemberId)
 export class KickMemberBtn extends ButtonHandler<[typeof KickMemberId]> {
     public async execute(): Promise<void> {
@@ -64,7 +64,7 @@ export class KickMemberBtn extends ButtonHandler<[typeof KickMemberId]> {
         // todo: i want it to be a select menu when channel
         // has <=25 (limit for select menus) members in future
         const channel = this.event.channel
-        if (!(channel?.type === ChannelType.GuildVoice && channel.isVoiceBased())) return
+        if (!(channel?.type === ChannelType.GuildVoice && channel.isVoiceBased())) throw new NotVoice()
         const t = await getLocale({ serverId: this.event.guildId })
         const modal = new ModalBuilder().setCustomId(KickMemberModalId.encode({})).setTitle(t.members.kick())
         const label = new LabelBuilder()
@@ -77,13 +77,13 @@ export class KickMemberBtn extends ButtonHandler<[typeof KickMemberId]> {
     }
 }
 
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ModalRoute(KickMemberModalId)
 export class KickMemberModal extends ModalHandler<[typeof KickMemberModalId]> {
     public async execute(): Promise<void> {
         const [t] = await Promise.all([getLocale({ serverId: this.event.guildId }), this.defer()])
         const channel = this.event.channel
-        if (!(channel?.type === ChannelType.GuildVoice && channel.isVoiceBased())) return
+        if (!(channel?.type === ChannelType.GuildVoice && channel.isVoiceBased())) throw new NotVoice()
         const user = this.event.fields.getSelectedUsers("id", true).first()
         if (!user) throw new UserNotFound()
         await channel.members.get(user.id)?.voice.setChannel(null)
@@ -95,7 +95,7 @@ export class KickMemberModal extends ModalHandler<[typeof KickMemberModalId]> {
     }
 }
 
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ButtonRoute(BlacklistId)
 export class BlacklistBtn extends ButtonHandler<[typeof BlacklistId]> {
     public async execute(): Promise<void> {
@@ -117,7 +117,7 @@ export class BlacklistBtn extends ButtonHandler<[typeof BlacklistId]> {
     }
 }
 
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ModalRoute(BlacklistModalId)
 export class BlacklistModal extends ModalHandler<[typeof BlacklistModalId]> {
     public async execute(): Promise<void> {
@@ -125,7 +125,7 @@ export class BlacklistModal extends ModalHandler<[typeof BlacklistModalId]> {
         const users = this.event.fields.getSelectedUsers("id", false)
         const currentUsers = users?.map((user) => user.id) ?? []
         const channel = this.event.channel
-        if (!(channel?.type === ChannelType.GuildVoice && channel.isVoiceBased())) return
+        if (!(channel?.type === ChannelType.GuildVoice && channel.isVoiceBased())) throw new NotVoice()
         const [settings, t] = await Promise.all([
             database.findChannel(channel.id),
             getLocale({ serverId: this.event.guildId })
@@ -142,7 +142,7 @@ export class BlacklistModal extends ModalHandler<[typeof BlacklistModalId]> {
     }
 }
 
-@Gated(CheckOwnerRights())
+@Gated(CheckOwnerRights)
 @ButtonRoute(ManagersId)
 export class ManageManagersBtn extends ButtonHandler<[typeof ManagersId]> {
     public async execute(): Promise<void> {
@@ -164,7 +164,7 @@ export class ManageManagersBtn extends ButtonHandler<[typeof ManagersId]> {
     }
 }
 
-@Gated(CheckOwnerRights())
+@Gated(CheckOwnerRights)
 @ModalRoute(ManagersModalId)
 export class ManageManagersModal extends ModalHandler<[typeof ManagersModalId]> {
     public async execute(): Promise<void> {

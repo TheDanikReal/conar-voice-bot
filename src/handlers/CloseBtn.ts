@@ -6,14 +6,14 @@ import { SuccessStatusComponent } from "../utils/embeds"
 import { CloseId } from "../utils/interactionIds"
 import { getLocale, rerenderDashboard } from "../utils/misc"
 import { withBlocking } from "../utils/mutexes"
-import { CheckRights, RaceConditionDetected } from "../utils/preconditions"
+import { CheckRights, NotVoice, RaceConditionDetected } from "../utils/preconditions"
 
-@Gated(CheckRights())
+@Gated(CheckRights)
 @ButtonRoute(CloseId)
 export class CloseButton extends ButtonHandler<[typeof CloseId]> {
     public async execute(): Promise<void> {
         const channel = this.event.channel
-        if (channel?.type !== ChannelType.GuildVoice) return
+        if (channel?.type !== ChannelType.GuildVoice) throw new NotVoice()
         const result = await withBlocking(this.event.guildId, "memberLimit", async () => {
             const [settings, t] = await Promise.all([
                 database.findChannel(channel.id),
