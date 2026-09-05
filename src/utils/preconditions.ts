@@ -1,5 +1,5 @@
-import { ContainerBuilder } from "@discordjs/builders"
-import { Notice, defineGate } from "@seedcord/gateway"
+import { ContainerBuilder, TextDisplayBuilder } from "@discordjs/builders"
+import { BuilderComponent, Notice, defineGate } from "@seedcord/gateway"
 
 import { database } from "./base"
 
@@ -17,6 +17,7 @@ export async function checkChannelRights(interaction: ButtonInteraction | Comman
     return true
 }
 
+/** checks if user is a manager of temp voice channel */
 export const CheckRights: Gate<GateContextBase, "CheckRights"> = defineGate("CheckRights", async (ctx) => {
     const userId = ctx.userId
     if (!userId) throw new NoRights("manager")
@@ -25,6 +26,7 @@ export const CheckRights: Gate<GateContextBase, "CheckRights"> = defineGate("Che
     if (channel?.ownerId !== userId && !isManager) throw new NoRights("manager")
 })
 
+/** checks if user is a owner of temp voice channel */
 export const CheckOwnerRights: Gate<GateContextBase, "CheckOwnerRights"> = defineGate(
     "CheckOwnerRights",
     async (ctx) => {
@@ -34,6 +36,31 @@ export const CheckOwnerRights: Gate<GateContextBase, "CheckOwnerRights"> = defin
         if (channel?.ownerId !== userId) throw new NoRights("owner")
     }
 )
+
+/** taken from seedcord's source code btw */
+export class NoticeCard extends BuilderComponent<'container'> {
+    public constructor(description: string, title = 'Cannot Proceed') {
+        super('container');
+        this.instance.addTextDisplayComponents(new TextDisplayBuilder().setContent(`### ${title}\n${description}`));
+    }
+}
+
+export class NotVoice extends Notice {
+    public constructor() {
+        super('A fault occurred', { cause: "Button is clicked outside of voice channel" });
+        this.report = true;
+    }
+
+    public render(ctx: RenderContext): ReplyResponse {
+        const contact = ctx.developerUsername ?? 'the developer';
+        const card = new NoticeCard(
+            `Button is clicked outside of voice channel. Please reach out to ${contact} with a way to reproduce the error and the following:\n` +
+            `### UUID: \`${ctx.uuid}\``,
+            'Error'
+        );
+        return { components: [card.component] };
+    }
+}
 
 export class NoRights extends Notice {
     level: "manager" | "owner"
