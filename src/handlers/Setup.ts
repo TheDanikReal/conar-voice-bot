@@ -12,10 +12,10 @@ import {
 import { ButtonStyle, ChannelType, MessageFlags, PermissionFlagsBits } from "discord.js"
 
 import { database } from "../utils/base"
-import { withBlocking } from "../utils/blocking"
 import { FailedStatusComponent, SuccessStatusComponent } from "../utils/embeds"
 import { ForceSetupId } from "../utils/interactionIds"
 import { getLocale } from "../utils/misc"
+import { withBlocking } from "../utils/mutexes"
 import { ActionInProgress } from "../utils/preconditions"
 
 import type { Dict } from "../generated/i18n"

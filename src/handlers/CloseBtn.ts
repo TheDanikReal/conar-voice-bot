@@ -2,10 +2,10 @@ import { ButtonHandler, ButtonRoute, Gated, Fault } from "@seedcord/gateway"
 import { ChannelType } from "discord.js"
 
 import { database } from "../utils/base"
-import { withBlocking } from "../utils/blocking"
 import { SuccessStatusComponent } from "../utils/embeds"
 import { CloseId } from "../utils/interactionIds"
 import { getLocale, rerenderDashboard } from "../utils/misc"
+import { withBlocking } from "../utils/mutexes"
 import { CheckRights, RaceConditionDetected } from "../utils/preconditions"
 
 @Gated(CheckRights())

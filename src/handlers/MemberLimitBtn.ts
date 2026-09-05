@@ -3,10 +3,10 @@ import { ButtonHandler, ButtonRoute, Gated, ModalHandler, ModalRoute } from "@se
 import { ChannelType, TextInputStyle } from "discord.js"
 
 import { database } from "../utils/base"
-import { withBlocking } from "../utils/blocking"
 import { FailedStatusComponent, SuccessStatusComponent } from "../utils/embeds"
 import { MemberLimitId, MemberLimitModalId } from "../utils/interactionIds"
 import { getLocale, rerenderDashboard } from "../utils/misc"
+import { withBlocking } from "../utils/mutexes"
 import { CheckRights, RaceConditionDetected } from "../utils/preconditions"
 
 @Gated(CheckRights())
