@@ -71,7 +71,7 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
             )
             // blacklist is now readonly??? idk but it doesnt throw ts error in prisma 8 if i cast it
             // as string[]
-            await blacklistUsers(channel, [], (slot?.blacklist ?? []) as string[])
+            await blacklistUsers(channel, [], slot?.blacklist ?? [])
             await database.addChannel(channel.id, {
                 messageId: message.id,
                 ownerId: member.id,

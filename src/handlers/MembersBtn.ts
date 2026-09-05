@@ -81,14 +81,14 @@ export class KickMemberBtn extends ButtonHandler<[typeof KickMemberId]> {
 @ModalRoute(KickMemberModalId)
 export class KickMemberModal extends ModalHandler<[typeof KickMemberModalId]> {
     public async execute(): Promise<void> {
-        await this.defer()
+        const [t] = await Promise.all([getLocale({ serverId: this.event.guildId }), this.defer()])
         const channel = this.event.channel
         if (!(channel?.type === ChannelType.GuildVoice && channel.isVoiceBased())) return
         const user = this.event.fields.getSelectedUsers("id", true).first()
         if (!user) throw new UserNotFound()
         await channel.members.get(user.id)?.voice.setChannel(null)
         try {
-            await this.edit({ components: [new SuccessStatusComponent(`kicked user`).component] })
+            await this.edit({ components: [new SuccessStatusComponent(t.members.kicked()).component] })
         } catch {}
         // if you kick yourself and you're the only member, channel will be deleted
         // so it's not guarranteed for message to be sent
