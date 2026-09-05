@@ -83,9 +83,9 @@ export class LoadStateBtn extends ButtonHandler<[typeof LoadState]> {
             await this.edit({ components: [new FailedStatusComponent(t.states.unableToFind()).component] })
             return
         }
-        const oldBlacklist = currentSettings.blacklist ? [...currentSettings.blacklist] : []
-        const blacklist = slotSettings.blacklist ? [...slotSettings.blacklist] : []
-        const managers = slotSettings.managers ? [...slotSettings.managers] : []
+        const oldBlacklist = currentSettings.blacklist ?? []
+        const blacklist = slotSettings.blacklist ?? []
+        const managers = slotSettings.managers ?? []
         await channel.edit({
             bitrate: slotSettings.bitrate ?? channel.bitrate,
             userLimit: slotSettings.closed ? 1 : (slotSettings.memberLimit ?? 0),

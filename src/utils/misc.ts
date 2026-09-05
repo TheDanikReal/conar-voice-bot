@@ -5,7 +5,7 @@ import { getT } from "../generated/i18n"
 
 import type { Guild, GuildPremiumTier, Snowflake, User, VoiceChannel } from "discord.js"
 
-const compareArrays = (arr1: string[], arr2: string[]) =>
+const compareArrays = (arr1: readonly string[], arr2: readonly string[]) =>
     arr1.length === arr2.length && arr1.every((val, index) => val === arr2[index])
 
 export function getMaxBitrate(premiumTier: GuildPremiumTier) {
@@ -20,8 +20,8 @@ export function getMaxBitrate(premiumTier: GuildPremiumTier) {
 
 export async function blacklistUsers(
     channel: VoiceChannel,
-    previousUsers: string[],
-    nextUsers: string[]
+    previousUsers: readonly string[],
+    nextUsers: readonly string[]
 ): Promise<void> {
     if (compareArrays(previousUsers, nextUsers)) return
     const previousUserIds = new Set<User>()
