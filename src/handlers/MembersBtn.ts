@@ -64,7 +64,7 @@ export class KickMemberBtn extends ButtonHandler<[typeof KickMemberId]> {
         // todo: i want it to be a select menu when channel
         // has <=25 (limit for select menus) members in future
         const channel = this.event.channel
-        if (!(channel && channel.type === ChannelType.GuildVoice && channel.isVoiceBased())) return
+        if (!(channel?.type === ChannelType.GuildVoice && channel.isVoiceBased())) return
         const t = await getLocale({ serverId: this.event.guildId })
         const modal = new ModalBuilder().setCustomId(KickMemberModalId.encode({})).setTitle(t.members.kick())
         const label = new LabelBuilder()
@@ -83,7 +83,7 @@ export class KickMemberModal extends ModalHandler<[typeof KickMemberModalId]> {
     public async execute(): Promise<void> {
         await this.defer()
         const channel = this.event.channel
-        if (!(channel && channel.type === ChannelType.GuildVoice && channel.isVoiceBased())) return
+        if (!(channel?.type === ChannelType.GuildVoice && channel.isVoiceBased())) return
         const user = this.event.fields.getSelectedUsers("id", true).first()
         if (!user) throw new UserNotFound()
         await channel.members.get(user.id)?.voice.setChannel(null)
@@ -125,13 +125,13 @@ export class BlacklistModal extends ModalHandler<[typeof BlacklistModalId]> {
         const users = this.event.fields.getSelectedUsers("id", false)
         const currentUsers = users?.map((user) => user.id) ?? []
         const channel = this.event.channel
-        if (!(channel && channel.type === ChannelType.GuildVoice && channel.isVoiceBased())) return
+        if (!(channel?.type === ChannelType.GuildVoice && channel.isVoiceBased())) return
         const [settings, t] = await Promise.all([
             database.findChannel(channel.id),
             getLocale({ serverId: this.event.guildId })
         ])
         if (!settings) return
-        const previousUsers = Array.isArray(settings.blacklist) ? settings.blacklist : []
+        const previousUsers = settings.blacklist ? [...settings.blacklist] : []
         await blacklistUsers(channel, previousUsers, currentUsers)
         await database.changeBlacklist(channel.id, currentUsers)
         await this.edit({

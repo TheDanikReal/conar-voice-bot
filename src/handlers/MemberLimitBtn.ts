@@ -34,8 +34,12 @@ export class MemberLimitButton extends ButtonHandler<[typeof MemberLimitId]> {
 export class MemberLimitModal extends ModalHandler<[typeof MemberLimitModalId]> {
     public async execute(): Promise<void> {
         const channel = this.event.channel
-        if (!(channel && channel.type === ChannelType.GuildVoice && channel.isVoiceBased())) return
-        const [t] = await Promise.all([getLocale({ serverId: this.event.guildId }), this.defer()])
+        if (!(channel?.type === ChannelType.GuildVoice && channel.isVoiceBased())) return
+        const [t, settings] = await Promise.all([
+            getLocale({ serverId: this.event.guildId }),
+            database.findChannel(channel.id),
+            this.defer()
+        ])
         const limit = parseInt(this.event.fields.getTextInputValue("limit").trim(), 10)
         if (limit < 0 || limit > 99 || Number.isNaN(limit)) {
             await this.edit({ components: [new FailedStatusComponent(t.memberLimit.incorrect()).component] })
@@ -43,7 +47,7 @@ export class MemberLimitModal extends ModalHandler<[typeof MemberLimitModalId]> 
         }
         await channel.setUserLimit(limit)
         await database.changeMaxMembers(channel.id, limit)
-        if ((await database.findChannel(channel.id))?.closed) {
+        if (settings?.closed) {
             throw new RaceConditionDetected()
         }
         await rerenderDashboard(channel, this.event.guild)

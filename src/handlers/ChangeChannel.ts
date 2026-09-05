@@ -15,14 +15,14 @@ export class ChangeChannel extends SlashHandler<"setchannel"> {
             content: t.settings.notAvailableInDms()
         })
 
-        const successDisplay = new TextDisplayBuilder({
-            content: t.settings.success()
-        })
-
         if (!this.event.guildId) {
             await this.edit({ components: [notAvailableDisplay] })
             return
         }
+
+        const successDisplay = new TextDisplayBuilder({
+            content: t.settings.success()
+        })
         await database.editServerIfExists({
             id: this.event.guildId,
             voiceChannel: this.options.getChannel("channel").id,

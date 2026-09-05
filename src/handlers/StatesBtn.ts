@@ -43,9 +43,7 @@ export class SaveStateBtn extends ButtonHandler<[typeof SaveState]> {
             this.defer()
         ])
         if (!settings) throw new ChannelNotFound()
-        if (!userSettings) {
-            userSettings = await database.addUser(userId)
-        }
+        userSettings ??= await database.addUser(userId)
         const blacklist = Array.isArray(settings.blacklist) ? settings.blacklist : []
         const managers = Array.isArray(settings.managers) ? settings.managers : []
         // looking on how this code changed with prisma 8 i now want to watch
@@ -80,12 +78,12 @@ export class LoadStateBtn extends ButtonHandler<[typeof LoadState]> {
             this.defer()
         ])
         if (!currentSettings) return
-        const oldBlacklist = Array.isArray(currentSettings.blacklist) ? currentSettings.blacklist : []
         const slotSettings = await database.findSave(this.event.user.id, this.params.slot)
         if (!slotSettings) {
             await this.edit({ components: [new FailedStatusComponent(t.states.unableToFind()).component] })
             return
         }
+        const oldBlacklist = currentSettings.blacklist ? [...currentSettings.blacklist] : []
         const blacklist = slotSettings.blacklist ? [...slotSettings.blacklist] : []
         const managers = slotSettings.managers ? [...slotSettings.managers] : []
         await channel.edit({

@@ -25,7 +25,7 @@ interface ChannelOptions {
 }
 
 export function composeDashboard(settings: ChannelOptions, t?: Dict): MessageCreateOptions & MessageEditOptions {
-    if (!t) t = getT()
+    t ??= getT()
     const isClosed = settings.closed
     // these closeChannel stuff look just bad
     // todo: make so that isClosed variable was depended on close button instead of
