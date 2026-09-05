@@ -5,7 +5,7 @@ import { ChannelType, TextInputStyle } from "discord.js"
 import { FailedStatusComponent, SuccessStatusComponent } from "../utils/embeds"
 import { BitrateId, BitrateModalId } from "../utils/interactionIds"
 import { getLocale, getMaxBitrate } from "../utils/misc"
-import { CheckRights } from "../utils/preconditions"
+import { CheckRights, NotVoice } from "../utils/preconditions"
 
 @Gated(CheckRights)
 @ButtonRoute(BitrateId)
@@ -30,7 +30,7 @@ export class BitrateButton extends ButtonHandler<[typeof BitrateId]> {
 @ModalRoute(BitrateModalId)
 export class BitrateModal extends ModalHandler<[typeof BitrateModalId]> {
     public async execute(): Promise<void> {
-        if (this.event.channel?.type !== ChannelType.GuildVoice) return
+        if (this.event.channel?.type !== ChannelType.GuildVoice) throw new NotVoice()
         const [t] = await Promise.all([getLocale({ serverId: this.event.guildId }), this.defer()])
         const bitrate = parseInt(this.event.fields.getTextInputValue("bitrate").trim(), 10)
         if (Number.isNaN(bitrate)) {

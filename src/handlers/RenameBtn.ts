@@ -5,13 +5,13 @@ import { ChannelType, TextInputStyle } from "discord.js"
 import { createStatusEmbed } from "../utils/embeds"
 import { RenameId, RenameModalId } from "../utils/interactionIds"
 import { getLocale } from "../utils/misc"
-import { CheckRights } from "../utils/preconditions"
+import { CheckRights, NotVoice } from "../utils/preconditions"
 
 @Gated(CheckRights)
 @ButtonRoute(RenameId)
 export class RenameButton extends ButtonHandler<[typeof RenameId]> {
     public async execute(): Promise<void> {
-        if (this.event.channel?.type !== ChannelType.GuildVoice) return
+        if (this.event.channel?.type !== ChannelType.GuildVoice) throw new NotVoice()
         const t = await getLocale({ serverId: this.event.guildId })
         const modal = new ModalBuilder().setCustomId(RenameModalId.encode({})).setTitle(t.rename.channel())
         const label = new LabelBuilder()
