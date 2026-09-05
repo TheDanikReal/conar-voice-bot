@@ -9,15 +9,16 @@ export async function withBlocking<ReturnType>(
     scope: Scopes,
     action: () => Promise<ReturnType>
 ): Promise<ReturnType | null> {
-    if (activeSetups.has(guildId)) {
+    const key = `${guildId}:${scope}`
+    if (activeSetups.has(key)) {
         return null
     }
 
-    activeSetups.add(`${guildId}:${scope}`)
+    activeSetups.add(key)
 
     try {
         return await action()
     } finally {
-        activeSetups.delete(guildId)
+        activeSetups.delete(key)
     }
 }
