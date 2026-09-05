@@ -47,14 +47,14 @@ export class NoticeCard extends BuilderComponent<'container'> {
 
 export class NotVoice extends Notice {
     public constructor() {
-        super('A fault occurred', { cause: "Button is clicked outside of voice channel" });
+        super('A fault occurred', { cause: "Interaction got executed outside of voice channel" });
         this.report = true;
     }
 
     public render(ctx: RenderContext): ReplyResponse {
         const contact = ctx.developerUsername ?? 'the developer';
         const card = new NoticeCard(
-            `Button is clicked outside of voice channel. Please reach out to ${contact} with a way to reproduce the error and the following:\n` +
+            `Interaction got executed outside of voice channel. Please reach out to ${contact} with a way to reproduce the error and the following:\n` +
             `### UUID: \`${ctx.uuid}\``,
             'Error'
         );
