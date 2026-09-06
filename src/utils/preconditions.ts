@@ -38,27 +38,29 @@ export const CheckOwnerRights: Gate<GateContextBase, "CheckOwnerRights"> = defin
 )
 
 /** taken from seedcord's source code btw */
-export class NoticeCard extends BuilderComponent<'container'> {
-    public constructor(description: string, title = 'Cannot Proceed') {
-        super('container');
-        this.instance.addTextDisplayComponents(new TextDisplayBuilder().setContent(`### ${title}\n${description}`));
+export class NoticeCard extends BuilderComponent<"container"> {
+    public constructor(description: string, title = "Cannot Proceed", color = 0x00_00_00) {
+        super("container")
+        this.instance
+            .addTextDisplayComponents(new TextDisplayBuilder().setContent(`### ${title}\n${description}`))
+            .setAccentColor(color)
     }
 }
 
 export class NotVoice extends Notice {
     public constructor() {
-        super('A fault occurred', { cause: "Interaction got executed outside of voice channel" });
-        this.report = true;
+        super("A fault occurred", { cause: "Interaction got executed outside of voice channel" })
+        this.report = true
     }
 
     public render(ctx: RenderContext): ReplyResponse {
-        const contact = ctx.developerUsername ?? 'the developer';
+        const contact = ctx.developerUsername ?? "the developer"
         const card = new NoticeCard(
             `Interaction got executed outside of voice channel. Please reach out to ${contact} with a way to reproduce the error and the following:\n` +
-            `### UUID: \`${ctx.uuid}\``,
-            'Error'
-        );
-        return { components: [card.component] };
+                `### UUID: \`${ctx.uuid}\``,
+            "Error"
+        )
+        return { components: [card.component] }
     }
 }
 

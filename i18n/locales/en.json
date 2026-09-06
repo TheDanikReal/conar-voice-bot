@@ -68,7 +68,22 @@
     },
     "settings": {
         "notAvailableInDms": "Editing settings is not available in dms",
-        "success": "Successfully applied settings"
+        "success": "Successfully applied settings",
+        "changingCreatorChannel": "Changing creator voice channel",
+        "changingCategory": "Changing category",
+        "changingTemplate": "Changing template",
+        "selectChannel": "Select channel",
+        "selectLanguage": "Choose language",
+        "language": "Language",
+        "templateInput": "Input template",
+        "settings": "Settings",
+        "current": "current",
+        "notSet": "Not set",
+        "configuring": "Configuring bot's settings",
+        "edit": "Edit",
+        "voiceChannel": "Voice channel (required)",
+        "category": "Category for creating temp channels at (recommended)",
+        "template": "Template for temp channel names (use `(username)` for getting username)"
     },
     "dashboard": {
         "openChannel": "Open channel",
