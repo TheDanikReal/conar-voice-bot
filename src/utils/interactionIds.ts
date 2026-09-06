@@ -30,3 +30,17 @@ export const LoadState = new CustomId("loadstate").int("slot")
 export const DeleteCurrentState = new CustomId("deletestate").int("slot")
 
 export const ForceSetupId = new CustomId("setup")
+
+// settings dashboard
+export const EditCreatorId = new CustomId("editcreator")
+export const EditCreatorModalId = new CustomId("creatormodal")
+
+export const EditCategoryId = new CustomId("editcategory")
+export const EditCategoryModalId = new CustomId("categorymodal")
+
+export const EditTemplateId = new CustomId("template")
+export const EditTemplateModalId = new CustomId("templatemodal")
+
+export const EditLanguageId = new CustomId("language")
+export const EditLanguageModalId = new CustomId("langagemodal")
+// end settings
