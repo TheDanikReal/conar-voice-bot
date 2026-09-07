@@ -9,12 +9,13 @@ import {
     ButtonHandler,
     ModalRoute,
     ModalHandler,
-    RequireBotPermissions
+    RequireBotPermissions,
+    GuildOnly
 } from "@seedcord/gateway"
 import { ButtonStyle, ChannelType, PermissionFlagsBits, TextInputStyle } from "discord.js"
 
 import { database } from "../utils/base"
-import { basicColor } from "../utils/consts"
+import { basicColor, templateMaxLength } from "../utils/consts"
 import {
     EditCategoryId,
     EditCategoryModalId,
@@ -28,7 +29,7 @@ import {
 import { getLocale } from "../utils/misc"
 import { NoticeCard } from "../utils/preconditions"
 
-@Gated(RequirePermissions([PermissionFlagsBits.ManageGuild]))
+@Gated(RequirePermissions([PermissionFlagsBits.ManageGuild]), GuildOnly())
 @SlashRoute("settings")
 export class Settings extends SlashHandler<"settings"> {
     public async execute(): Promise<void> {
@@ -131,6 +132,7 @@ export class EditCreator extends ButtonHandler<[typeof EditCreatorId]> {
     }
 }
 
+@Gated(RequirePermissions([PermissionFlagsBits.ManageGuild]))
 @ModalRoute(EditCreatorModalId)
 export class EditCreatorModal extends ModalHandler<[typeof EditCreatorModalId]> {
     public async execute(): Promise<void> {
@@ -171,6 +173,7 @@ export class EditCategory extends ButtonHandler<[typeof EditCategoryId]> {
     }
 }
 
+@Gated(RequirePermissions([PermissionFlagsBits.ManageGuild]))
 @ModalRoute(EditCategoryModalId)
 export class EditCategoryModal extends ModalHandler<[typeof EditCategoryModalId]> {
     public async execute(): Promise<void> {
@@ -198,7 +201,7 @@ export class EditTemplate extends ButtonHandler<[typeof EditTemplateId]> {
         const label = new LabelBuilder().setLabel(t.settings.templateInput()).setTextInputComponent((builder) =>
             builder
                 .setMinLength(1)
-                .setMaxLength(60)
+                .setMaxLength(templateMaxLength)
                 .setCustomId("template")
                 .setRequired(true)
                 .setStyle(TextInputStyle.Short)

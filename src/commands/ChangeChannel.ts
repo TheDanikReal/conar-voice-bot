@@ -1,5 +1,6 @@
 import { RegisterCommand, BuilderComponent } from "@seedcord/gateway"
 import { ChannelType, PermissionFlagsBits } from "discord.js"
+import { templateMaxLength } from "../utils/consts"
 
 @RegisterCommand("global")
 export class SetChannelCommand extends BuilderComponent<"command"> {
@@ -27,8 +28,7 @@ export class SetChannelCommand extends BuilderComponent<"command"> {
                     .setName("template")
                     .setDescription("template for default channel names, use {username} for fetching username")
                     .setMinLength(1)
-                    // 32 is limit for usernames
-                    .setMaxLength(100 - 32)
+                    .setMaxLength(templateMaxLength)
             )
             .addStringOption((builder) =>
                 builder
