@@ -83,7 +83,7 @@
         "edit": "Edit",
         "voiceChannel": "Voice channel (required)",
         "category": "Category for creating temp channels at (recommended)",
-        "template": "Template for temp channel names (use `{username}` for getting username)"
+        "template": "Template for temp channel names (use `(username)` for getting username)"
     },
     "dashboard": {
         "openChannel": "Open channel",

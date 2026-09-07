@@ -1,5 +1,6 @@
 import { RegisterCommand, BuilderComponent } from "@seedcord/gateway"
 import { ChannelType, PermissionFlagsBits } from "discord.js"
+
 import { templateMaxLength } from "../utils/consts"
 
 @RegisterCommand("global")

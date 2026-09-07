@@ -221,7 +221,7 @@ export class EditTemplateModal extends ModalHandler<[typeof EditTemplateModalId]
         const [t] = await Promise.all([getLocale({ serverId: this.event.guildId }), this.defer()])
         await database.editServerIfExists({
             id: this.event.guildId,
-            template: this.event.fields.getTextInputValue("template")
+            template: this.event.fields.getTextInputValue("template").replaceAll("(", "{").replaceAll(")", "}")
         })
         await this.edit({
             components: [new NoticeCard(t.settings.success(), t.settings.settings(), basicColor).component]
