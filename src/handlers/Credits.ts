@@ -28,7 +28,11 @@ That's it, I'm the only developer, however...`)
                     .addTextDisplayComponents((builder) => builder.setContent("# Honorable mentions"))
                     .addTextDisplayComponents((builder) =>
                         builder.setContent(`## qomineko (pronounced as komi)
-Developer of original Connor bot, which inspired me to make Carrot bot`)
+Current developer of original Connor bot`)
+                    )
+                    .addTextDisplayComponents((builder) =>
+                        builder.setContent(`## silmarill (persik)
+Author of the idea for Connor bot, its' creator and first developer, inspired me to make Carrot bot`)
                     )
                     .addSectionComponents((builder) =>
                         builder

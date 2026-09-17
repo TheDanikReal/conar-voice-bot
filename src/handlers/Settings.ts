@@ -2,7 +2,6 @@ import { ContainerBuilder, LabelBuilder, ModalBuilder } from "@discordjs/builder
 import {
     SlashRoute,
     SlashHandler,
-    Emojis,
     Gated,
     RequirePermissions,
     ButtonRoute,
@@ -38,7 +37,6 @@ export class Settings extends SlashHandler<"settings"> {
             getLocale({ serverId: this.event.guildId }),
             this.defer({ ephemeral: false })
         ])
-        const current = t.settings.current()
         const edit = t.settings.edit()
         const voiceChannel = settings?.voiceChannel ? `<#${settings.voiceChannel}>` : t.settings.notSet()
         const voiceCategory = settings?.voiceCategory ? `<#${settings.voiceCategory}>` : t.settings.notSet()
@@ -47,57 +45,37 @@ export class Settings extends SlashHandler<"settings"> {
             .addSectionComponents((builder) =>
                 builder
                     .addTextDisplayComponents((builder) =>
-                        builder.setContent(`${t.settings.voiceChannel()}\n-# ${current}: ${voiceChannel}`)
+                        builder.setContent(`${t.settings.voiceChannel()}\n-# ${voiceChannel}`)
                     )
                     .setButtonAccessory((builder) =>
-                        builder
-                            .setCustomId(EditCreatorId.encode({}))
-                            .setEmoji(Emojis.edit)
-                            .setStyle(ButtonStyle.Primary)
-                            .setLabel(edit)
+                        builder.setCustomId(EditCreatorId.encode({})).setStyle(ButtonStyle.Secondary).setLabel(edit)
                     )
             )
             .addSectionComponents((builder) =>
                 builder
                     .addTextDisplayComponents((builder) =>
-                        builder.setContent(
-                            `${t.settings.category()}\n-# ${current}: ${voiceCategory}`
-                        )
+                        builder.setContent(`${t.settings.category()}\n-# ${voiceCategory}`)
                     )
                     .setButtonAccessory((builder) =>
-                        builder
-                            .setCustomId(EditCategoryId.encode({}))
-                            .setEmoji(Emojis.edit)
-                            .setStyle(ButtonStyle.Primary)
-                            .setLabel(edit)
+                        builder.setCustomId(EditCategoryId.encode({})).setStyle(ButtonStyle.Secondary).setLabel(edit)
                     )
             )
             .addSectionComponents((builder) =>
                 builder
                     .addTextDisplayComponents((builder) =>
-                        builder.setContent(
-                            `${t.settings.template()}\n-# ${current}: ${settings?.template ?? t.setup.template()}`
-                        )
+                        builder.setContent(`${t.settings.template()}\n-# ${settings?.template ?? t.setup.template()}`)
                     )
                     .setButtonAccessory((builder) =>
-                        builder
-                            .setCustomId(EditTemplateId.encode({}))
-                            .setEmoji(Emojis.edit)
-                            .setStyle(ButtonStyle.Primary)
-                            .setLabel(edit)
+                        builder.setCustomId(EditTemplateId.encode({})).setStyle(ButtonStyle.Secondary).setLabel(edit)
                     )
             )
             .addSectionComponents((builder) =>
                 builder
                     .addTextDisplayComponents((builder) =>
-                        builder.setContent(`${t.settings.language()}\n-# ${current}: ${settings?.language ?? "en"}`)
+                        builder.setContent(`${t.settings.language()}\n-# ${settings?.language ?? "en"}`)
                     )
                     .setButtonAccessory((builder) =>
-                        builder
-                            .setCustomId(EditLanguageId.encode({}))
-                            .setEmoji(Emojis.edit)
-                            .setStyle(ButtonStyle.Primary)
-                            .setLabel(edit)
+                        builder.setCustomId(EditLanguageId.encode({})).setStyle(ButtonStyle.Secondary).setLabel(edit)
                     )
             )
         await this.edit({ components: [container] })

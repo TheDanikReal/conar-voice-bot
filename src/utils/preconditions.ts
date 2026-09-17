@@ -160,3 +160,33 @@ export class ActionInProgress extends Notice {
         }
     }
 }
+
+export class MusicDisabled extends Notice {
+    constructor() {
+        super(`LAVALINK_URL or LAVALINK_PASS are not set`)
+    }
+    render(_ctx: RenderContext): ReplyResponse {
+        return {
+            components: [
+                new ContainerBuilder()
+                    .setAccentColor(red)
+                    .addTextDisplayComponents((builder) => builder.setContent(`:warning: Music module is disabled`))
+            ]
+        }
+    }
+}
+
+export class MusicNotFound extends Notice {
+    constructor() {
+        super(`track could not be found`)
+    }
+    render(_ctx: RenderContext): ReplyResponse {
+        return {
+            components: [
+                new ContainerBuilder()
+                    .setAccentColor(red)
+                    .addTextDisplayComponents((builder) => builder.setContent(`:warning: Track could not be found`))
+            ]
+        }
+    }
+}
