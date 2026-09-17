@@ -6,7 +6,9 @@ export class Cat extends BuilderComponent<"command"> {
     constructor() {
         super("command")
 
-        this.instance.setName("settings").setDescription("Interactive dashboard for editing settings")
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+        this.instance
+            .setName("settings")
+            .setDescription("Interactive dashboard for editing settings")
+            .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     }
 }

@@ -22,7 +22,10 @@ export class Voice extends EventHandler<Events.VoiceStateUpdate> {
         const channel = oldId ? await database.findChannel(oldId) : undefined
         if (oldId && channel?.id) {
             const channel = oldState.channel
-            if (channel?.members.size === 0) {
+            if (
+                channel?.members.size === 0 ||
+                (channel?.members.size === 1 && channel.members.at(0)?.id === this.core.bot.client.user?.id)
+            ) {
                 await channel.delete("nobody is in channel")
                 try {
                     await database.deleteChannel(oldId)

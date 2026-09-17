@@ -2,14 +2,18 @@ import { ActionRowBuilder, ButtonBuilder, ContainerBuilder } from "@discordjs/bu
 import { Emojis } from "@seedcord/gateway"
 import { ButtonStyle, MessageFlags, SeparatorSpacingSize } from "discord.js"
 
-import { basicColor } from "./consts"
+import { basicColor, lavalinkEnabled } from "./consts"
 import {
+    AddMusicId,
     BitrateId,
     CloseId,
     DeleteId,
+    DestroyMusicId,
     InvitesId,
     ManageMembersId,
     MemberLimitId,
+    MusicId,
+    NextMusicId,
     RenameId,
     StatesId
 } from "./interactionIds"
@@ -22,6 +26,10 @@ interface ChannelOptions {
     disableRequests: boolean
     owner: GuildMember
     closed: boolean
+}
+
+interface MusicOptions {
+    title: string
 }
 
 export function composeDashboard(settings: ChannelOptions, t?: Dict): MessageCreateOptions & MessageEditOptions {
@@ -51,7 +59,7 @@ export function composeDashboard(settings: ChannelOptions, t?: Dict): MessageCre
         .setEmoji(closeChannelId)
         .setStyle(isClosed ? ButtonStyle.Danger : ButtonStyle.Secondary)
     // todo add other buttons and compose message, then send and add actions
-    const firstRow = new ActionRowBuilder<ButtonBuilder>().addComponents(rename, bitrate, memberLimit, close)
+    const firstRow = new ActionRowBuilder<ButtonBuilder>().addComponents([rename, bitrate, memberLimit, close])
     const manageMembers = new ButtonBuilder()
         .setCustomId(ManageMembersId.encode({}))
         .setEmoji(Emojis.members)
@@ -64,7 +72,13 @@ export function composeDashboard(settings: ChannelOptions, t?: Dict): MessageCre
         .setCustomId(InvitesId.encode({}))
         .setEmoji(Emojis.requests)
         .setStyle(ButtonStyle.Primary)
-    const secondRow = new ActionRowBuilder<ButtonBuilder>().addComponents(manageMembers, manageSaves, requests)
+    const music = new ButtonBuilder()
+        .setCustomId(MusicId.encode({}))
+        .setEmoji(Emojis.play)
+        .setStyle(ButtonStyle.Secondary)
+    const secondRowArray: ButtonBuilder[] = [manageMembers, manageSaves, requests]
+    if (lavalinkEnabled) secondRowArray.push(music)
+    const secondRow = new ActionRowBuilder<ButtonBuilder>().addComponents(secondRowArray)
     const container = new ContainerBuilder()
         .setAccentColor(basicColor)
         .addTextDisplayComponents([
@@ -76,7 +90,8 @@ ${Emojis.voiceLimited} - ${t.dashboard.memberLimit()}.
 ${closeChannelId} - ${closeChannelMessage}.
 ${Emojis.members} - ${t.dashboard.members()}.
 ${Emojis.setup} - ${t.dashboard.settingSaves()}.
-${Emojis.requests} - ${invitesMessage}.`)
+${Emojis.requests} - ${invitesMessage}.
+${Emojis.play} - ${t.dashboard.music()}`)
         ])
         .addSeparatorComponents((builder) => builder.setSpacing(SeparatorSpacingSize.Small))
         .addActionRowComponents(firstRow, secondRow)
@@ -90,4 +105,30 @@ ${Emojis.requests} - ${invitesMessage}.`)
         .setStyle(ButtonStyle.Danger)
     const thirdRow = new ActionRowBuilder<ButtonBuilder>().addComponents(deleteChannel)
     return { flags: MessageFlags.IsComponentsV2, components: [container, thirdRow] }
+}
+
+export function composeMusicDashboard(settings: MusicOptions, t?: Dict): MessageCreateOptions & MessageEditOptions {
+    t ??= getT()
+    const addMusic = new ButtonBuilder()
+        .setCustomId(AddMusicId.encode({}))
+        .setEmoji(Emojis.play)
+        .setStyle(ButtonStyle.Secondary)
+    const nextMusic = new ButtonBuilder()
+        .setCustomId(NextMusicId.encode({}))
+        .setEmoji(Emojis.bitrate)
+        .setStyle(ButtonStyle.Secondary)
+    const destroyPlayer = new ButtonBuilder()
+        .setCustomId(DestroyMusicId.encode({}))
+        .setEmoji(Emojis.delete)
+        .setStyle(ButtonStyle.Danger)
+    const firstRow = new ActionRowBuilder<ButtonBuilder>().addComponents([addMusic, nextMusic, destroyPlayer])
+    const container = new ContainerBuilder()
+        .setAccentColor(basicColor)
+        .addTextDisplayComponents([
+            (builder) => builder.setContent(`### ${t.music.music()}`),
+            (builder) => builder.setContent(`${t.music.currentlyPlaying()}: ${settings.title}.`)
+        ])
+        .addSeparatorComponents((builder) => builder.setSpacing(SeparatorSpacingSize.Small))
+        .addActionRowComponents(firstRow)
+    return { flags: MessageFlags.IsComponentsV2, components: [container] }
 }

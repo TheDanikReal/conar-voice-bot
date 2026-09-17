@@ -82,8 +82,8 @@
         "configuring": "Configuring bot's settings",
         "edit": "Edit",
         "voiceChannel": "Voice channel (required)",
-        "category": "Category for creating temp channels at (recommended)",
-        "template": "Template for temp channel names (use `(username)` for getting username)"
+        "category": "Category (recommended)",
+        "template": "Template"
     },
     "dashboard": {
         "openChannel": "Open channel",
@@ -98,7 +98,8 @@
         "memberLimit": "Set member limit",
         "members": "Manage members",
         "settingSaves": "Manage channel setting states",
-        "delete": "Delete"
+        "delete": "Delete",
+        "music": "Open music dashboard"
     },
     "setup": {
         "channelAlreadyExists": "You already have a temporary voice channel, are you sure you want to create a new one and abandon the old one?",
@@ -111,6 +112,17 @@
         },
         "success": "Successfully created category and {channel} channel, applied the changes to the database.",
         "successButton": "Done!"
+    },
+    "music": {
+        "nowPlaying": "Now playing {title} from {source} by {author}, length: {length} ({url})",
+        "music": "Music",
+        "currentlyPlaying": "Currently playing",
+        "search": "Input search query",
+        "alreadyOff": "Music is already not playing",
+        "notPlaying": "Not playing",
+        "exampleMusic": "C418 - Mice on Venus",
+        "unknown": "Unknown",
+        "addTitle": "Add music"
     },
     "inputNumber": "Input number:",
     "enabled": "Enabled",

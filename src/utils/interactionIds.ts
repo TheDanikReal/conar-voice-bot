@@ -44,3 +44,9 @@ export const EditTemplateModalId = new CustomId("templatemodal")
 export const EditLanguageId = new CustomId("language")
 export const EditLanguageModalId = new CustomId("langagemodal")
 // end settings
+
+export const MusicId = new CustomId("music")
+export const MusicModalId = new CustomId("musicmodal")
+export const AddMusicId = new CustomId("addmusic")
+export const DestroyMusicId = new CustomId("destroymusic")
+export const NextMusicId = new CustomId("nextmusic")
