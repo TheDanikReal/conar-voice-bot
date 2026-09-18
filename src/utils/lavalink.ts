@@ -20,7 +20,7 @@ function initLavalink(): void {
             auth: process.env.LAVALINK_PASS,
             url: process.env.LAVALINK_URL,
             name: "node",
-            secure: true
+            secure: process.env.LAVALINK_SECURE?.toLowerCase() === "true"
         }
     ]
     kazagumo = new Kazagumo(
@@ -54,19 +54,25 @@ function initLavalink(): void {
         const channel = seedcord.bot.client.channels.cache.get(player.voiceId) as VoiceChannel
         if (!channel) return
         // no promises for listeners :(
-        void getLocale({ serverId: channel.guildId }).then((t) => {
-            void channel.send({
-                content: t.music.nowPlaying({
-                    title: track.title,
-                    author: track.author ?? t.music.unknown(),
-                    source: track.sourceName,
-                    url: track.uri ?? t.music.unknown(),
-                    length: track.length?.toString() ?? t.music.unknown()
-                }),
-                allowedMentions: { parse: [] }
-            }).catch(() => { /* TODO: will handle later, when i'll realise how to use seedcord's
-                                logger externally */})
-        }).catch(() => {})
+        void getLocale({ serverId: channel.guildId })
+            .then((t) => {
+                void channel
+                    .send({
+                        content: t.music.nowPlaying({
+                            title: track.title,
+                            author: track.author ?? t.music.unknown(),
+                            source: track.sourceName,
+                            url: track.uri ?? t.music.unknown(),
+                            length: track.length?.toString() ?? t.music.unknown()
+                        }),
+                        allowedMentions: { parse: [] }
+                    })
+                    .catch(() => {
+                        /* TODO: will handle later, when i'll realise how to use seedcord's
+                                logger externally */
+                    })
+            })
+            .catch(() => {})
     })
 }
 

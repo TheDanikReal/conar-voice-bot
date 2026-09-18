@@ -34,7 +34,10 @@ export const seedcord = new Seedcord({
             kick: ["kick", "964544146444546088"],
             mod: ["mod", "964544146444546088"],
             sync: ["sync", "964544146444546088"],
-            requests: ["requests", "964544146444546088"]
+            requests: ["requests", "964544146444546088"],
+            pause: ["pause", "964544146444546088"],
+            stop: ["stop", "964544146444546088"],
+            next: ["next", "964544146444546088"]
         }
     },
     subscribers: {

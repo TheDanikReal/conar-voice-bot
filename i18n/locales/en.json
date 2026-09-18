@@ -115,14 +115,16 @@
     },
     "music": {
         "nowPlaying": "Now playing {title} from {source} by {author}, length: {length} ({url})",
-        "music": "Music",
+        "queued": "Queued {title} by {author}, length: {length}",
         "currentlyPlaying": "Currently playing",
         "search": "Input search query",
         "alreadyOff": "Music is already not playing",
         "notPlaying": "Not playing",
         "exampleMusic": "C418 - Mice on Venus",
         "unknown": "Unknown",
-        "addTitle": "Add music"
+        "addTitle": "Add music",
+        "unpaused": "Unpaused player",
+        "paused": "Paused player"
     },
     "inputNumber": "Input number:",
     "enabled": "Enabled",
