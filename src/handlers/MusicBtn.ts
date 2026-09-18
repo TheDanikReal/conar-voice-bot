@@ -4,7 +4,7 @@ import { TextInputStyle } from "discord.js"
 
 import { composeMusicDashboard } from "../utils/dashboard"
 import { FailedStatusComponent } from "../utils/embeds"
-import { AddMusicId, DestroyMusicId, MusicId, MusicModalId, NextMusicId } from "../utils/interactionIds"
+import { AddMusicId, DestroyMusicId, MusicId, MusicModalId, NextMusicId, PauseMusicId } from "../utils/interactionIds"
 import { kazagumo } from "../utils/lavalink"
 import { getLocale } from "../utils/misc"
 import { CheckRights, MusicDisabled, MusicNotFound } from "../utils/preconditions"
@@ -63,14 +63,24 @@ export class MusicModal extends ModalHandler<[typeof MusicModalId]> {
         const track = res.tracks[0]
         if (!track) throw new MusicNotFound()
         player.queue.add(track)
-        if (!player.playing) await player.play()
+        if (!player.playing) {
+            await player.play()
+            await this.edit(
+                t.music.nowPlaying({
+                    author: track.author ?? t.music.unknown(),
+                    source: track.sourceName,
+                    length: track.length?.toString() ?? t.music.unknown(),
+                    title: track.title,
+                    url: track.uri ?? t.music.unknown()
+                })
+            )
+            return
+        }
         await this.edit(
-            t.music.nowPlaying({
+            t.music.queued({
                 author: track.author ?? t.music.unknown(),
-                source: track.sourceName,
                 length: track.length?.toString() ?? t.music.unknown(),
-                title: track.title,
-                url: track.uri ?? t.music.unknown()
+                title: track.title
             })
         )
     }
@@ -105,5 +115,36 @@ export class NextMusic extends ButtonHandler<[typeof NextMusicId]> {
         }
         player.skip()
         await this.reply(t.setup.successButton())
+    }
+}
+
+@ButtonRoute(PauseMusicId)
+export class PauseMusic extends ButtonHandler<[typeof PauseMusicId]> {
+    public async execute(): Promise<void> {
+        if (!kazagumo) throw new MusicDisabled()
+        const t = await getLocale({ serverId: this.event.guildId })
+        const player = kazagumo.getPlayer(this.event.guildId)
+        if (!player) {
+            await this.reply({ components: [new FailedStatusComponent(t.music.alreadyOff()).component] })
+            return
+        }
+        let msg = ""
+        switch (player.paused) {
+            case true: {
+                player.pause(false)
+                msg = t.music.unpaused()
+                break
+            }
+            case false: {
+                player.pause(true)
+                msg = t.music.paused()
+                break
+            }
+            default: {
+                msg = t.music.unknown()
+                break
+            }
+        }
+        await this.reply(msg)
     }
 }

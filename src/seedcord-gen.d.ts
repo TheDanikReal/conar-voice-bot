@@ -27,9 +27,12 @@ declare module '@seedcord/gateway' {
         lock: 'guild';
         members: 'guild';
         mod: 'guild';
+        next: 'guild';
+        pause: 'guild';
         play: 'guild';
         requests: 'guild';
         setup: 'guild';
+        stop: 'guild';
         sync: 'guild';
         unlock: 'guild';
         voiceLimited: 'guild';

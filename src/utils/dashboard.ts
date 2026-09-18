@@ -14,6 +14,7 @@ import {
     MemberLimitId,
     MusicId,
     NextMusicId,
+    PauseMusicId,
     RenameId,
     StatesId
 } from "./interactionIds"
@@ -113,21 +114,26 @@ export function composeMusicDashboard(settings: MusicOptions, t?: Dict): Message
         .setCustomId(AddMusicId.encode({}))
         .setEmoji(Emojis.play)
         .setStyle(ButtonStyle.Secondary)
-    const nextMusic = new ButtonBuilder()
-        .setCustomId(NextMusicId.encode({}))
-        .setEmoji(Emojis.bitrate)
+    const pauseMusic = new ButtonBuilder()
+        .setCustomId(PauseMusicId.encode({}))
+        .setEmoji(Emojis.pause)
         .setStyle(ButtonStyle.Secondary)
     const destroyPlayer = new ButtonBuilder()
         .setCustomId(DestroyMusicId.encode({}))
-        .setEmoji(Emojis.delete)
-        .setStyle(ButtonStyle.Danger)
-    const firstRow = new ActionRowBuilder<ButtonBuilder>().addComponents([addMusic, nextMusic, destroyPlayer])
+        .setEmoji(Emojis.stop)
+        .setStyle(ButtonStyle.Secondary)
+    const nextMusic = new ButtonBuilder()
+        .setCustomId(NextMusicId.encode({}))
+        .setEmoji(Emojis.next)
+        .setStyle(ButtonStyle.Secondary)
+    const firstRow = new ActionRowBuilder<ButtonBuilder>().addComponents([pauseMusic, destroyPlayer, nextMusic])
     const container = new ContainerBuilder()
         .setAccentColor(basicColor)
-        .addTextDisplayComponents([
-            (builder) => builder.setContent(`### ${t.music.music()}`),
-            (builder) => builder.setContent(`${t.music.currentlyPlaying()}: ${settings.title}.`)
-        ])
+        .addSectionComponents((builder) =>
+            builder
+                .addTextDisplayComponents((builder) => builder.setContent(`### ${settings.title}`))
+                .setButtonAccessory(addMusic)
+        )
         .addSeparatorComponents((builder) => builder.setSpacing(SeparatorSpacingSize.Small))
         .addActionRowComponents(firstRow)
     return { flags: MessageFlags.IsComponentsV2, components: [container] }
