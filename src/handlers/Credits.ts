@@ -32,7 +32,7 @@ Current developer of original Connor bot`)
                     )
                     .addTextDisplayComponents((builder) =>
                         builder.setContent(`## silmarill (persik)
-Author of the idea for Connor bot, its' creator and first developer, inspired me to make Carrot bot`)
+Author of the idea for Connor bot, its creator and first developer, inspired me to make Carrot bot`)
                     )
                     .addSectionComponents((builder) =>
                         builder

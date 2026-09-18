@@ -62,9 +62,11 @@ function initLavalink(): void {
                     source: track.sourceName,
                     url: track.uri ?? t.music.unknown(),
                     length: track.length?.toString() ?? t.music.unknown()
-                })
-            })
-        })
+                }),
+                allowedMentions: { parse: [] }
+            }).catch(() => { /* TODO: will handle later, when i'll realise how to use seedcord's
+                                logger externally */})
+        }).catch(() => {})
     })
 }
 
