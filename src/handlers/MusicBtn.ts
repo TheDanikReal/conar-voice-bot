@@ -118,6 +118,7 @@ export class NextMusic extends ButtonHandler<[typeof NextMusicId]> {
     }
 }
 
+@Gated(CheckRights)
 @ButtonRoute(PauseMusicId)
 export class PauseMusic extends ButtonHandler<[typeof PauseMusicId]> {
     public async execute(): Promise<void> {
