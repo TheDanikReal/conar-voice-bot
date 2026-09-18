@@ -77,6 +77,7 @@ export function composeDashboard(settings: ChannelOptions, t?: Dict): MessageCre
         .setEmoji(Emojis.play)
         .setStyle(ButtonStyle.Secondary)
     const secondRowArray: ButtonBuilder[] = [manageMembers, manageSaves, requests]
+    const musicAddition = lavalinkEnabled ? `\n${Emojis.play} - ${t.dashboard.music()}.` : ""
     if (lavalinkEnabled) secondRowArray.push(music)
     const secondRow = new ActionRowBuilder<ButtonBuilder>().addComponents(secondRowArray)
     const container = new ContainerBuilder()
@@ -90,8 +91,7 @@ ${Emojis.voiceLimited} - ${t.dashboard.memberLimit()}.
 ${closeChannelId} - ${closeChannelMessage}.
 ${Emojis.members} - ${t.dashboard.members()}.
 ${Emojis.setup} - ${t.dashboard.settingSaves()}.
-${Emojis.requests} - ${invitesMessage}.
-${Emojis.play} - ${t.dashboard.music()}`)
+${Emojis.requests} - ${invitesMessage}.${musicAddition}`)
         ])
         .addSeparatorComponents((builder) => builder.setSpacing(SeparatorSpacingSize.Small))
         .addActionRowComponents(firstRow, secondRow)

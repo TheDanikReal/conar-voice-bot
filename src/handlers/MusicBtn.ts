@@ -19,7 +19,7 @@ export class MusicButton extends ButtonHandler<[typeof MusicId]> {
         const t = await getLocale({ serverId: this.event.guildId })
         await this.event.editReply({
             ...composeMusicDashboard({
-                title: kazagumo.getPlayer(this.event.channelId)?.queue[0]?.title ?? t.music.notPlaying()
+                title: kazagumo.getPlayer(this.event.guildId)?.queue.current?.title ?? t.music.notPlaying()
             })
         })
     }
@@ -99,11 +99,11 @@ export class NextMusic extends ButtonHandler<[typeof NextMusicId]> {
         if (!kazagumo) throw new MusicDisabled()
         const t = await getLocale({ serverId: this.event.guildId })
         const player = kazagumo.getPlayer(this.event.guildId)
-        if (!player?.queue[0]) {
+        if (!player?.queue.current) {
             await this.reply({ components: [new FailedStatusComponent(t.music.alreadyOff()).component] })
             return
         }
-        player.queue.remove(0)
+        player.skip()
         await this.reply(t.setup.successButton())
     }
 }
