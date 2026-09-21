@@ -25,7 +25,7 @@ function initLavalink(): void {
     ]
     kazagumo = new Kazagumo(
         {
-            defaultSearchEngine: "youtube",
+            defaultSearchEngine: "spotify",
             send: (guildId, payload) => {
                 const guild = seedcord.bot.client.guilds.cache.get(guildId)
                 if (guild) guild.shard.send(payload)
