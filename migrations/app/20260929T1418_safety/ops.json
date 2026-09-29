@@ -1,0 +1,256 @@
+[
+  {
+    "id": "dropDefault.Save.blacklist",
+    "label": "Drop default on \"Save\".\"blacklist\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "blacklist",
+        "table": "Save"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"blacklist\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Save",
+          "blacklist"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop default on \"blacklist\"",
+        "sql": "ALTER TABLE \"public\".\"Save\" ALTER COLUMN \"blacklist\" DROP DEFAULT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"blacklist\" has no default",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"column_default\" IS NULL)) AS \"result\"",
+        "params": [
+          "public",
+          "Save",
+          "blacklist"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropDefault.Save.managers",
+    "label": "Drop default on \"Save\".\"managers\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "managers",
+        "table": "Save"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"managers\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Save",
+          "managers"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop default on \"managers\"",
+        "sql": "ALTER TABLE \"public\".\"Save\" ALTER COLUMN \"managers\" DROP DEFAULT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"managers\" has no default",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"column_default\" IS NULL)) AS \"result\"",
+        "params": [
+          "public",
+          "Save",
+          "managers"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropDefault.TempChannel.blacklist",
+    "label": "Drop default on \"TempChannel\".\"blacklist\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "blacklist",
+        "table": "TempChannel"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"blacklist\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "TempChannel",
+          "blacklist"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop default on \"blacklist\"",
+        "sql": "ALTER TABLE \"public\".\"TempChannel\" ALTER COLUMN \"blacklist\" DROP DEFAULT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"blacklist\" has no default",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"column_default\" IS NULL)) AS \"result\"",
+        "params": [
+          "public",
+          "TempChannel",
+          "blacklist"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropDefault.TempChannel.managers",
+    "label": "Drop default on \"TempChannel\".\"managers\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "managers",
+        "table": "TempChannel"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"managers\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "TempChannel",
+          "managers"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop default on \"managers\"",
+        "sql": "ALTER TABLE \"public\".\"TempChannel\" ALTER COLUMN \"managers\" DROP DEFAULT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"managers\" has no default",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"column_default\" IS NULL)) AS \"result\"",
+        "params": [
+          "public",
+          "TempChannel",
+          "managers"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.dropNotNull.Save.blacklist",
+    "label": "Drop NOT NULL on \"Save\".\"blacklist\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "blacklist",
+        "table": "Save"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"blacklist\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Save",
+          "blacklist"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop NOT NULL on \"blacklist\"",
+        "sql": "ALTER TABLE \"public\".\"Save\" ALTER COLUMN \"blacklist\" DROP NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"blacklist\" is nullable",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "Save",
+          "blacklist",
+          "YES"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.dropNotNull.Save.managers",
+    "label": "Drop NOT NULL on \"Save\".\"managers\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "managers",
+        "table": "Save"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"managers\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Save",
+          "managers"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop NOT NULL on \"managers\"",
+        "sql": "ALTER TABLE \"public\".\"Save\" ALTER COLUMN \"managers\" DROP NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"managers\" is nullable",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "Save",
+          "managers",
+          "YES"
+        ]
+      }
+    ]
+  }
+]

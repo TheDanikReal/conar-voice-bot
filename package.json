@@ -17,14 +17,14 @@
         "lint:fix": "eslint 'src/**/*.ts' --fix --cache",
         "fmt": "prettier --write 'src/**/*.{ts,json,md}' --cache",
         "tc": "tsc --noEmit",
-        "database:deploy": "prisma db migrate --advance-ref db && prisma contract emit"
+        "database:deploy": "prisma contract emit && prisma db migrate --advance-ref db"
     },
     "dependencies": {
         "@discordjs/builders": "^1.14.1",
         "@prisma/orm-postgres": "8.0.0-rc.11",
-        "@seedcord/gateway": "^0.6.0",
+        "@seedcord/gateway": "^0.7.2",
         "discord.js": "^14.27.0",
-        "dotenv": "^17.4.2",
+        "dotenv": "^18.0.4",
         "envapt": "^8.2.1",
         "kazagumo": "^3.4.3",
         "lavalink-client": "^2.11.0",
@@ -32,16 +32,16 @@
         "shoukaku": "^4.3.0"
     },
     "devDependencies": {
-        "@seedcord/eslint-config": "^2.2.1",
-        "@seedcord/eslint-plugin": "^0.4.0",
-        "@seedcord/tsconfig": "^2.0.3",
+        "@seedcord/eslint-config": "^2.2.2",
+        "@seedcord/eslint-plugin": "^0.4.1",
+        "@seedcord/tsconfig": "^2.0.4",
         "@types/node": "^22.20.3",
-        "eslint-plugin-discordjs": "^0.1.4",
+        "eslint-plugin-discordjs": "^0.1.5",
         "eslint-plugin-security": "^4.0.1",
         "eslint-plugin-tsdoc": "^0.5.3",
-        "prettier": "^3.9.7",
+        "prettier": "^3.9.9",
         "prisma": "8.0.0-rc.15",
-        "seedcord": "^0.19.5",
+        "seedcord": "^0.21.2",
         "typescript": "~6.0.3"
     }
 }
