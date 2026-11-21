@@ -6,9 +6,27 @@
         "outDir": "./dist",
         "skipLibCheck": true,
         "noImplicitAny": true,
-        "types": ["node"],
-        "resolveJsonModule": true
+        "types": [
+            "node"
+        ],
+        "resolveJsonModule": true,
+        "paths": {
+            "#src/*": [
+                "./src/*"
+            ],
+            "#components/*": [
+                "./src/components/*"
+            ]
+        }
     },
-    "include": ["src/**/*.ts", "seedcord.config.ts", "i18n/build.ts", "prisma.config.ts"],
-    "exclude": ["node_modules", "dist"]
+    "include": [
+        "src/**/*.ts",
+        "seedcord.config.ts",
+        "i18n/build.ts",
+        "prisma.config.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
 }

@@ -4,7 +4,13 @@
     "compilerOptions": {
         "rootDir": "./src",
         "outDir": "./dist",
-        "noEmit": false
+        "noEmit": false,
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "paths": {
+            "#src/*": ["./src/*"],
+            "#components/*": ["./src/components/*"]
+        }
     },
     "include": ["src/**/*.ts"],
     "exclude": ["node_modules", "dist"]

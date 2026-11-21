@@ -1,2 +1,3 @@
 [ ] - If locale is "toString", the in operator matches Object.prototype and getT returns an inherited function instead of a dictionary. Use Object.prototype.hasOwnProperty.call(dictionaries, locale) before indexing.
 [ ] - Reject plural branches that are not strings. Guard in i18n/build.ts accepts {"one": 1} because it validates only branch names. buildPluralMethod then passes the number to extractParamsAndTemplate, which calls replace and aborts compilation. Validate every plural branch value and throw a locale/key-specific error for invalid catalog entries
+[ ] - throw ChannelNotFound instead of returning when channel is not in database in rerenderDashboard
